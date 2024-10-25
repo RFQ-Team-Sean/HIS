@@ -35,7 +35,7 @@ import { NgModule } from '@angular/core';
 import { ViewPDSComponent } from './personal-data-sheet/view/view.component';
 import { EditPDSComponent } from './personal-data-sheet/edit/edit.component';
 import { GeneralInformationComponent } from './personal-data-sheet/view/general-information/general-information.component';
-import { LeavesAttendanceRecordsComponent } from './personal-data-sheet/view/leaves-attendance-records/leaves-attendance-records.component';
+import { LeavesAttendanceRecordsComponent } from './leaves-attendance-records/leaves-attendance-records.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -54,7 +54,7 @@ export const routes: Routes = [
 
   { path: 'pimam', component: PimamComponent, canActivate: [authGuard] },
   { path: 'merits-and-violations', component: MeritsAndViolationsComponent, canActivate: [authGuard]},
-
+  { path: 'leaves-and-attendance-records', component: LeavesAttendanceRecordsComponent, canActivate: [authGuard] },
   { path: 'test-back', component: TestBackComponent},
   { path: 'test-back2', component: TestBack2Component},
   { path: 'test-back3', component: TestBack3Component},
@@ -68,7 +68,7 @@ export const routes: Routes = [
         children: [
           { path: 'general-information', component: GeneralInformationComponent, canActivate: [authGuard] },
           { path: 'compensation-records', component: CompensationRecordsComponent, canActivate: [authGuard] },
-          { path: 'leaves-and-attendance-records', component: LeavesAttendanceRecordsComponent, canActivate: [authGuard] }
+          // { path: 'leaves-and-attendance-records', component: LeavesAttendanceRecordsComponent, canActivate: [authGuard] }
         ]
       },
       { path: 'edit', component: EditPDSComponent, canActivate: [authGuard],

@@ -4,7 +4,7 @@ import { SidebarNavigationModule } from './../sidebar-navigation/sidebar-navigat
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../Supabase/supabase.service';
 import { CompensationRecordsComponent } from '../personal-data-sheet/view/compensation-records/compensation-records.component';
-import { LeavesAttendanceRecordsComponent } from '../personal-data-sheet/view/leaves-attendance-records/leaves-attendance-records.component';
+import { LeavesAttendanceRecordsComponent } from '../leaves-attendance-records/leaves-attendance-records.component';
 import 'flowbite';
 // import { Datepicker } from 'flowbite';                                                                                                                                                                                                                     =======
 import { FormsModule } from '@angular/forms';
