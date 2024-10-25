@@ -10,6 +10,7 @@ interface Field {
   type : string,
   options? : string[],
   value?: string,
+  value2?: string,
   defaultValue?: string
 }
 
@@ -38,6 +39,7 @@ export class PersonalInformationComponent implements AfterViewInit {
     this.datepickerInput.nativeElement.addEventListener('blur', (event: Event) => {
       console.log('Date changed:', (event.target as HTMLInputElement).value);
     });
+    this.disableDropdown('single Citizenship', 'Citizenship-dualDropdown');
   }
 
 
@@ -50,9 +52,10 @@ export class PersonalInformationComponent implements AfterViewInit {
     { label: 'Place of Birth', type: 'text' },
     { label: 'Sex', type: 'boolean', options: ['Male', 'Female'] },
     { label: 'Civil Status', type: 'dropdown', options: ['Single', 'Married', 'Widowed', 'Separated'] },
+    { label: 'Citizenship', type: 'hybrid', options: ['Filipino', 'American', 'Chinese', 'Bumbai', 'Nigger'] },
     { label: 'Height', type: 'text' },
     { label: 'Weight', type: 'text' },
-    { label: 'Blood Type', type: 'dropdown', options: ['A', 'B', 'AB', 'O'] }
+    { label: 'Blood Type', type: 'dropdown', options: ['A', 'B', 'AB', 'O'] },
   ];
 
   contactDetails: Field[] = [
@@ -88,15 +91,52 @@ export class PersonalInformationComponent implements AfterViewInit {
     { label: 'Permanent Address Details', fields: this.addressDetails },
   ];
 
-  private dropdowns!: NodeListOf<Element>;
 
-  ngOnInit() {}
 
-  isOpen: boolean = false; // Track whether the dropdown is open
+  constructor() {
+  }
+
+  disableDropdown(radioId: string, dropdownId: string) {
+    const radioButton = document.getElementById(radioId) as HTMLInputElement;
+    const dropdownButton = document.getElementById(dropdownId) as HTMLSelectElement | HTMLButtonElement;
+
+    // dropdownButton.classList.toggle('bg-gray-200');
+    // dropdownButton.classList.toggle('bg-gray-50');
+    // dropdownButton.classList.toggle('hover:bg-gray-100');
+
+    console.log('disableDropdown() called!', radioButton.id, dropdownButton.id)
+    dropdownButton.disabled = radioButton.checked;
+    if (radioButton && dropdownButton) {
+      if(dropdownButton.disabled) {
+        dropdownButton.classList.add('bg-gray-200');
+        dropdownButton.classList.remove('bg-gray-50', 'hover:bg-gray-100');
+      }
+      else {
+        dropdownButton.classList.remove('bg-gray-200');
+        dropdownButton.classList.add('bg-gray-50', 'hover:bg-gray-100');
+      }
+    this.activeDropdownLabel = null;
+    }
+  }
+
+
+  ngOnInit() {
+
+  }
+
   activeDropdownLabel: string | null = null; // Keep track of the active dropdown
 
-  toggleDropdown(field: Field) {
+  toggleDropdown(field: Field, dropdownId? : string) {
     // If the clicked dropdown is already open, close it; otherwise, open it
+    if(field.label === 'Citizenship') {
+      if(dropdownId === field.label+'-single') {
+        this.activeDropdownLabel = this.activeDropdownLabel !== field.label+'-single' ? field.label+'-single' : null;
+      }
+      else if(dropdownId === field.label+'-dual') {
+        this.activeDropdownLabel = this.activeDropdownLabel !== field.label+'-dual' ? field.label+'-dual' : null;
+      }
+      return;
+    }
     this.activeDropdownLabel = this.activeDropdownLabel === field.label ? null : field.label;
   }
 
@@ -110,7 +150,18 @@ export class PersonalInformationComponent implements AfterViewInit {
     }
   }
 
-  selectOption(field: Field, option: string) {
+  selectOption(field: Field, option: string, dropdownId? : string) {
+    if(field.label === 'Citizenship') {
+      if(dropdownId === field.label+'-single') {
+        field.value = option;
+      }
+      else if(dropdownId === field.label+'-dual') {
+        field.value2 = option;
+      }
+      this.activeDropdownLabel = null;
+      return;
+    }
+
     field.value = option; // Set the selected option
     this.activeDropdownLabel = null; // Close the dropdown
   }

@@ -25,7 +25,7 @@ export class EducationalBackgroundComponent {
   schoolInfo : Field[] = [
     { label: 'Name of School', type: 'text' },
     { label: 'Degree/Course', type: 'text', defaultValue: 'N/A if not applicable' },
-    { label: 'Year Graduated', type: 'text' },
+    { label: 'Year Graduated', type: 'date' },
     { label: 'Highest Grade/Level/Units Earned', type: 'text' },
     { label: 'Scholarship (if any)', type: 'text' },
     { label: 'Academic Honors Received', type: 'text' }

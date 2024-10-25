@@ -35,7 +35,7 @@
           </div>
           <!-- Boolean Field -->
           <div *ngIf="field.type === 'boolean'">
-            <label for="sex" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ field.label }}</label>
+            <label for="{{ field.label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ field.label }}</label>
             <div class="flex justify-evenly gap-4 py-3">
               <div *ngFor="let option of field.options" class="flex items-center h-full">
                 <!-- Use field.label or fieldset.label + field.label to create a unique name -->

@@ -21,9 +21,16 @@
           <div *ngIf="field.type === 'date'" class="flex flex-col">
             <label for="{{ field.label }}" class=" w-full block mb-2 text-sm font-medium text-gray-900">{{ field.label }}</label>
             <div id="{{ field.label }}" class="w-full">
-                <p-calendar [(ngModel)]="date" showClear="true" styleClass="relative block w-full"
-                            inputStyleClass="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full"
-                            panelStyleClass="absolute top-0 left-0 scale-75"></p-calendar>
+              <p-calendar
+                [(ngModel)]="date"
+                [iconDisplay]="'input'"
+                [showIcon]="true"
+                inputId="icondisplay"
+                inputStyleClass="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                focus:ring-blue-500 focus:border-blue-500 block p-2.5 !important"
+                panelStyleClass="w-min scale-75 absolute z-10"
+                view="year"
+                dateFormat="yy" />
             </div>
           </div>
           <!-- Boolean Field -->

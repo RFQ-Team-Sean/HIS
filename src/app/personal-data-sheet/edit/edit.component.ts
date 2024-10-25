@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Event, Router, RouterOutlet, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { SidebarNavigationModule } from 'src/app/sidebar-navigation/sidebar-navigation.module';
 import { CommonModule } from '@angular/common';
@@ -25,7 +25,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
     ]),
   ],
 })
-export class EditPDSComponent {
+export class EditPDSComponent implements AfterViewInit {
   date: Date | undefined;
 
   rootUrl = '/personal-data-sheet/edit/';
@@ -46,6 +46,10 @@ export class EditPDSComponent {
   constructor(private router: Router) {
     // this.currentUrl = router.url;
     router.navigate([this.sections[0].route])
+  }
+
+  ngAfterViewInit(): void {
+    this.router.navigate([this.sections[0].route])
   }
 
   progressBarWidth: string = '0%'; // Default value
