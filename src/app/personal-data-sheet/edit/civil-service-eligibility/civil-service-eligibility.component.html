@@ -1,0 +1,33 @@
+<div class="w-full h-full">
+  <h1 class="relative">Civil Service Eligibility</h1>
+  <form class="w-full">
+    <!-- Civil Service Eligibility Information Fieldset -->
+    <fieldset class="border-t border-t-gray-300 p-4">
+      <legend class="px-4 bg-white text-xl font-medium tracking-widest">Civil Service Eligibility Information</legend>
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div *ngFor="let field of civilServiceEligibilityInfo">
+          <div *ngIf="field.type === 'text'">
+            <label for="{{ field.label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> {{ field.label }} </label>
+            <input type="text" id="{{ field.label }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required />
+          </div>
+          <div *ngIf="field.type === 'date'" class="flex flex-col">
+            <label for="{{ field.label }}" class=" w-full block mb-2 text-sm font-medium text-gray-900">{{ field.label }}</label>
+            <div id="{{ field.label }}" class="relative w-full">
+              <p-calendar
+              class="w-full relative"
+              inputStyleClass="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+              focus:ring-blue-500 focus:border-blue-500 block p-2.5 !important"
+              panelStyleClass="w-min scale-75 absolute z-10"
+              [(ngModel)]="date"
+              [iconDisplay]="'input'"
+              [showIcon]="true"
+              inputId="icondisplay">
+            </p-calendar>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>

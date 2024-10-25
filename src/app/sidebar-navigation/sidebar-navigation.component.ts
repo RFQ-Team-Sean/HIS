@@ -45,7 +45,7 @@ export class SidebarNavigationComponent {
     '/pimam': 'badge',
     // '/pds': 'account_circle',
     '/loan-information': 'account_balance',
-    '/personal-data-sheet' : 'account_circle'
+    '/personal-data-sheet/view' : 'account_circle'
   };
 
   constructor(

@@ -3,7 +3,7 @@ import { RouterModule, Router } from '@angular/router';
 import { SidebarNavigationModule } from './../sidebar-navigation/sidebar-navigation.module';
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../Supabase/supabase.service';
-import { CompensationRecordsComponent } from '../compensation-records/compensation-records.component';
+import { CompensationRecordsComponent } from '../personal-data-sheet/view/compensation-records/compensation-records.component';
 import { LeavesAttendanceRecordsComponent } from '../leaves-attendance-records/leaves-attendance-records.component';
 import 'flowbite';
 // import { Datepicker } from 'flowbite';                                                                                                                                                                                                                     =======

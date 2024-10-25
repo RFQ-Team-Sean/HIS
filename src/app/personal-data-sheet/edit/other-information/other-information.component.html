@@ -1,0 +1,16 @@
+<div class="w-full h-full">
+  <h1 class="relative">Other Information</h1>
+  <form class="w-full">
+    <!-- Additional Details Fieldset -->
+    <fieldset class="border-t border-t-gray-300 p-4 h-full">
+      <legend class="px-4 bg-white text-xl font-medium tracking-widest">Additional Details</legend>
+      <div class="flex flex-col justify-stretch gap-6">
+        <div *ngFor="let field of otherInformationFields" class="h-full basis-1/3">
+          <label for="{{ field.label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> {{ field.label }} </label>
+          <textarea id="{{ field.label }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 text-start" placeholder="" required>
+          </textarea>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>

@@ -33,7 +33,8 @@
             ],
             "scripts": [
               "node_modules/flowbite/dist/flowbite.js",
-              "node_modules/apexcharts/dist/apexcharts.min.js"
+              "node_modules/apexcharts/dist/apexcharts.min.js",
+              "node_modules/flowbite/dist/flowbite.min.js"
             ],
             "server": "src/main.server.ts",
             "prerender": true,

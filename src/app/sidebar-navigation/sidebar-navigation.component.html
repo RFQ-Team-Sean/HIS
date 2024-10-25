@@ -22,9 +22,9 @@
           <a (click)="navigateTo(item.route)"
             routerLinkActive="bg-blue-100 text-blue-600"
             class="flex items-center py-3 px-4 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all ease-in-out cursor-pointer"
-            [ngClass]="{'justify-center': !isExpanded}">
+            [ngClass]="{'justify-start': !isExpanded}">
             <span class="material-icons text-xl transition-transform ease-in-out"
-                  [ngClass]="{'mr-3': isExpanded, 'scale-125': !isExpanded}">
+                  [ngClass]="{'mr-3': isExpanded, 'scale-100': !isExpanded}">
               {{getIconForRoute(item.route)}}
             </span>
             <span class="transition-all ease-in-out whitespace-nowrap overflow-hidden"
