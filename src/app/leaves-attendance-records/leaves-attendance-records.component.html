@@ -162,8 +162,14 @@
             <p><strong>Start Date:</strong> {{ selectedRequest?.start_date }}</p>
             <p><strong>End Date:</strong> {{ selectedRequest?.end_date }}</p>
             <p><strong>Request:</strong> {{ selectedRequest?.request }}</p>
-            <p><strong>Status:</strong> {{ selectedRequest?.status }}</p>
-
+            <div class="flex"><strong class="mr-1">Status:</strong>
+            <p [ngClass]="{
+                ' text-yellow-500': selectedRequest?.status === 'Pending',
+                ' text-green-500': selectedRequest?.status === 'Approved',
+                ' text-red-500': selectedRequest?.status === 'Rejected'
+                }">
+                 {{ selectedRequest?.status }}</p>
+            </div>
             <!-- Status dropdown -->
             <label for="status" class="block mt-4 text-sm font-medium">Update Status</label>
             <select [(ngModel)]="newStatus" id="status" class="block w-full mt-1 border border-gray-300 rounded-md">
