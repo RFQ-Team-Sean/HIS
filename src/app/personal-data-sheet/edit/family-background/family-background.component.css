@@ -1,0 +1,7 @@
+::ng-deep .p-calendar {
+  width: 100% !important;
+}
+
+::ng-deep .p-inputtext {
+  width: 100% !important;
+}

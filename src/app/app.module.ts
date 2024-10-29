@@ -16,11 +16,11 @@ import { TestBack4Component } from './test-back4/test-back4.component';
 import { PDSComponent } from './pds/pds.component';
 
 import { MeritsAndViolationsComponent } from './merits-and-violations/merits-and-violations.component';
-import { PersonalDataSheetComponent } from './personal-data-sheet/personal-data-sheet.component';
+// import { PersonalDataSheetComponent } from './personal-data-sheet/personal-data-sheet.component';
 import { LoanInformationComponent } from './loan-information/loan-information.component';
-import { PersonalInformationComponent } from './personal-data-sheet/personal-information/personal-information.component';
-import { FamilyBackgroundComponent } from './personal-data-sheet/family-background/family-background.component';
-import { EducationalBackgroundComponent } from './personal-data-sheet/educational-background/educational-background.component';
+import { PersonalInformationComponent } from './personal-data-sheet/edit/personal-information/personal-information.component';
+import { FamilyBackgroundComponent } from './personal-data-sheet/edit/family-background/family-background.component';
+import { EducationalBackgroundComponent } from './personal-data-sheet/edit/educational-background/educational-background.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
@@ -46,7 +46,7 @@ import { LeavesAttendanceRecordsComponent } from './leaves-attendance-records/le
     TestBack3Component,
     TestBack4Component,
     PDSComponent,
-    PersonalDataSheetComponent,
+    // PersonalDataSheetComponent,
     LoanInformationComponent,
     PersonalInformationComponent,
     FamilyBackgroundComponent,

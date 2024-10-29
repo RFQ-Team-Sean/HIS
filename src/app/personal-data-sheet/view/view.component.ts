@@ -4,6 +4,15 @@ import { Event, Router, NavigationEnd, RouterLink, RouterLinkActive, RouterOutle
 import { filter } from 'rxjs/operators';
 import { SidebarNavigationModule } from 'src/app/sidebar-navigation/sidebar-navigation.module';
 
+interface Field {
+  label : string,
+  type : string,
+  value? : string, // dito ilagay input value ng field for backend
+  defaultValue? : string,
+  options? : string[],
+  selectedOption? : string
+}
+
 @Component({
   selector: 'app-view',
   standalone: true,
@@ -13,15 +22,20 @@ import { SidebarNavigationModule } from 'src/app/sidebar-navigation/sidebar-navi
 })
 export class ViewPDSComponent implements OnInit {
 
-  constructor(private router: Router) {}
 
   currentUrl: string = '';
 
   editRootUrl : string = '/personal-data-sheet/edit/';
   viewRootUrl : string = '/personal-data-sheet/view/';
-
+  editUrl : string = this.editRootUrl + 'personal-information';
+  generalInfoUrl = this.viewRootUrl + 'general-information';
   compensationRecordsUrl = this.viewRootUrl + 'compensation-records';
-  dtrUrl : string = this.viewRootUrl + 'dtr';
+  leavesAndAttendanceRecordsUrl = this.viewRootUrl + 'leaves-and-attendance-records';
+
+  constructor(private router: Router) {
+    this.currentUrl = router.url;
+  }
+
 
   ngOnInit(): void {
     this.router.events
@@ -31,19 +45,26 @@ export class ViewPDSComponent implements OnInit {
       .subscribe((event: NavigationEnd) => {
         this.currentUrl = event.urlAfterRedirects;
       });
+
+    this.router.navigate([this.generalInfoUrl]);
   }
 
   navigateTo = (route: string) => this.router.navigate([route]);
 
-  sections = [
-    { title: 'I. Personal Information', route: this.editRootUrl + 'personal-information' },
-    { title: 'II. Family Background', route: this.editRootUrl + 'family-background' },
-    { title: 'III. Educational Background', route: this.editRootUrl + 'educational-background' },
-    { title: 'IV. Civil Service Eligibility', route: this.editRootUrl + 'civil-service-eligibility' },
-    { title: 'V. Work Experience', route: this.editRootUrl + 'work-experience' },
-    { title: 'VI. Voluntary Work', route: this.editRootUrl + 'voluntary-work' },
-    { title: 'VII. Learning and Development Interventions', route: this.editRootUrl + 'learning-and-development-interventions' },
-    { title: 'VIII. Other Information', route: this.editRootUrl + 'other-information' },
-  ];
-
+  setTitle(currentUrl : string) {
+    switch (currentUrl) {
+      case this.generalInfoUrl:
+        return 'General Information';
+        break;
+      case this.compensationRecordsUrl:
+        return 'Compensation Records';
+        break;
+      case this.leavesAndAttendanceRecordsUrl:
+        return 'Leaves and Attendance Records';
+        break;
+      default:
+        return '';
+        break;
+    }
+  }
 }

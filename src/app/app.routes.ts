@@ -19,22 +19,23 @@ import { TestBack3Component } from './test-back3/test-back3.component';
 import { TestBack4Component } from './test-back4/test-back4.component';
 import { PDSComponent } from './pds/pds.component';
 import { PdsFamilyBackgroundComponent } from './pds-family-background/pds-family-background.component';
-import { CompensationRecordsComponent } from './compensation-records/compensation-records.component';
+import { CompensationRecordsComponent } from './personal-data-sheet/view/compensation-records/compensation-records.component';
 import { LoanInformationComponent } from './loan-information/loan-information.component';
 
 import { MeritsAndViolationsComponent } from './merits-and-violations/merits-and-violations.component';
-import { LeavesAttendanceRecordsComponent } from './leaves-attendance-records/leaves-attendance-records.component';
-import { PersonalInformationComponent } from './personal-data-sheet/personal-information/personal-information.component';
-import { FamilyBackgroundComponent } from './personal-data-sheet/family-background/family-background.component';
-import { EducationalBackgroundComponent } from './personal-data-sheet/educational-background/educational-background.component';
-import { CivilServiceEligibilityComponent } from './personal-data-sheet/civil-service-eligibility/civil-service-eligibility.component';
-import { WorkExperienceComponent } from './personal-data-sheet/work-experience/work-experience.component';
-import { VoluntaryWorkComponent } from './personal-data-sheet/voluntary-work/voluntary-work.component';
-import { LearningAndDevelopmentInterventionsComponent } from './personal-data-sheet/learning-and-development-interventions/learning-and-development-interventions.component';
-import { OtherInformationComponent } from './personal-data-sheet/other-information/other-information.component';
+import { PersonalInformationComponent } from './personal-data-sheet/edit/personal-information/personal-information.component';
+import { FamilyBackgroundComponent } from './personal-data-sheet/edit/family-background/family-background.component';
+import { EducationalBackgroundComponent } from './personal-data-sheet/edit/educational-background/educational-background.component';
+import { CivilServiceEligibilityComponent } from './personal-data-sheet/edit/civil-service-eligibility/civil-service-eligibility.component';
+import { WorkExperienceComponent } from './personal-data-sheet/edit/work-experience/work-experience.component';
+import { VoluntaryWorkComponent } from './personal-data-sheet/edit/voluntary-work/voluntary-work.component';
+import { LearningAndDevelopmentInterventionsComponent } from './personal-data-sheet/edit/learning-and-development-interventions/learning-and-development-interventions.component';
+import { OtherInformationComponent } from './personal-data-sheet/edit/other-information/other-information.component';
 import { NgModule } from '@angular/core';
 import { ViewPDSComponent } from './personal-data-sheet/view/view.component';
 import { EditPDSComponent } from './personal-data-sheet/edit/edit.component';
+import { GeneralInformationComponent } from './personal-data-sheet/view/general-information/general-information.component';
+import { LeavesAttendanceRecordsComponent } from './leaves-attendance-records/leaves-attendance-records.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -52,11 +53,8 @@ export const routes: Routes = [
   { path: 'workflow-approval-user', component: WorkflowApprovalUserComponent, canActivate: [authGuard] },
 
   { path: 'pimam', component: PimamComponent, canActivate: [authGuard] },
-  { path: 'compensation-records', component: CompensationRecordsComponent, canActivate: [authGuard] },
-
   { path: 'merits-and-violations', component: MeritsAndViolationsComponent, canActivate: [authGuard]},
-  { path: 'leaves-attendance-records', component: LeavesAttendanceRecordsComponent},
-
+  { path: 'leaves-attendance-records', component: LeavesAttendanceRecordsComponent, canActivate: [authGuard] },
   { path: 'test-back', component: TestBackComponent},
   { path: 'test-back2', component: TestBack2Component},
   { path: 'test-back3', component: TestBack3Component},
@@ -68,8 +66,9 @@ export const routes: Routes = [
     children: [
       { path: 'view', component: ViewPDSComponent, canActivate: [authGuard],
         children: [
+          { path: 'general-information', component: GeneralInformationComponent, canActivate: [authGuard] },
           { path: 'compensation-records', component: CompensationRecordsComponent, canActivate: [authGuard] },
-          { path: 'dtr', component: DtrComponent, canActivate: [authGuard] }
+          // { path: 'leaves-and-attendance-records', component: LeavesAttendanceRecordsComponent, canActivate: [authGuard] }
         ]
       },
       { path: 'edit', component: EditPDSComponent, canActivate: [authGuard],

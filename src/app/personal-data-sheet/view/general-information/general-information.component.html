@@ -1,0 +1,11 @@
+<div class="grid grid-cols-3 grid-flow-row-dense auto-rows-min gap-6 w-full">
+  <div *ngFor="let fieldset of fieldsets" class="border rounded-2xl shadow-md p-4 pb-2">
+    <span class="font-medium text-xl tracking-wide mb-2">{{ fieldset.label }}</span>
+    <br>
+    <div *ngFor="let field of fieldset.fields" class="grid grid-cols-2 w-full justify-start">
+      <span class="font-semibold flex items-center overflow-clip overflow-ellipsis p-2">{{ field.label }}</span>
+      <span id="{{ field.label }}" class="italic flex items-center p-2 overflow-clip overflow-ellipsis">{{ field.defaultValue }}</span>
+      <hr class="col-span-2" *ngIf="field !== fieldset.fields[fieldset.fields.length - 1]">
+    </div>
+  </div>
+</div>

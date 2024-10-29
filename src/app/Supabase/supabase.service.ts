@@ -1539,7 +1539,7 @@ async getParameters() {
     return data;
   }
 
-  async updateLeaveRequestStatus(requestId: number, newStatus: 'Sick Leave' | 'Maternity Leave' | 'Vacation Leave') {
+  async updateLeaveRequestStatus(requestId: number, newStatus: 'Pending' | 'Approved' | 'Rejected') {
     const { data, error } = await this.supabase
          .from('leave_requests')
          .update({ status: newStatus })
@@ -1563,6 +1563,29 @@ async getParameters() {
         return { error };
     }
     return { data };
+  }
+
+
+  async getScheduleAdjustmentRequests() {
+    const { data, error } = await this.supabase.from('schedule_adjustment_requests').select('* , profile(email)');
+    if (error) {
+      console.error('Error fetching leave requests:', error);
+      return [];
+    }
+    return data;
+  }
+
+  async updateScheduleAdjustmentRequestStatus(requestId: number, newStatus: 'Pending' | 'Approved' | 'Rejected') {
+    const { data, error } = await this.supabase
+         .from('schedule_adjustment_requests')
+         .update({ status: newStatus })
+         .eq('id', requestId);
+
+      if (error) {
+        console.error('Error updating leave request status:', error);
+        return null;
+      }
+    return data;
   }
 
 

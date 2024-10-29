@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Event, Router, RouterOutlet, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { SidebarNavigationModule } from 'src/app/sidebar-navigation/sidebar-navigation.module';
 import { CommonModule } from '@angular/common';
@@ -25,7 +25,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
     ]),
   ],
 })
-export class EditPDSComponent {
+export class EditPDSComponent implements AfterViewInit {
   date: Date | undefined;
 
   rootUrl = '/personal-data-sheet/edit/';
@@ -41,9 +41,16 @@ export class EditPDSComponent {
     { title: 'VIII. Other Information', route: this.rootUrl + 'other-information'},
   ];
 
-  prepareRoute = (outlet: RouterOutlet) => { return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'] };
+  // prepareRoute = (outlet: RouterOutlet) => { return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'] };
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    // this.currentUrl = router.url;
+    router.navigate([this.sections[0].route])
+  }
+
+  ngAfterViewInit(): void {
+    this.router.navigate([this.sections[0].route])
+  }
 
   progressBarWidth: string = '0%'; // Default value
 
@@ -52,7 +59,9 @@ export class EditPDSComponent {
   previousUrl : string = "";
   currentUrl : string = "";
   nextUrl : string = "";
-  currentRoute : string ='';
+  viewUrl :string = 'personal-data-sheet/view/general-information';
+
+  navigateTo = (route : string) => this.router.navigateByUrl(route);
 
   ngOnInit(): void {
     this.router.events
@@ -62,14 +71,8 @@ export class EditPDSComponent {
       .subscribe((event: NavigationEnd) => {
         this.updateProgressBarWidth(event.urlAfterRedirects);
         this.currentUrl = event.urlAfterRedirects;
-        this.currentRoute = this.router.url;
         this.setPreviousUrl();
         this.setNextUrl();
-        console.log("Previous URL:", this.previousUrl);
-        console.log("Current URL:", this.currentUrl);
-        console.log("Next URL:", this.nextUrl);
-        console.log("urlAfterRedirects:", event.urlAfterRedirects);
-        console.log(this.sections[2].route);
       });
   }
 
@@ -100,6 +103,14 @@ export class EditPDSComponent {
     if (currentIndex >= 1 && currentIndex < this.sections.length) {
       this.previousUrl = this.sections[currentIndex - 1].route;
       console.log("previousURL changed!")
+    }
+  }
+
+  toggleModal(modalId : string) {
+    const modal = document.getElementById(modalId);
+
+    if(modal) {
+      modal.classList.toggle('hidden');
     }
   }
 }

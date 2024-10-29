@@ -6,7 +6,8 @@ import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../Supabase/supabase.service';
 import { FormsModule } from '@angular/forms';
 
-type LeaveStatus = 'Sick Leave' | 'Maternity Leave' | 'Vacation Leave';
+type LeaveStatus = 'Pending' | 'Approved' | 'Rejected';
+type ScheduleStatus = 'Pending' | 'Approved' | 'Rejected';
 
 @Component({
   selector: 'app-leaves-attendance-records',
@@ -20,16 +21,19 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
   @ViewChild('datePickerInput') datepickerInput!: ElementRef<HTMLInputElement>;
 
   leaveRequests: any[] = [];
+  scheduleAdjustmentRequests: any[] = [];
 
   isManaging: boolean = false;
   isAdjusting: boolean = false;
 
-  adjustButtonText: string = 'Adjust Schedule';
+  adjustButtonText: string = 'Manage Requests';
   manageButtonText: string = 'Manage Requests';
 
   isModalOpen = false; 
+  isModalOpen2 = false; //For sched adjustment requests
   selectedRequest: any = null;
-  newStatus: LeaveStatus = 'Sick Leave'; //temp status
+  newStatus: LeaveStatus = 'Pending'; //temp status leaves
+  newStatus2: LeaveStatus = 'Pending'; //temp status requests
 
   adjustLeaveAmount: number = 0;
 
@@ -40,6 +44,9 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
   async ngOnInit() {
     this.leaveRequests = await this.supabaseService.getLeaveRequests();
     console.log(this.leaveRequests);
+
+    this.scheduleAdjustmentRequests = await this.supabaseService.getScheduleAdjustmentRequests();
+    console.log(this.scheduleAdjustmentRequests);
   }
 
   // ngAfterViewInit(): void {
@@ -63,17 +70,28 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
 
   onAdjustButtonClick(){
     this.isAdjusting = !this.isAdjusting;
-    this.adjustButtonText = this.adjustButtonText === 'Adjust Schedule' ? 'Stop Adjusting Schedule' : 'Adjust Schedule'
+    this.adjustButtonText = this.adjustButtonText === 'Manage Requests' ? 'Stop Managing Requests' : 'Manage Requests'
   }
 
-  openModal(request: any) {
+  openModal(request: any) { //For leave requests modal
     this.selectedRequest = request;
     this.isModalOpen = true;
+    this.newStatus = request.status;  
+  }
+
+  openModal2(request: any) { //For schedule adjustment requests modal
+    this.selectedRequest = request;
+    this.isModalOpen2 = true;
     this.newStatus = request.status;  
   }
   
   closeModal() {
     this.isModalOpen = false; 
+    this.selectedRequest = null; 
+  }
+
+  closeModal2() {
+    this.isModalOpen2 = false; 
     this.selectedRequest = null; 
   }
 
@@ -102,6 +120,24 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
                 }
             });
         this.closeModal()
+    }
+
+    
+  }
+
+
+  onUpdateClicked2() {
+    if (this.selectedRequest) {
+        this.selectedRequest.status = this.newStatus;
+        this.supabaseService.updateScheduleAdjustmentRequestStatus(this.selectedRequest.id, this.newStatus)
+            .then(updatedData => {
+                if (updatedData) {
+                    console.log('Status updated in Supabase:', updatedData);
+                } else {
+                    console.error('Failed to update status in Supabase');
+                }
+            });
+        this.closeModal2()
     }
 
     
