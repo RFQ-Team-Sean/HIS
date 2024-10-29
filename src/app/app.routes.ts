@@ -54,7 +54,7 @@ export const routes: Routes = [
 
   { path: 'pimam', component: PimamComponent, canActivate: [authGuard] },
   { path: 'merits-and-violations', component: MeritsAndViolationsComponent, canActivate: [authGuard]},
-  { path: 'leaves-and-attendance-records', component: LeavesAttendanceRecordsComponent, canActivate: [authGuard] },
+  { path: 'leaves-attendance-records', component: LeavesAttendanceRecordsComponent, canActivate: [authGuard] },
   { path: 'test-back', component: TestBackComponent},
   { path: 'test-back2', component: TestBack2Component},
   { path: 'test-back3', component: TestBack3Component},
