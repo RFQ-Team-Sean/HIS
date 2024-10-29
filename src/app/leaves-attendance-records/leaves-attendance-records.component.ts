@@ -33,7 +33,7 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
   isModalOpen2 = false; //For sched adjustment requests
   selectedRequest: any = null;
   newStatus: LeaveStatus = 'Pending'; //temp status leaves
-  newStatus2: LeaveStatus = 'Pending'; //temp status requests
+  newStatus2: ScheduleStatus = 'Pending'; //temp status requests
 
   adjustLeaveAmount: number = 0;
 
@@ -82,7 +82,7 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
   openModal2(request: any) { //For schedule adjustment requests modal
     this.selectedRequest = request;
     this.isModalOpen2 = true;
-    this.newStatus = request.status;  
+    this.newStatus2 = request.status;  
   }
   
   closeModal() {
@@ -126,10 +126,10 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
   }
 
 
-  onUpdateClicked2() {
+  onUpdateClicked2() { //for update button in schedule adjustment requests
     if (this.selectedRequest) {
-        this.selectedRequest.status = this.newStatus;
-        this.supabaseService.updateScheduleAdjustmentRequestStatus(this.selectedRequest.id, this.newStatus)
+        this.selectedRequest.status = this.newStatus2;
+        this.supabaseService.updateScheduleAdjustmentRequestStatus(this.selectedRequest.id, this.newStatus2)
             .then(updatedData => {
                 if (updatedData) {
                     console.log('Status updated in Supabase:', updatedData);
