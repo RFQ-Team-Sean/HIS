@@ -187,7 +187,7 @@
             </div>
             <!-- Status dropdown -->
             <label for="status" class="block mt-4 text-sm font-medium">Update Status</label>
-            <select [(ngModel)]="newStatus" id="status" class="block w-full mt-1 border border-gray-300 rounded-md">
+            <select [(ngModel)]="newStatus2" id="status" class="block w-full mt-1 border border-gray-300 rounded-md">
                 <option value="Pending">Pending</option>
                 <option value="Approved">Approved</option>
                 <option value="Rejected">Rejected</option>
@@ -203,7 +203,7 @@
                 </button>
             </div>
         </div>
-
+    </div>
 
     <!-- Modal for Leave Requests -->
     <div *ngIf="isModalOpen" class="fixed inset-0 flex items-center justify-center z-50">
