@@ -52,12 +52,17 @@
 
                                     <div class="flex justify-between items-center w-full px-5">
                                         <p class="text-xl font-semibold tracking-wider mt-10">SCHEDULE ADJUSTMENT REQUESTS</p>
-                                        <button [ngClass]="{ 'bg-green-500 hover:bg-green-600': !isAdjusting, 'bg-pink-500 hover:bg-pink-600': isAdjusting }"
-                                                    class="text-white rounded border border-gray-200 text-sm font-medium px-5 py-2.5 transition duration-300 ease-in-out" (click)="onAdjustButtonClick()">
-                                            {{ adjustButtonText }}
-                                        </button>
+                                        <div class="flex space-x-2">
+                                            <button *ngIf="isAdjusting" (click)="openAddSchedModal()" class="text-white bg-blue-500 hover:bg-blue-700 rounded border border-gray-200 text-sm font-medium px-5 py-2.5">
+                                                + Add Request
+                                            </button>
+                                            <button [ngClass]="{ 'bg-green-500 hover:bg-green-600': !isAdjusting, 'bg-pink-500 hover:bg-pink-600': isAdjusting }"
+                                                        class="text-white rounded border border-gray-200 text-sm font-medium px-5 py-2.5 transition duration-300 ease-in-out" (click)="onAdjustButtonClick()">
+                                                {{ adjustButtonText }}
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="max-h-[12rem] overflow-y-auto custom-scrollbar">
+                                    <div class="max-h-[13rem] overflow-y-auto custom-scrollbar">
                                         <table class="w-full text-left">
                                             <thead class="bg-gray-100 z-10 sticky top-0">
                                                 <tr>
@@ -72,7 +77,10 @@
                                                 <tr *ngFor="let request of scheduleAdjustmentRequests">
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ request.id }}</td>
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ request.profile?.email }}</td>
-                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ request.request }}</td>
+                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                        <div class="truncate max-w-sm">{{ request.request }}</div>
+                                                         <a *ngIf="request.fileUrl" [href]="request.fileUrl" target="_blank" class="text-xs text-blue-600 hover:underline">View</a>
+                                                    </td>
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
                                                         <span class="px-2 py-1 text-xs font-semibold rounded"
                                                                 [ngClass]="{
@@ -101,16 +109,16 @@
                                     <div class="flex justify-between items-center w-full px-5">
                                         <p class="text-xl font-semibold tracking-wider mt-10">LEAVE REQUESTS</p>
                                         <div class="flex space-x-2">
-                                            <!-- <button *ngIf="isManaging" class="text-white bg-gray-500 hover:bg-gray-600 rounded border border-gray-200 text-sm font-medium px-5 py-2.5">
+                                            <button *ngIf="isManaging" (click)="openAddLeaveModal()" class="text-white bg-blue-500 hover:bg-blue-700 rounded border border-gray-200 text-sm font-medium px-5 py-2.5">
                                                 + Add Request
-                                            </button> -->
+                                            </button>
                                             <button [ngClass]="{ 'bg-green-500 hover:bg-green-600': !isManaging, 'bg-pink-500 hover:bg-pink-600': isManaging }"
                                                     class="text-white rounded border border-gray-200 text-sm font-medium px-5 py-2.5 transition duration-300 ease-in-out" (click)="onManageButtonClick()">
                                                 {{ manageButtonText }}
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="max-h-[12rem] overflow-y-auto custom-scrollbar overflow-x-auto">
+                                    <div class="max-h-[13rem] overflow-y-auto custom-scrollbar overflow-x-auto">
                                         <table class="w-full text-left" >
                                             <thead class="bg-gray-100 z-10 sticky top-0">
                                                 <tr>
@@ -133,7 +141,10 @@
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.leave_type }}</td>
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.start_date }}</td>
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.end_date }}</td>
-                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.request }}</td>
+                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                        <div>{{ requests.request }}</div>
+                                                         <a *ngIf="requests.fileUrl" [href]="requests.fileUrl" target="_blank" class="text-xs text-blue-600 hover:underline">View</a>
+                                                    </td>
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
                                                         <span class="px-2 py-1 text-xs font-semibold rounded"
                                                                 [ngClass]="{
@@ -164,9 +175,10 @@
             </div>
         </div>
     </div>
+
     <!-- Modal for Schedule Adjustment Requests -->
+
     <div *ngIf="isModalOpen2" class="fixed inset-0 flex items-center justify-center z-50">
-        <!-- Dark background -->
         <div class="absolute inset-0 bg-black opacity-50"></div>
         
         <!-- Modal content -->
@@ -205,16 +217,70 @@
         </div>
     </div>
 
+    <!-- Modal for Adding Schedule Adjustment Requests -->
+    <div *ngIf="isAddSchedModalOpen" class="fixed inset-0 flex items-center justify-center z-50">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow-lg p-6 w-96 z-10">
+            <h2 class="text-xl font-semibold mb-4">Add Schedule Adjustment Request</h2>
+
+            <form (ngSubmit)="onAddSchedSubmit()">
+                <!-- Employee Dropdown -->
+                <label class="block text-sm font-medium text-gray-700">Requester</label>
+                <select
+                    [(ngModel)]="selectedEmployeeId"
+                    name="employee"
+                    class="block w-full px-3 py-2 mt-1 mb-4 bg-white border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required
+                >
+                    <option *ngFor="let employee of employees" [value]="employee.user_id">
+                        {{ employee.first_name }} {{ employee.surname }}
+                    </option>
+                </select>
+
+                <!-- File Upload -->
+                <label class="block text-sm font-medium text-gray-700">Upload Request Document</label>
+                <input
+                    type="file"
+                    (change)="onFileSelected($event)"
+                    class="block w-full px-3 py-2 mt-1 bg-white border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required
+                />
+
+                <!-- Submit and Cancel buttons -->
+                <div class="flex justify-end mt-6">
+                    <button
+                        type="submit"
+                        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mr-2"
+                        [disabled]="isSubmitting"
+                    >
+                        Add Request
+                    </button>
+                    <button
+                        type="button"
+                        (click)="closeAddSchedModal()"
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
     <!-- Modal for Leave Requests -->
+
     <div *ngIf="isModalOpen" class="fixed inset-0 flex items-center justify-center z-50">
-        <!-- Dark background -->
         <div class="absolute inset-0 bg-black opacity-50"></div>
         
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow-lg p-6 w-96 z-10">
             <h2 class="text-xl font-semibold mb-4">Update Leave Request</h2>
 
-            <!-- Display details of the request -->
             <p><strong>Request ID:</strong> {{ selectedRequest?.id }}</p>
             <p><strong>Requested by:</strong> {{ selectedRequest?.profile?.email }}</p>
             <p><strong>Leave Type:</strong> {{ selectedRequest?.leave_type }}</p>
@@ -244,12 +310,33 @@
                 <input type="number" [(ngModel)]="adjustLeaveAmount" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300" />
             </div>
 
-            <!-- Buttons -->
             <div class="flex justify-end mt-6">
                 <button (click)="onUpdateClicked()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mr-2">
                     Update
                 </button>
                 <button (click)="closeModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Adding Schedule Leave Requests -->
+
+    <div *ngIf="isAddLeaveModalOpen" class="fixed inset-0 flex items-center justify-center z-50">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow-lg p-6 w-96 z-10">
+            <h2 class="text-xl font-semibold mb-4">Add Leave Request</h2>
+
+            <p>Balls</p>
+
+            <div class="flex justify-end mt-6">
+                <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mr-2">
+                    Add Request
+                </button>
+                <button (click)="closeAddLeaveModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
                     Cancel
                 </button>
             </div>

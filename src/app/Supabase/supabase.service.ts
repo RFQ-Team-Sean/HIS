@@ -1588,5 +1588,29 @@ async getParameters() {
     return data;
   }
 
+  async getFileUrl(filePath: string, bucketName: string): Promise<string | null> {
+    
+      const response = await this.supabase.storage.from(bucketName).getPublicUrl(filePath);
+      
+      if (!response.data) {
+          console.error('Error retrieving file URL:', response);  
+          return null;
+      }
+      return response.data.publicUrl;
+      
+  }
+
+  async getProfilesForRequests() {
+    return this.supabase.from('profile').select('user_id, first_name, surname');
+  }
+
+  async uploadRequestFile(bucket: string, path: string, file: File) {
+      return this.supabase.storage.from(bucket).upload(path, file);
+  }
+
+  async insertScheduleAdjustmentRequest(data: any) {
+      return this.supabase.from('schedule_adjustment_requests').insert(data);
+  }
+
 
 }
