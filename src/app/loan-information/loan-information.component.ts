@@ -12,6 +12,7 @@ interface Loan {
   totalPaid: number;
   lastPayment: Date;
   status: string;
+  selected?: boolean;
 }
 
 @Component({
@@ -50,20 +51,19 @@ export class LoanInformationComponent {
   filteredLoanRecords: Loan[] = []; //[...this.loanRecords]; // Initially all records are shown
 
   ngOnInit(): void {
-    this.filteredLoanRecords = [...this.loanRecords];// Initially all records are shown
+    this.filteredLoanRecords = this.loanRecords;// Initially all records are shown
   }
 
   // SEARCH BY FILTERING TABLE
   searchTable() {
-    this.filteredLoanRecords = this.loanRecords.filter(loan =>
-      loan.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      loan.type.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      loan.outstandingBalance.toString().toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      loan.totalPaid.toString().toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      loan.lastPayment.toDateString().toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      loan.status.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
-    console.log("Filtered Results:", this.filteredLoanRecords);
+    this.filteredLoanRecords = this.loanRecords.filter(loan => {
+      return loan.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+             loan.type.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+             loan.outstandingBalance.toString().includes(this.searchTerm) ||
+             loan.totalPaid.toString().includes(this.searchTerm) ||
+             (loan.lastPayment ? loan.lastPayment.toLocaleDateString().includes(this.searchTerm) : false) ||
+             loan.status.toLowerCase().includes(this.searchTerm.toLowerCase());
+    });
   }
 
   trackByFn(index: number, item: any): any {
@@ -79,6 +79,9 @@ export class LoanInformationComponent {
   isAscending: boolean = true; // Tracks sorting direction
 
   sortTable(column: keyof Loan): void {
+    if(column === 'selected') {
+      return;
+    }
     if (this.sortColumn === column) {
       this.isAscending = !this.isAscending; // Toggle sort direction
     } else {
@@ -113,12 +116,19 @@ export class LoanInformationComponent {
     this.manageButtonIcon = this.showManageColumn? 'visibility' : 'edit_note';
   }
 
-  toggleModal(modalId: string) {
+  selectedLoan: Loan | null = null;
+  toggleModal(modalId: string, loan? : Loan) {
     const modal = document.getElementById(modalId) as HTMLElement;
 
     if(modal) {
       modal.classList.toggle('hidden');
     }
+
+    if (loan) {
+      // Clone the selected loan to avoid direct mutation
+      this.selectedLoan = { ...loan };
+    }
+    console.log(this.selectedLoan);
   }
 
   addLoan() {
@@ -162,55 +172,49 @@ export class LoanInformationComponent {
     }
   }
 
-  // currentStatus : string = 'ngek';
-  editLoan(loan : Loan) {
-    const nameInput = document.getElementById('loan-name-input') as HTMLInputElement | null;
-    const typeInput = document.getElementById('loan-type-input') as HTMLInputElement | null;
-    const outBalanceInput = document.getElementById('loan-outstandingBalance-input') as HTMLInputElement | null;
-    const totalPaidInput = document.getElementById('loan-totalPaid-input') as HTMLInputElement | null;
-    const lastPayInput = document.getElementById('loan-lastPayment-input') as HTMLInputElement | null;
-    const statusInput = document.getElementById('loan-status-input') as HTMLInputElement | null;
+  editLoan() {
+    if (this.selectedLoan) {
+      const index = this.loanRecords.findIndex(
+        (loan) => loan.name === this.selectedLoan?.name
+      );
 
-    let hasEmptyField : string | boolean = nameInput?.value === '' || typeInput?.value === ''
-    || outBalanceInput?.value === '' || totalPaidInput?.value === ''
-    || lastPayInput?.value === '' || statusInput?.value === '';
-
-    if(hasEmptyField) {
-      return;
-    }
-
-    if (nameInput && typeInput && outBalanceInput && totalPaidInput && lastPayInput && statusInput) {
-      loan.name = nameInput.value;
-      loan.type = typeInput.value;
-      loan.outstandingBalance = Number(outBalanceInput.value);
-      loan.totalPaid = Number(totalPaidInput.value);
-      // loan.lastPayment = lastPayInput.value;
-      loan.status = statusInput.value;
-
-      this.toggleModal('edit-loan-modal');
+      if (index > -1) {
+        // Update the loan record with edited data
+        this.loanRecords[index] = { ...this.selectedLoan };
+      }
 
       console.log(this.loanRecords);
-
-      nameInput.value = '';
-      typeInput.value = '';
-      outBalanceInput.value = '';
-      totalPaidInput.value = '';
-      lastPayInput.value = '';
-      statusInput.value = '';
-    } else {
-        console.error("One or more input elements are missing.");
+      this.filteredLoanRecords = [...this.loanRecords];
+      // console.log(this.filteredLoanRecords);
+      // Close the modal
+      this.toggleModal('edit-loan-modal');
     }
   }
 
-  deleteLoan(loan : Loan) {
-    const index = this.loanRecords.findIndex(item => item === loan);
-
-    if (index > -1) {
-        this.loanRecords.splice(index, 1);
+  deleteLoan() {
+    if (this.selectedLoan) {
+      this.loanRecords = this.loanRecords.filter(loan => loan.name !== this.selectedLoan?.name);
+      this.toggleModal('delete-loan-modal');
     }
-    this.toggleModal('delete-loan-modal');
-    console.log(this.loanRecords);
+
+    this.filteredLoanRecords = [...this.loanRecords];
+    console.log(this.filteredLoanRecords);
   }
 
+  selectedCount : number = 0;
+  toggleSelectAll() {
+    const selectAllChecked = this.selectedCount === this.filteredLoanRecords.length;
+    this.selectedCount = selectAllChecked ? 0 : this.filteredLoanRecords.length;
+    this.filteredLoanRecords.forEach(loan => loan.selected = !selectAllChecked);
+  }
 
+  updateSelectedCount() {
+    this.selectedCount = this.filteredLoanRecords.filter(loan => loan.selected).length;
+  }
+
+  deleteSelectedLoans() {
+    this.filteredLoanRecords = this.filteredLoanRecords.filter(loan => !loan.selected);
+    this.selectedCount = 0; // Reset the count after deletion
+    this.toggleModal('batch-delete-modal');
+  }
 }
