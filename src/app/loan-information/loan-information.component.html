@@ -29,8 +29,8 @@
           <div class="flex justify-end p-4 gap-4">
             <!-- BATCH DELETE Loan Button -->
             <button *ngIf="selectedCount > 0 && showManageColumn" (click)="toggleModal('batch-delete-modal')"
-              class="bg-red-600 hover:bg-red-800 text-white font-medium rounded-full px-4">
-              <span class="material-icons align-middle">{{ 'delete' }}</span>Delete ({{ selectedCount }} item{{ selectedCount > 1 ? 's' : '' }})
+              class="bg-red-600 hover:bg-red-800 text-white font-medium rounded-full px-4 inline-flex gap-2 justify-center items-center">
+              <span class="material-icons align-middle scale-90">{{ 'delete_sweep' }}</span>Delete ({{ selectedCount }} item{{ selectedCount > 1 ? 's' : '' }})
             </button>
             <!-- SELECT/UNSELECT ALL button -->
             <button *ngIf="showManageColumn" (click)="toggleSelectAll()" class="bg-gray-300 text-gray-800 font-medium rounded-full px-4">
