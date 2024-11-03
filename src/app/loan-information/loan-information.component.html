@@ -1,128 +1,259 @@
 <div class="flex">
   <app-sidebar-navigation></app-sidebar-navigation>
-  <div class="flex flex-col w-full px-6 pt-6">
-    <!-- First Inner Div: Covering the entire width -->
+  <div class="flex flex-col w-full p-6 h-screen">
+    <!-- HEADER DIV -->
     <div class="flex flex-col w-full">
       <p class="text-3xl font-bold text-neutral-900">Loan Information</p>
-      <p class="pb-5 text-slate-500 text-sm">Manage Loan Records</p>
+      <p class="pb-5 text-slate-500 text-sm">View and Manage Loan Records</p>
     </div>
 
-    <!-- Second Inner Div: Right under the first one -->
-    <div class="relative shadow-md sm:rounded-lg mt-6 overflow-x-auto"> <!-- Added overflow-hidden -->
-      <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400 rounded-lg border-spacing-0"> <!-- Added border-separate -->
-        <thead class="text-xs text-white uppercase bg-blue-600 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">Loan Name</th>
-                <th scope="col" class="px-6 py-3">Loan Type</th>
-                <th scope="col" class="px-6 py-3">Outstanding Balance</th>
-                <th scope="col" class="px-6 py-3">Total Paid</th>
-                <th scope="col" class="px-6 py-3">Last Payment</th>
-                <th scope="col" class="px-6 py-3">Status</th>
-                <th scope="col" class="px-6 py-3"><span class="sr-only">Edit</span></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Personal Loan
-                </th>
-                <td class="px-6 py-4">School</td>
-                <td class="px-6 py-4">$5,000</td>
-                <td class="px-6 py-4">$2,000</td>
-                <td class="px-6 py-4">2024-09-15</td>
-                <td class="px-6 py-4 text-center">
-                    <span class="bg-yellow-500 text-white text-center p-2 rounded-full dark:text-white">Pending</span>
-                </td>
-                <td class="px-6 py-4 text-right">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">BDO Bank Loan</th>
-                <td class="px-6 py-4">Bank</td>
-                <td class="px-6 py-4">$150,000</td>
-                <td class="px-6 py-4">$50,000</td>
-                <td class="px-6 py-4">2024-09-01</td>
-                <td class="px-6 py-4 text-center">
-                    <span class="bg-green-500 text-white text-center p-2 rounded-full dark:text-white">Active</span>
-                </td>
-                <td class="px-6 py-4 text-right">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
-            <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Utang kay Jaycel</th>
-                <td class="px-6 py-4">Calamity</td>
-                <td class="px-6 py-4">$12,000</td>
-                <td class="px-6 py-4">$7,000</td>
-                <td class="px-6 py-4">2024-08-30</td>
-                <td class="px-6 py-4 text-center">
-                    <span class="bg-red-500 text-white text-center p-2 rounded-full dark:text-white">Late</span>
-                </td>
-                <td class="px-6 py-4 text-right">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
-        </tbody>
-      </table>
-    </div>
-    <div>
-      <!-- Modal toggle -->
-      <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-        Apply for New Loan
-      </button>
-
-      <!-- Main modal -->
-      <div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-          <div class="relative p-4 w-full max-w-md max-h-full">
-              <!-- Modal content -->
-              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                  <!-- Modal header -->
-                  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                          Create New Product
-                      </h3>
-                      <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
-                          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                          </svg>
-                          <span class="sr-only">Close modal</span>
-                      </button>
-                  </div>
-                  <!-- Modal body -->
-                  <form class="p-4 md:p-5">
-                      <div class="grid gap-4 mb-4 grid-cols-2">
-                          <div class="col-span-2">
-                              <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                              <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
-                          </div>
-                          <div class="col-span-2 sm:col-span-1">
-                              <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
-                              <input type="number" name="price" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999" required="">
-                          </div>
-                          <div class="col-span-2 sm:col-span-1">
-                              <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
-                              <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                  <option selected="">Select category</option>
-                                  <option value="TV">TV/Monitors</option>
-                                  <option value="PC">PC</option>
-                                  <option value="GA">Gaming/Console</option>
-                                  <option value="PH">Phones</option>
-                              </select>
-                          </div>
-                          <div class="col-span-2">
-                              <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Description</label>
-                              <textarea id="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write product description here"></textarea>
-                          </div>
-                      </div>
-                      <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                          <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                          Add new product
-                      </button>
-                  </form>
+    <!-- MAIN TABLE DIV -->
+      <div class="bg-white border relative shadow-md sm:rounded-lg my-4 flex flex-col flex-1 max-h-20">
+        <div class="flex justify-between">
+          <!-- Search Bar -->
+          <form class="max-w-md m-4 flex justify-start">
+            <div class="relative">
+              <!-- Search Icon -->
+              <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                </svg>
               </div>
+              <!-- Search Input Bar -->
+              <input type="search" [(ngModel)]="searchTerm" (input)="searchTable()" id="default-search" class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300
+              rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search Loan Detail..." required />
+            </div>
+          </form>
+          <!-- TABLE BUTTONs DIV -->
+          <div class="flex justify-end p-4 gap-4">
+            <!-- MANAGE Loan Record Toggle Button -->
+            <button (click)="toggleManageColumn()" class="inline-flex justify-center items-center gap-1
+             text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300
+             font-medium rounded-full text-sm px-4" type="button">
+              <span class="material-icons align-middle ">{{ manageButtonIcon }}</span>{{ manageButtonText }}
+            </button>
+            <!-- ADD Loan Record Toggle Button -->
+            <button (click)="toggleModal('add-loan-modal')" class="inline-flex justify-center items-center gap-1
+            text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300
+            font-medium rounded-full text-sm px-4" type="button">
+              <span class="material-icons align-middle ">{{ 'add' }}</span>Add New Loan
+            </button>
           </div>
+        </div>
+          <table class="w-full text-sm text-center text-gray-500 rounded-lg border-spacing-0 inline-table">
+            <thead class="w-full text-xs uppercase bg-gray-100">
+              <tr>
+                <th (click)="sortTable('name')" scope="col" class="px-6 py-2 hover:bg-gray-200 cursor-pointer align-middle">
+                  <span class="align-middle">Loan Name</span>
+                  <span class="material-icons inline-block align-middle scale-75">{{ 'unfold_more' }} </span>
+                </th>
+                <th (click)="sortTable('type')" scope="col" class="px-6 py-2 hover:bg-gray-200 cursor-pointer align-middle">
+                  <span class="align-middle">Loan Type</span>
+                  <span class="material-icons inline-block align-middle scale-75">{{ 'unfold_more' }} </span>
+                </th>
+                <th (click)="sortTable('outstandingBalance')" scope="col" class="px-6 py-2 hover:bg-gray-200 cursor-pointer align-middle">
+                  <span class="align-middle">Outstanding Balance</span>
+                  <span class="material-icons inline-block align-middle scale-75">{{ 'unfold_more' }} </span>
+                </th>
+                <th (click)="sortTable('totalPaid')" scope="col" class="px-6 py-2 hover:bg-gray-200 cursor-pointer align-middle">
+                  <span class="align-middle">Total Paid</span>
+                  <span class="material-icons inline-block align-middle scale-75">{{ 'unfold_more' }} </span>
+                </th>
+                <th (click)="sortTable('lastPayment')" scope="col" class="px-6 py-2 hover:bg-gray-200 cursor-pointer align-middle">
+                  <span class="align-middle">Last Payment</span>
+                  <span class="material-icons inline-block align-middle scale-75">{{ 'unfold_more' }} </span>
+                </th>
+                <th (click)="sortTable('status')" scope="col" class="px-6 py-2 hover:bg-gray-200 cursor-pointer align-middle">
+                  <span class="align-middle">Status</span>
+                  <span class="material-icons inline-block align-middle scale-75">{{ 'unfold_more' }} </span>
+                </th>
+                <th *ngIf="showManageColumn" scope="col" class="px-6 py-2 hover:bg-gray-200 cursor-pointer align-middle"></th>
+          </tr>
+            </thead>
+              <tbody>
+                <tr *ngFor="let loan of filteredLoanRecords; trackBy: trackByFn" class="bg-white border-b hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <th scope="row" class="px-6 py-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{ loan.name }}
+                  </th>
+                  <td>{{ loan.type }}</td>
+                  <td>{{ loan.outstandingBalance | currency: 'PHP' }}</td>
+                  <td>{{ loan.totalPaid | currency: 'PHP' }}</td>
+                  <td>{{ loan.lastPayment | date: 'MM/dd/yyyy' }}</td>
+                  <td class="flex justify-center items-center py-2">
+                    <span [ngClass]="{
+                      'bg-yellow-500': loan.status === 'Pending',
+                      'bg-green-500': loan.status === 'Approved',
+                      'bg-blue-500': loan.status === 'Active',
+                      'bg-red-800': loan.status === 'Past Due',
+                      'bg-red-500': loan.status === 'Late',
+                      'bg-indigo-500': loan.status === 'Deferred',
+                      'bg-pink-500': loan.status === 'In Collections',
+                      'bg-gray-400': loan.status === 'Closed',
+                      'bg-red-700': loan.status === 'Defaulted',
+                      'bg-blue-600': loan.status === 'Restructured',
+                      'bg-black': loan.status === 'Cancelled'
+                    }" class="flex justify-center items-center min-w-20 px-1 py-1 rounded-full text-white truncate text-xs">
+                      {{ loan.status }}
+                    </span>
+                  </td>
+                  <td *ngIf="showManageColumn" class="px-6 py-0">
+                    <div class="flex justify-evenly items-center">
+                      <!-- EDIT Record Toggle Button -->
+                      <button (click)="toggleModal('edit-loan-modal')" class="material-icons font-medium text-blue-600"
+                      title="Edit Loan Details">{{ 'edit' }}</button>
+<!-- EDIT LOAN Modal Overlay and Container -->
+<div id="edit-loan-modal" class="fixed hidden inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  <!-- Modal Content -->
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center mb-4 h-full">
+      <span class="text-lg font-semibold text-gray-900">Edit Loan Details</span>
+      <button (click)="toggleModal('edit-loan-modal')" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8 flex items-center justify-center">
+        <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" fill="none">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7l-6 6"/>
+        </svg>
+        <span class="sr-only">Close modal</span>
+      </button>
+    </div>
+    <!-- Modal Form -->
+    <form>
+      <div class="grid grid-cols-2 gap-y-4">
+        <label for="name" class="text-sm flex items-center font-medium text-gray-700">Loan Name</label>
+        <input [(ngModel)]="loan.name" id="loan-name-input" type="text" class="input-field rounded-lg border" required>
+
+        <label for="type" class="text-sm flex items-center font-medium text-gray-700">Loan Type</label>
+        <input [(ngModel)]="loan.type" id="loan-type-input" type="text" class="input-field rounded-lg border" required>
+
+        <label for="outstandingBalance" class="text-sm flex items-center font-medium text-gray-700">Outstanding Balance</label>
+        <input [(ngModel)]="loan.outstandingBalance" id="loan-outstandingBalance-input" type="number" class="input-field rounded-lg border" required>
+
+        <label for="totalPaid" class="text-sm flex items-center font-medium text-gray-700">Total Paid</label>
+        <input [(ngModel)]="loan.totalPaid" id="loan-totalPaid-input" type="number" class="input-field rounded-lg border" required>
+
+        <label for="lastPayment" class="text-sm flex items-center font-medium text-gray-700">Last Payment</label>
+        <input [(ngModel)]="loan.lastPayment" id="loan-lastPayment-input" type="date" class="input-field rounded-lg border" required>
+
+        <label for="status" class="text-sm flex items-center font-medium text-gray-700">Status</label>
+        <select [(ngModel)]="loan.status" id="loan-status-input" class="input-field rounded-lg border">
+          <option value="Pending">Pending</option>
+          <option value="Approved">Approved</option>
+          <option value="Active">Active</option>
+          <option value="Past Due">Past Due</option>
+          <option value="Late">Late</option>
+          <option value="Deferred">Deferred</option>
+          <option value="In Collections">In Collections</option>
+          <option value="Closed">Closed</option>
+          <option value="Defaulted">Defaulted</option>
+          <option value="Restructured">Restructured</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+        <div class="col-span-2 flex justify-center">
+          <button (click)="editLoan(loan)" type="submit" class="col-span-2 mt-2 w-auto bg-blue-600 hover:bg-blue-800 text-white font-medium rounded-lg p-2 px-4">
+            Save Changes
+          </button>
+        </div>
       </div>
+    </form>
+  </div>
+</div>
+
+                      <!-- DELETE Record Modal Toggle Button -->
+                      <button (click)="toggleModal('delete-loan-modal')" class="material-icons font-medium text-red-600"
+                      title="Delete Loan">{{ 'delete' }}</button>
+                      <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
+<!-- DELETE LOAN Modal Overlay and Container -->
+<div id="delete-loan-modal" class="fixed hidden inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  <!-- Modal Content -->
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center mb-4 h-full">
+      <span class="text-lg font-semibold text-gray-900">Delete Loan</span>
+      <button (click)="toggleModal('delete-loan-modal')" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8 flex items-center justify-center">
+        <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" fill="none">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7l-6 6"/>
+        </svg>
+        <span class="sr-only">Close modal</span>
+      </button>
+    </div>
+    <div class="align-middle text-center">
+      <svg class="mx-auto mb-4 text-gray-400 w-12 h-12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
+      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+    </svg>
+      <h3 class="mb-5 text-lg font-normal text-gray-500">Are you sure? This action cannot be undone.</h3>
+
+      <!-- Action Buttons -->
+      <button (click)="deleteLoan(loan)" class="bg-red-600 hover:bg-red-800 text-white font-medium rounded-lg px-5 py-2.5 text-sm focus:ring-4 focus:outline-none focus:ring-green-300">
+        Yes
+      </button>
+      <button (click)="toggleModal('delete-loan-modal')" class="px-5 py-2.5 ms-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:ring-4 focus:outline-none focus:ring-gray-100">
+        No
+      </button>
     </div>
   </div>
 </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+
+<!-- ADD LOAN Modal Overlay and Container -->
+<div id="add-loan-modal" class="fixed hidden inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  <!-- Modal Content -->
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center mb-4 h-full">
+      <span class="text-lg font-semibold text-gray-900">Add Loan</span>
+      <button (click)="toggleModal('add-loan-modal')" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8 flex items-center justify-center">
+        <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" fill="none">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7l-6 6"/>
+        </svg>
+        <span class="sr-only">Close modal</span>
+      </button>
+    </div>
+    <!-- Modal Form -->
+    <form>
+      <div class="grid grid-cols-2 gap-y-4">
+        <label for="name" class="text-sm flex items-center font-medium text-gray-700">Loan Name</label>
+        <input id="loan-name-input" type="text" class="input-field rounded-lg border" placeholder="e.g., Personal Loan" required>
+
+        <label for="type" class="text-sm flex items-center font-medium text-gray-700">Loan Type</label>
+        <input id="loan-type-input" type="text" class="input-field rounded-lg border" placeholder="e.g., School" required>
+
+        <label for="outstandingBalance" class="text-sm flex items-center font-medium text-gray-700">Outstanding Balance</label>
+        <input id="loan-outstandingBalance-input" type="number" class="input-field rounded-lg border" placeholder="e.g., 5000" required>
+
+        <label for="totalPaid" class="text-sm flex items-center font-medium text-gray-700">Total Paid</label>
+        <input id="loan-totalPaid-input" type="number" class="input-field rounded-lg border" placeholder="e.g., 2000" required>
+
+        <label for="lastPayment" class="text-sm flex items-center font-medium text-gray-700">Last Payment</label>
+        <input id="loan-lastPayment-input" type="date" class="input-field rounded-lg border" required>
+
+        <label for="status" class="text-sm flex items-center font-medium text-gray-700">Status</label>
+        <select id="loan-status-input" class="input-field rounded-lg border">
+          <option value="Pending">Pending</option>
+          <option value="Approved">Approved</option>
+          <option value="Active">Active</option>
+          <option value="Past Due">Past Due</option>
+          <option value="Late">Late</option>
+          <option value="Deferred">Deferred</option>
+          <option value="In Collections">In Collections</option>
+          <option value="Closed">Closed</option>
+          <option value="Defaulted">Defaulted</option>
+          <option value="Restructured">Restructured</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+        <div class="col-span-2 flex justify-center">
+          <button (click)="addLoan()" type="submit" class="col-span-2 mt-2 w-auto bg-blue-600 hover:bg-blue-800 text-white font-medium rounded-lg p-2 px-4">
+            Add Loan
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+

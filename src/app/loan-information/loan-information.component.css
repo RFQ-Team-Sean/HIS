@@ -1,0 +1,12 @@
+/* Fix the header row at the top */
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Table adjustments for scrollable body */
+.overflow-y-auto {
+  max-height: 400px; /* Adjust this as needed */
+  overflow-y: auto;
+}
