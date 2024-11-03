@@ -25,7 +25,6 @@ export class SidebarNavigationComponent {
     { name: 'Workflow Approval', route: '/workflow-approval' },
     { name: 'Personal Information Management', route: '/pimam' },
     { name: 'Personal Data Sheet', route: '/personal-data-sheet/view'},
-    { name: 'PDS', route: '/pds'},
     { name: 'Loan Information', route: '/loan-information'},
     { name: 'Merits and Violations', route: '/merits-and-violations'},
     { name: 'Leaves and Attendance Records', route: '/leaves-attendance-records'},
@@ -43,7 +42,6 @@ export class SidebarNavigationComponent {
     '/merits-and-violations' : 'list',
     '/leaves-attendance-records': 'perm_contact_calendar',
     '/pimam': 'badge',
-    // '/pds': 'account_circle',
     '/loan-information': 'account_balance',
     '/personal-data-sheet/view' : 'account_circle'
   };

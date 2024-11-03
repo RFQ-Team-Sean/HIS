@@ -9,10 +9,19 @@
     </div>
     <!-- Div For Section Buttons -->
     <div class="flex flex-col justify-center gap-3 items-center mt-2 mb-4 p-2 w-full basis-4/5">
-      <button type="button" [routerLink]="[generalInfoUrl]" routerLinkActive="bg-blue-800" class="min-w-[70%] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">General Information</button>
-      <button type="button" class="min-w-[70%] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Employment Records</button>
-      <button type="button" [routerLink]="[compensationRecordsUrl]" routerLinkActive="bg-blue-800" class="min-w-[70%] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Compensation Records</button>
-      <!-- <button type="button" [routerLink]="[leavesAndAttendanceRecordsUrl]" routerLinkActive="bg-blue-800" class="min-w-[70%] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Leaves and Attendance Records</button> -->
+      <!-- General Info Button -->
+      <button type="button" [routerLink]="[generalInfoUrl]" routerLinkActive="bg-blue-800"
+      class="min-w-[70%] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300
+      font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 inline-flex gap-2 justify-center items-center">
+      <span class="material-icons">{{ 'account_circle' }}</span>General Information</button>
+      <!-- Employment Records Button -->
+      <button type="button" class="min-w-[70%] text-white bg-blue-700 hover:bg-blue-800
+      focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Employment Records</button>
+      <!-- Compensation Records Button -->
+      <button type="button" [routerLink]="[compensationRecordsUrl]" routerLinkActive="bg-blue-800"
+      class="min-w-[70%] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300
+      font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 inline-flex justify-center items-center gap-2">
+      <span class="material-icons"> {{'pie_chart'}}</span>Compensation Records</button>
     </div>
   </aside>
   <!-- Right Main Column -->
@@ -31,7 +40,8 @@
       <div class="flex items-center justify-between basis-3/5 ml-6 gap-8">
         <span class="text-2xl font-extralight tracking-widest">{{ setTitle(currentUrl) }}</span>
         <button type="button" (click)="navigateTo(editRootUrl)" class="text-white bg-green-500 hover:bg-green-800 flex justify-evenly gap-1 items-center
-        focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-4 py-2" *ngIf="currentUrl === generalInfoUrl"><span class="material-icons scale-[.65] me-0 m-0">{{'edit'}}</span>Edit</button>
+        focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-4 py-2" *ngIf="currentUrl === generalInfoUrl">
+        <span class="material-icons scale-[.65] me-0 m-0">{{'edit'}}</span>Edit</button>
       </div>
     </div>
     <hr>
