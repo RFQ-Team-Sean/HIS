@@ -23,10 +23,14 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
   scheduleAdjustmentRequests: any[] = [];
   employees: any[] = [];
   
+  leaveTypes: any[] = ['Sick Leave', 'Maternity Leave', 'Vacation Leave'];
   addLeaveForm: FormGroup;
   addSchedForm: FormGroup;
   selectedFile: File | null = null;
   selectedEmployeeId: number | null = null;
+  selectedLeaveType: string | null = null;
+  selectedStartDate: string | null = null;
+  selectedEndDate: string | null = null;
   file: File | null = null;
 
   isManaging: boolean = false;
@@ -136,6 +140,11 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
 
   closeAddLeaveModal() {
     this.isAddLeaveModalOpen = false;
+    this.selectedEmployeeId = null;
+    this.selectedLeaveType = null;
+    this.selectedStartDate = null;
+    this.selectedEndDate = null;
+    this.file = null;
   }
 
 
@@ -144,7 +153,7 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
 
     this.isSubmitting = true;
 
-    // Step 1: Upload file to Supabase Storage
+    //Upload file to supabase bucket
     const filePath = `${Date.now()}_${this.file.name}`;
     const { error: uploadError } = await this.supabaseService.uploadRequestFile(
         'schedule-adjustment-requests-documents',
@@ -158,34 +167,90 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
         return;
     }
 
-    // Step 2: Submit data to schedule_adjustment_requests table
-    const { error: insertError } = await this.supabaseService.insertScheduleAdjustmentRequest({
+    //Submit data to schedule_adjustment_requests table
+    const { error: insertError } = await this.supabaseService.insertRequest({
         employee_id: this.selectedEmployeeId,
         request: filePath,
         status: 'Pending',
-    });
+    }, 'schedule_adjustment_requests');
+
+    this.scheduleAdjustmentRequests = await this.supabaseService.getScheduleAdjustmentRequests()
 
     if (insertError) {
         console.error('Error inserting schedule adjustment request:', insertError);
     } else {
-        this.closeAddSchedModal(); // Close modal after successful submission
+        this.closeAddSchedModal();
+    }
+
+    this.isSubmitting = false;
+  }
+
+  async onAddLeaveSubmit() {
+    if (!this.selectedEmployeeId || !this.file) return;
+
+    this.isSubmitting = true;
+
+    //Upload file to supabase bucket
+    const filePath = `${Date.now()}_${this.file.name}`;
+    const { error: uploadError } = await this.supabaseService.uploadRequestFile(
+        'leave-requests-documents',
+        filePath,
+        this.file
+    );
+
+    if (uploadError) {
+        console.error('Error uploading file:', uploadError);
+        this.isSubmitting = false;
+        return;
+    }
+
+    //Submit data to leave_requests table
+    const { error: insertError } = await this.supabaseService.insertRequest({
+        employee_id: this.selectedEmployeeId,
+        leave_type: this.selectedLeaveType,
+        request: filePath,
+        start_date: this.selectedStartDate, 
+        end_date: this.selectedEndDate,     
+        status: 'Pending',
+    }, 'leave_requests');
+
+
+    this.leaveRequests = await this.supabaseService.getLeaveRequests()
+
+    if (insertError) {
+        console.error('Error inserting schedule adjustment request:', insertError);
+    } else {
+        this.closeAddSchedModal();
     }
 
     this.isSubmitting = false;
   }
 
   onUpdateClicked() {
-    if (this.selectedRequest) {
-      this.selectedRequest.status = this.newStatus;
-      this.supabaseService.updateLeaveRequestStatus(this.selectedRequest.id, this.newStatus)
-        .then(updatedData => {
-          if (updatedData) {
+    //update leave balance
+    const newBalance = (this.selectedRequest.profile.leave_balance || 0) + this.adjustLeaveAmount;
+    this.supabaseService.updateLeaveBalance(this.selectedRequest.profile?.user_id, newBalance)
+      .then(updatedData => {
+        if (updatedData) {
             console.log('Status updated in Supabase:', updatedData);
-          } else {
+        } else {
             console.error('Failed to update status in Supabase');
-          }
-        });
-      this.closeModal();
+        }
+      });
+    this.selectedRequest.profile.leave_balance = newBalance;
+    this.adjustLeaveAmount = 0;
+    //update request status
+    if (this.selectedRequest) {
+        this.selectedRequest.status = this.newStatus;
+        this.supabaseService.updateLeaveRequestStatus(this.selectedRequest.id, this.newStatus)
+            .then(updatedData => {
+                if (updatedData) {
+                    console.log('Status updated in Supabase:', updatedData);
+                } else {
+                    console.error('Failed to update status in Supabase');
+                }
+            });
+        this.closeModal()
     }
   }
 

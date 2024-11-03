@@ -108,7 +108,7 @@
 
                                     <div class="flex justify-between items-center w-full px-5">
                                         <p class="text-xl font-semibold tracking-wider mt-10">LEAVE REQUESTS</p>
-                                        <div class="flex space-x-2">
+                                        <div  class="flex space-x-2">
                                             <button *ngIf="isManaging" (click)="openAddLeaveModal()" class="text-white bg-blue-500 hover:bg-blue-700 rounded border border-gray-200 text-sm font-medium px-5 py-2.5">
                                                 + Add Request
                                             </button>
@@ -137,7 +137,7 @@
                                                 <tr *ngFor="let requests of leaveRequests">
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.id }}</td>
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.profile?.email }}</td>
-                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.leave_balance }}</td>
+                                                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.profile?.leave_balance }}</td>
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.leave_type }}</td>
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.start_date }}</td>
                                                     <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.end_date }}</td>
@@ -322,24 +322,87 @@
     </div>
 
     <!-- Modal for Adding Schedule Leave Requests -->
-
     <div *ngIf="isAddLeaveModalOpen" class="fixed inset-0 flex items-center justify-center z-50">
         <div class="absolute inset-0 bg-black opacity-50"></div>
-        
+
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow-lg p-6 w-96 z-10">
             <h2 class="text-xl font-semibold mb-4">Add Leave Request</h2>
 
-            <p>Balls</p>
+            <form (ngSubmit)="onAddLeaveSubmit()">
+                <!-- Employee Dropdown -->
+                <label class="block text-sm font-medium text-gray-700">Requester</label>
+                <select
+                    [(ngModel)]="selectedEmployeeId"
+                    name="employee"
+                    class="block w-full px-3 py-2 mt-1 mb-4 bg-white border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required
+                >
+                    <option *ngFor="let employee of employees" [value]="employee.user_id">
+                        {{ employee.first_name }} {{ employee.surname }}
+                    </option>
+                </select>
 
-            <div class="flex justify-end mt-6">
-                <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mr-2">
-                    Add Request
-                </button>
-                <button (click)="closeAddLeaveModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
-                    Cancel
-                </button>
-            </div>
+                <!-- Leave Type Dropdown -->
+                <label class="block text-sm font-medium text-gray-700">Leave Type</label>
+                <select
+                    [(ngModel)]="selectedLeaveType"
+                    name="leave_type"
+                    class="block w-full px-3 py-2 mt-1 mb-4 bg-white border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required
+                >
+                    <option *ngFor="let type of leaveTypes" [value]="type">
+                        {{ type }}
+                    </option>
+                </select>
+
+                <!-- Start Date -->
+                <label class="block text-sm font-medium text-gray-700">Start Date</label>
+                <input
+                    type="date"
+                    [(ngModel)]="selectedStartDate"
+                    name="start_date"
+                    class="block w-full px-3 py-2 mt-1 mb-4 bg-white border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required
+                />
+
+                <!-- End Date -->
+                <label class="block text-sm font-medium text-gray-700">End Date</label>
+                <input
+                    type="date"
+                    [(ngModel)]="selectedEndDate"
+                    name="end_date"
+                    class="block w-full px-3 py-2 mt-1 mb-4 bg-white border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required
+                />
+
+                <!-- File Upload -->
+                <label class="block text-sm font-medium text-gray-700">Upload Request Document</label>
+                <input
+                    type="file"
+                    (change)="onFileSelected($event)"
+                    class="block w-full px-3 py-2 mt-1 bg-white border rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required
+                />
+
+                <!-- Submit and Cancel buttons -->
+                <div class="flex justify-end mt-6">
+                    <button
+                        type="submit"
+                        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mr-2"
+                        [disabled]="isSubmitting"
+                    >
+                        Add Request
+                    </button>
+                    <button
+                        type="button"
+                        (click)="closeAddLeaveModal()"
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

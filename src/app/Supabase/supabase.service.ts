@@ -1531,7 +1531,7 @@ async getParameters() {
   //LEAVE REQUESTS
 
   async getLeaveRequests() {
-    const { data, error } = await this.supabase.from('leave_requests').select('* , profile(email)');
+    const { data, error } = await this.supabase.from('leave_requests').select('* , profile(*)');
     if (error) {
       console.error('Error fetching leave requests:', error);
       return [];
@@ -1554,9 +1554,9 @@ async getParameters() {
 
   async updateLeaveBalance(requestId: number, newBalance: number) {
     const { data, error } = await this.supabase
-        .from('leave_requests')
+        .from('profile')
         .update({ leave_balance: newBalance })
-        .eq('id', requestId);
+        .eq('user_id', requestId);
     
     if (error) {
         console.error('Error updating leave balance:', error);
@@ -1608,9 +1608,11 @@ async getParameters() {
       return this.supabase.storage.from(bucket).upload(path, file);
   }
 
-  async insertScheduleAdjustmentRequest(data: any) {
-      return this.supabase.from('schedule_adjustment_requests').insert(data);
+  async insertRequest(data: any, table: string) {
+      return this.supabase.from(table).insert(data);
   }
+
+
 
 
 }
