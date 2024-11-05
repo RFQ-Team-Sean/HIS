@@ -1612,6 +1612,37 @@ async getParameters() {
       return this.supabase.from(table).insert(data);
   }
 
+  async deleteScheduleAdjustmentRequest(requestId: number, filename: string) {
+    try {
+        // Step 1: Delete the file from the bucket
+        const { error: storageError } = await this.supabase
+            .storage
+            .from('schedule-adjustment-requests-documents')
+            .remove([filename]);
+
+        if (storageError) {
+            console.error('Error deleting file from storage:', storageError);
+            return null;
+        }
+
+        // Step 2: Delete the request entry from the table
+        const { data, error } = await this.supabase 
+            .from('schedule_adjustment_requests')
+            .delete()
+            .eq('id', requestId);
+
+        if (error) {
+            console.error('Error deleting request from database:', error);
+            return null;
+        }
+
+        return data;
+    } catch (err) {
+        console.error('Unexpected error during deletion:', err);
+        return null;
+    }
+  }
+
 
 
 

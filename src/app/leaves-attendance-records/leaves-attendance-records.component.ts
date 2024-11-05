@@ -37,12 +37,13 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
   isAdjusting: boolean = false;
   isAddSchedModalOpen: boolean = false;
   isAddLeaveModalOpen: boolean = false;
-
+  
   adjustButtonText: string = 'Manage Requests';
   manageButtonText: string = 'Manage Requests';
 
   isModalOpen = false;
   isModalOpen2 = false; // For sched adjustment request
+  isDeleteConfirmModalOpen = false;
   isSubmitting = false;
   selectedRequest: any = null;
   newStatus: LeaveStatus = 'Pending';
@@ -121,6 +122,15 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
   openAddLeaveModal() {
     this.isAddLeaveModalOpen = true;
   }
+  
+  openDeleteConfirmationModal() {
+    this.isDeleteConfirmModalOpen = true;
+  }
+
+  closeDeleteConfirmationModal() {
+      this.isDeleteConfirmModalOpen = false;
+  }
+
 
   closeModal() {
     this.isModalOpen = false;
@@ -146,7 +156,6 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
     this.selectedEndDate = null;
     this.file = null;
   }
-
 
   async onAddSchedSubmit() {
     if (!this.selectedEmployeeId || !this.file) return;
@@ -268,6 +277,24 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
       this.closeModal2();
     }
   }
+
+  async onDeleteConfirmed() {
+    if (this.selectedRequest) {
+        this.supabaseService.deleteScheduleAdjustmentRequest(this.selectedRequest.id, this.selectedRequest.request)
+            .then(deleted => {
+                if (deleted) {
+                    console.log('Request and file deleted successfully:', deleted);
+                } else {
+                    console.log('Failed to delete request or file');
+                }
+            })
+            .catch(error => console.error('Error during delete:', error));
+        this.closeDeleteConfirmationModal();
+        this.closeModal2();
+    }
+    this.scheduleAdjustmentRequests = await this.supabaseService.getScheduleAdjustmentRequests()
+  }
+
 
   // ngAfterViewInit(): void {
   //   const datePicker = document.getElementById('default-datepicker');
