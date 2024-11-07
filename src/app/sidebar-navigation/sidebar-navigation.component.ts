@@ -18,12 +18,7 @@ export class SidebarNavigationComponent {
   // sidebar buttons
   sidebarItems: SidebarItem[] = [
     { name: 'Dashboard', route: '/dashboard' },
-    { name: 'Employee Management', route: '/user-management' },
-    { name: 'System Management', route: '/system-management' },
-    { name: 'Audit Trail', route: '/audit-trail' },
     { name: 'DTR', route: '/dtr' },
-    { name: 'Workflow Approval', route: '/workflow-approval' },
-    { name: 'Personal Information Management', route: '/pimam' },
     { name: 'Personal Data Sheet', route: '/personal-data-sheet/view'},
     { name: 'Loan Information', route: '/loan-information'},
     { name: 'Merits and Violations', route: '/merits-and-violations'},
@@ -33,15 +28,10 @@ export class SidebarNavigationComponent {
 
   private routeIconMap: { [key: string]: string } = {
     '/dashboard': 'dashboard',
-    '/user-management': 'group',
-    '/system-management': 'settings',
-    '/audit-trail': 'history',
     '/dtr': 'today',
-    '/workflow-approval': 'person_add',
     '/support-ticket': 'contact_support',
     '/merits-and-violations' : 'list',
     '/leaves-attendance-records': 'perm_contact_calendar',
-    '/pimam': 'badge',
     '/loan-information': 'account_balance',
     '/personal-data-sheet/view' : 'account_circle'
   };

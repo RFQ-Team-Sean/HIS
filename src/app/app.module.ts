@@ -3,16 +3,8 @@ import { Component, Injectable, NgModule } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { UserManagementComponent } from './user-management/user-management.component';
 import { LoginFailedComponent } from '../app/login-failed/login-failed.component';
 import { SidebarNavigationComponent } from './sidebar-navigation/sidebar-navigation.component';
-import { AuditTrailComponent } from './audit-trail/audit-trail.component';
-import { WorkflowComponent } from './workflow-approval/workflow-approval.component';
-import { TestBackComponent } from './test-back/test-back.component';
-import { TestBack2Component } from './test-back2/test-back2.component';
-import { TestBack3Component } from './test-back3/test-back3.component';
-import { TestBack4Component } from './test-back4/test-back4.component';
-
 import { PDSComponent } from './pds/pds.component';
 
 import { MeritsAndViolationsComponent } from './merits-and-violations/merits-and-violations.component';
@@ -26,7 +18,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app.routes';
 
-
 import { LeavesAttendanceRecordsComponent } from './leaves-attendance-records/leaves-attendance-records.component';
 
 
@@ -36,15 +27,8 @@ import { LeavesAttendanceRecordsComponent } from './leaves-attendance-records/le
     RouterOutlet,
     CommonModule,
     DashboardComponent,
-    UserManagementComponent,
     LoginFailedComponent,
-    AuditTrailComponent,
     SidebarNavigationComponent,
-    WorkflowComponent,
-    TestBackComponent,
-    TestBack2Component,
-    TestBack3Component,
-    TestBack4Component,
     PDSComponent,
     // PersonalDataSheetComponent,
     LoanInformationComponent,
