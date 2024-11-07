@@ -33,7 +33,7 @@ export class SidebarNavigationComponent {
     '/support-ticket': 'contact_support',
     '/merits-and-violations' : 'list',
     '/leaves-attendance-records': 'perm_contact_calendar',
-    '/requests': 'perm_contact_calendar',
+    '/requests': 'list_alt',
     '/loan-information': 'account_balance',
     '/personal-data-sheet/view' : 'account_circle'
   };

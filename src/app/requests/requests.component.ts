@@ -45,7 +45,7 @@ export class RequestsComponent implements OnInit{
       leaveType: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
-      request: ['', Validators.required] // Field to store filename
+      request: ['', Validators.required]
     });
   }
 
