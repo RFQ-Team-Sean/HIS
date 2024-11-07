@@ -18,7 +18,7 @@ export class SidebarNavigationComponent {
   // sidebar buttons
   sidebarItems: SidebarItem[] = [
     { name: 'Dashboard', route: '/dashboard' },
-    { name: 'DTR', route: '/dtr' },
+    { name: 'Daily Time Logs', route: '/dtr' },
     { name: 'Personal Data Sheet', route: '/personal-data-sheet/view'},
     { name: 'Loan Information', route: '/loan-information'},
     { name: 'Merits and Violations', route: '/merits-and-violations'},

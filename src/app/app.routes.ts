@@ -50,7 +50,7 @@ export const routes: Routes = [
       { path: 'view', component: ViewPDSComponent, canActivate: [authGuard],
         children: [
           { path: 'general-information', component: GeneralInformationComponent, canActivate: [authGuard] },
-          { path: 'compensation-records', component: CompensationRecordsComponent, canActivate: [authGuard] },
+          { path: 'compensation-records', component: CompensationRecordsComponent, canActivate: [authGuard] }
         ]
       },
       { path: 'edit', component: EditPDSComponent, canActivate: [authGuard],
