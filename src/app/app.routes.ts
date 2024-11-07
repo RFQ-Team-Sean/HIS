@@ -36,6 +36,7 @@ import { ViewPDSComponent } from './personal-data-sheet/view/view.component';
 import { EditPDSComponent } from './personal-data-sheet/edit/edit.component';
 import { GeneralInformationComponent } from './personal-data-sheet/view/general-information/general-information.component';
 import { LeavesAttendanceRecordsComponent } from './leaves-attendance-records/leaves-attendance-records.component';
+import { RequestsComponent } from './requests/requests.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -51,10 +52,10 @@ export const routes: Routes = [
   { path: 'workflow-approval', component: WorkflowComponent, canActivate: [authGuard] },
   { path: 'support-ticket', component: SupportTicketComponent, canActivate: [authGuard] },
   { path: 'workflow-approval-user', component: WorkflowApprovalUserComponent, canActivate: [authGuard] },
-
   { path: 'pimam', component: PimamComponent, canActivate: [authGuard] },
   { path: 'merits-and-violations', component: MeritsAndViolationsComponent, canActivate: [authGuard]},
   { path: 'leaves-attendance-records', component: LeavesAttendanceRecordsComponent, canActivate: [authGuard] },
+  { path: 'requests', component: RequestsComponent, canActivate: [authGuard]},
   { path: 'test-back', component: TestBackComponent},
   { path: 'test-back2', component: TestBack2Component},
   { path: 'test-back3', component: TestBack3Component},

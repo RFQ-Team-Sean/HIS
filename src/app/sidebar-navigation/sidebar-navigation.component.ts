@@ -28,6 +28,8 @@ export class SidebarNavigationComponent {
     { name: 'Loan Information', route: '/loan-information'},
     { name: 'Merits and Violations', route: '/merits-and-violations'},
     { name: 'Leaves and Attendance Records', route: '/leaves-attendance-records'},
+    { name: 'Requests', route: '/requests'},
+
 
   ];
 
@@ -41,6 +43,7 @@ export class SidebarNavigationComponent {
     '/support-ticket': 'contact_support',
     '/merits-and-violations' : 'list',
     '/leaves-attendance-records': 'perm_contact_calendar',
+    '/requests': 'list_alt',
     '/pimam': 'badge',
     '/loan-information': 'account_balance',
     '/personal-data-sheet/view' : 'account_circle'

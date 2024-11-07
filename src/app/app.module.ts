@@ -26,8 +26,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app.routes';
 
-
 import { LeavesAttendanceRecordsComponent } from './leaves-attendance-records/leaves-attendance-records.component';
+import { RequestsComponent } from './requests/requests.component';
 
 
 @NgModule({
@@ -54,6 +54,7 @@ import { LeavesAttendanceRecordsComponent } from './leaves-attendance-records/le
     BrowserAnimationsModule,
     MeritsAndViolationsComponent,
     LeavesAttendanceRecordsComponent,
+    RequestsComponent,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule
