@@ -1,0 +1,206 @@
+<div class="flex">
+    <app-sidebar-navigation></app-sidebar-navigation>
+    <div class="flex-grow">
+        <div class="min-h-screen p-6 mb-6">
+            <p class="mb-2 text-3xl font-bold text-neutral-900">Requests<br></p>
+            <p class="mb-2 pb-5 text-slate-500 text-sm">View and manage Leaves, Daily Time Record Adjustments, Overtime, Certifications, Membership Forms, Monetization of leave credits, etc.</p>
+            <div class="z-10 relative rounded-xl shadow-lg bg-white">
+                <div class="flex flex-col gap-5 w-full">
+                    <div class="overflow-x-auto flex flex-col gap-5 py-5 rounded-lg">
+                        <div class="flex justify-between items-center w-full px-5">
+                            <p class="text-xl font-semibold tracking-wider mt-10">LEAVE REQUESTS</p>
+                            <div  class="flex space-x-2">
+                                <button *ngIf="isManagingLeaves" (click)="openAddLeaveModal()" class="text-white bg-blue-500 hover:bg-blue-700 rounded border border-gray-200 text-sm font-medium px-5 py-2.5">
+                                    + Add Request
+                                </button>
+                                <button [ngClass]="{ 'bg-green-500 hover:bg-green-600': !isManagingLeaves, 'bg-pink-500 hover:bg-pink-600': isManagingLeaves }"
+                                        class="text-white rounded border border-gray-200 text-sm font-medium px-5 py-2.5 transition duration-300 ease-in-out" (click)="onManageButtonClick('Leaves')">
+                                    {{ manageLeaveButtonText }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="max-h-[28rem] overflow-y-auto custom-scrollbar overflow-x-auto">
+                            <table class="w-full text-left" >
+                                <thead class="bg-gray-100 z-10 sticky top-0">
+                                    <tr>
+                                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Request ID</th>
+                                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Requested By</th>
+                                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Leave Balance</th>
+                                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Leave Type</th>
+                                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
+                                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">End Date</th>
+                                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Request</th>
+                                        <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th *ngIf="isManagingLeaves" class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr *ngFor="let requests of leaveRequests">
+                                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.id }}</td>
+                                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.profile?.email }}</td>
+                                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.profile?.leave_balance }}</td>
+                                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.leave_type }}</td>
+                                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.start_date }}</td>
+                                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.end_date }}</td>
+                                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <div>{{ requests.request }}</div>
+                                             <a *ngIf="requests.fileUrl" [href]="requests.fileUrl" target="_blank" class="text-xs text-blue-600 hover:underline">View</a>
+                                        </td>
+                                        <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <span class="px-2 py-1 text-xs font-semibold rounded"
+                                                    [ngClass]="{
+                                                    'bg-yellow-200 text-yellow-800': requests.status === 'Pending',
+                                                    'bg-green-200 text-green-800': requests.status === 'Approved',
+                                                    'bg-red-200 text-red-800': requests.status === 'Rejected'
+                                                    }">
+                                                {{ requests.status }}
+                                            </span>
+                                        </td>
+                                        <td *ngIf="isManagingLeaves" class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <button (click)="openManageRequestModal('Leaves', requests)" class="text-blue-500 hover:text-blue-700 mx-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-pencil-square h-6 w-6" viewBox="0 0 16 16">
+                                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal for Managing Leave Requests -->
+    <div *ngIf="isManageLeaveModalOpen" class="fixed inset-0 flex items-center justify-center z-50">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        
+        <div class="relative bg-white rounded-lg shadow-lg p-6 w-96 z-10">
+            <h2 class="text-xl font-semibold mb-4">Update Leave Request</h2>
+
+            <p><strong>Request ID:</strong> {{ selectedRequest?.id }}</p>
+            <p><strong>Requested by:</strong> {{ selectedRequest?.profile?.email }}</p>
+            <p><strong>Leave Type:</strong> {{ selectedRequest?.leave_type }}</p>
+            <p><strong>Leave Balance:</strong> {{ selectedRequest?.leave_balance }}</p>
+            <p><strong>Start Date:</strong> {{ selectedRequest?.start_date }}</p>
+            <p><strong>End Date:</strong> {{ selectedRequest?.end_date }}</p>
+            <p><strong>Request:</strong> {{ selectedRequest?.request }}</p>
+            <div class="flex"><strong class="mr-1">Status:</strong>
+            <p [ngClass]="{
+                ' text-yellow-500': selectedRequest?.status === 'Pending',
+                ' text-green-500': selectedRequest?.status === 'Approved',
+                ' text-red-500': selectedRequest?.status === 'Rejected'
+                }">
+                 {{ selectedRequest?.status }}</p>
+            </div>
+            <!-- Status dropdown -->
+            <label for="status" class="block mt-4 text-sm font-medium">Update Status</label>
+            <select [(ngModel)]="newLeaveStatus" id="status" class="block w-full mt-1 border border-gray-300 rounded-md">
+                <option value="Pending">Pending</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+
+            <!-- Input fields for adding and deducting leave balance -->
+            <div class="my-4">
+                <label for="addLeave" class="block text-sm font-medium text-gray-700">Add/Deduct Leave Balance</label>
+                <input type="number" [(ngModel)]="adjustLeaveAmount" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300" />
+            </div>
+
+            <div class="flex justify-end mt-6">
+                <button (click)="onUpdateLeaveClicked()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mr-2">
+                    Update
+                </button>
+                <button (click)="closeManageRequestModal('Leaves')" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Adding Leave Requests -->
+    <div *ngIf="isAddLeaveModalOpen" class="fixed inset-0 flex items-center justify-center z-50">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+
+        <div class="relative bg-white rounded-lg shadow-lg p-6 w-96 z-10">
+            <h2 class="text-xl font-semibold mb-4">Add Leave Request</h2>
+
+            <form (ngSubmit)="onAddLeaveSubmit()">
+                <!-- Employee Dropdown -->
+                <label class="block text-sm font-medium text-gray-700">Requester</label>
+                <select
+                    [(ngModel)]="selectedEmployeeId"
+                    name="employee"
+                    class="block w-full px-3 py-2 mt-1 mb-4 bg-white border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required
+                >
+                    <option *ngFor="let employee of employees" [value]="employee.user_id">
+                        {{ employee.first_name }} {{ employee.surname }}
+                    </option>
+                </select>
+
+                <!-- Leave Type Dropdown -->
+                <label class="block text-sm font-medium text-gray-700">Leave Type</label>
+                <select
+                    [(ngModel)]="selectedLeaveType"
+                    name="leave_type"
+                    class="block w-full px-3 py-2 mt-1 mb-4 bg-white border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required
+                >
+                    <option *ngFor="let type of leaveTypes" [value]="type">
+                        {{ type }}
+                    </option>
+                </select>
+
+                <!-- Start Date -->
+                <label class="block text-sm font-medium text-gray-700">Start Date</label>
+                <input
+                    type="date"
+                    [(ngModel)]="selectedStartDate"
+                    name="start_date"
+                    class="block w-full px-3 py-2 mt-1 mb-4 bg-white border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required
+                />
+
+                <!-- End Date -->
+                <label class="block text-sm font-medium text-gray-700">End Date</label>
+                <input
+                    type="date"
+                    [(ngModel)]="selectedEndDate"
+                    name="end_date"
+                    class="block w-full px-3 py-2 mt-1 mb-4 bg-white border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required
+                />
+
+                <!-- File Upload -->
+                <label class="block text-sm font-medium text-gray-700">Upload Request Document</label>
+                <input
+                    type="file"
+                    (change)="onFileSelected($event)"
+                    class="block w-full px-3 py-2 mt-1 bg-white border rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required
+                />
+
+                <!-- Submit and Cancel buttons -->
+                <div class="flex justify-end mt-6">
+                    <button
+                        type="submit"
+                        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mr-2"
+                        [disabled]="isSubmitting"
+                    >
+                        Add Request
+                    </button>
+                    <button
+                        type="button"
+                        (click)="closeAddLeaveModal()"
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

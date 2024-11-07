@@ -28,6 +28,7 @@ import { ViewPDSComponent } from './personal-data-sheet/view/view.component';
 import { EditPDSComponent } from './personal-data-sheet/edit/edit.component';
 import { GeneralInformationComponent } from './personal-data-sheet/view/general-information/general-information.component';
 import { LeavesAttendanceRecordsComponent } from './leaves-attendance-records/leaves-attendance-records.component';
+import { RequestsComponent } from './requests/requests.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -41,10 +42,13 @@ export const routes: Routes = [
   { path: 'support-ticket', component: SupportTicketComponent, canActivate: [authGuard] },
   { path: 'merits-and-violations', component: MeritsAndViolationsComponent, canActivate: [authGuard]},
   { path: 'leaves-attendance-records', component: LeavesAttendanceRecordsComponent, canActivate: [authGuard] },
+  { path: 'requests', component: RequestsComponent, canActivate: [authGuard]},
+  { path: 'loan-information', component: LoanInformationComponent, canActivate: [authGuard] },
 
+  //OLD PDS
   { path: 'pds', component: PDSComponent, canActivate: [authGuard] },
   { path: 'pds-family-background', component: PdsFamilyBackgroundComponent, canActivate: [authGuard] },
-  { path: 'loan-information', component: LoanInformationComponent, canActivate: [authGuard] },
+  //REDESIGNED PDS
   { path: 'personal-data-sheet', canActivate: [authGuard],
     children: [
       { path: 'view', component: ViewPDSComponent, canActivate: [authGuard],
@@ -67,6 +71,7 @@ export const routes: Routes = [
         ]
       }
     ]},
+  
 ];
 
 @NgModule({

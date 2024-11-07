@@ -229,7 +229,7 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
     if (insertError) {
         console.error('Error inserting schedule adjustment request:', insertError);
     } else {
-        this.closeAddSchedModal();
+        this.closeAddLeaveModal();
     }
 
     this.isSubmitting = false;
