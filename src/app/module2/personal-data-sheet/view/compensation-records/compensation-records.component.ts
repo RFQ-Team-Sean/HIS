@@ -3,8 +3,8 @@ import { ChartComponent } from "ng-apexcharts";
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { RouterModule, Router } from '@angular/router';
 import { DecimalPipe, CommonModule, isPlatformBrowser  } from '@angular/common';
-import { SupabaseService } from '../../../Supabase/supabase.service';
-import { FlowbiteService } from '../../../services/flowbite.service';
+import { SupabaseService } from '../../../../Supabase/supabase.service';
+import { FlowbiteService } from '../../../../services/flowbite.service';
 import { FormsModule, NgForm  } from '@angular/forms';
 import {
   ApexNonAxisChartSeries,

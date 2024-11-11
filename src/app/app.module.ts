@@ -2,24 +2,24 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, Injectable, NgModule } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardComponent } from './module2/dashboard/dashboard.component';
 import { LoginFailedComponent } from '../app/login-failed/login-failed.component';
 import { SidebarNavigationComponent } from './sidebar-navigation/sidebar-navigation.component';
-import { PDSComponent } from './pds/pds.component';
+import { PDSComponent } from './pds-old/pds.component';
 
-import { MeritsAndViolationsComponent } from './merits-and-violations/merits-and-violations.component';
+import { MeritsAndViolationsComponent } from './module2/employment-records/merits-and-violations/merits-and-violations.component';
 // import { PersonalDataSheetComponent } from './personal-data-sheet/personal-data-sheet.component';
-import { LoanInformationComponent } from './loan-information/loan-information.component';
-import { PersonalInformationComponent } from './personal-data-sheet/edit/personal-information/personal-information.component';
-import { FamilyBackgroundComponent } from './personal-data-sheet/edit/family-background/family-background.component';
-import { EducationalBackgroundComponent } from './personal-data-sheet/edit/educational-background/educational-background.component';
+import { LoanInformationComponent } from './module2/loan-information/loan-information.component';
+import { PersonalInformationComponent } from './module2/personal-data-sheet/edit/personal-information/personal-information.component';
+import { FamilyBackgroundComponent } from './module2/personal-data-sheet/edit/family-background/family-background.component';
+import { EducationalBackgroundComponent } from './module2/personal-data-sheet/edit/educational-background/educational-background.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app.routes';
 
-import { LeavesAttendanceRecordsComponent } from './leaves-attendance-records/leaves-attendance-records.component';
-import { RequestsComponent } from './requests/requests.component';
+import { LeavesAttendanceRecordsComponent } from './module2/leaves-attendance-records/leaves-attendance-records.component';
+import { RequestsComponent } from './module2/requests/requests.component';
 
 
 @NgModule({
@@ -29,7 +29,7 @@ import { RequestsComponent } from './requests/requests.component';
     CommonModule,
     DashboardComponent,
     LoginFailedComponent,
-    SidebarNavigationComponent,
+    // SidebarNavigationComponent,
     PDSComponent,
     // PersonalDataSheetComponent,
     LoanInformationComponent,

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { SupabaseService } from '../Supabase/supabase.service';
-import { SidebarNavigationModule } from '../sidebar-navigation/sidebar-navigation.module';
+import { SupabaseService } from '../../Supabase/supabase.service';
+import { SidebarNavigationModule } from '../../sidebar-navigation/sidebar-navigation.module';
 
 @Component({
   selector: 'app-dashboard',

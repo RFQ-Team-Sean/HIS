@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarNavigationModule } from '../sidebar-navigation/sidebar-navigation.module';
+import { SidebarNavigationModule } from '../../sidebar-navigation/sidebar-navigation.module';
 import { CommonModule } from '@angular/common';
-import { SupabaseService } from '../Supabase/supabase.service';
+import { SupabaseService } from '../../Supabase/supabase.service';
 import { FormGroup, FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 type ScheduleStatus = 'Pending' | 'Approved' | 'Rejected';

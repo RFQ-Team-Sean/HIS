@@ -1,8 +1,8 @@
 import { Component, OnInit} from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { SidebarNavigationModule } from '../sidebar-navigation/sidebar-navigation.module';
-import { SupabaseService } from '../Supabase/supabase.service';
+import { SidebarNavigationModule } from '../../sidebar-navigation/sidebar-navigation.module';
+import { SupabaseService } from '../../Supabase/supabase.service';
 
 type LeaveStatus = 'Pending' | 'Approved' | 'Rejected';
 

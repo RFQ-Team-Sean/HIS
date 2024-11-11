@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarNavigationModule } from '../sidebar-navigation/sidebar-navigation.module';
-import { SupabaseService } from '../Supabase/supabase.service';
+import { SidebarNavigationModule } from '../../../sidebar-navigation/sidebar-navigation.module';
+import { SupabaseService } from '../../../Supabase/supabase.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { SidebarNavigationModule } from '../sidebar-navigation/sidebar-navigation.module';
+import { SidebarNavigationModule } from '../../sidebar-navigation/sidebar-navigation.module';
 import { CommonModule } from '@angular/common';
-import { SupabaseService } from '../Supabase/supabase.service';
+import { SupabaseService } from '../../Supabase/supabase.service';
 import { FormsModule } from '@angular/forms';
 
 interface Loan {

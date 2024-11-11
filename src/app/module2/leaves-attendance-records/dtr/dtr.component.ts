@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { SidebarNavigationModule } from './../sidebar-navigation/sidebar-navigation.module';
-import { SupabaseService } from '../Supabase/supabase.service';
+import { SidebarNavigationModule } from '../../../sidebar-navigation/sidebar-navigation.module';
+import { SupabaseService } from '../../../Supabase/supabase.service';
 
 // Interface defining the structure of an Attendance record
 interface Attendance {

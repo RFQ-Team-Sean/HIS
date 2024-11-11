@@ -1,34 +1,32 @@
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardComponent } from './module2/dashboard/dashboard.component';
 import { LoginFailedComponent } from './login-failed/login-failed.component';
 import { OtpPopupComponent } from './otp-popup/otp-popup.component';
-import { DtrComponent } from './dtr/dtr.component';
+import { DtrComponent } from './module2/leaves-attendance-records/dtr/dtr.component';
 import { SubmitTicketComponent } from './submit-ticket/submit-ticket.component';
 import { SupportTicketComponent } from './support-ticket/support-ticket.component';
 import { authGuard } from './auth/auth.guard'; // Adjust the path if necessary
 
-import { PDSComponent } from './pds/pds.component';
-import { PdsFamilyBackgroundComponent } from './pds-family-background/pds-family-background.component';
-import { CompensationRecordsComponent } from './personal-data-sheet/view/compensation-records/compensation-records.component';
-import { LoanInformationComponent } from './loan-information/loan-information.component';
-import { MeritsAndViolationsComponent } from './merits-and-violations/merits-and-violations.component';
+import { CompensationRecordsComponent } from './module2/personal-data-sheet/view/compensation-records/compensation-records.component';
+import { LoanInformationComponent } from './module2/loan-information/loan-information.component';
+import { MeritsAndViolationsComponent } from './module2/employment-records/merits-and-violations/merits-and-violations.component';
 
-import { PersonalInformationComponent } from './personal-data-sheet/edit/personal-information/personal-information.component';
-import { FamilyBackgroundComponent } from './personal-data-sheet/edit/family-background/family-background.component';
-import { EducationalBackgroundComponent } from './personal-data-sheet/edit/educational-background/educational-background.component';
-import { CivilServiceEligibilityComponent } from './personal-data-sheet/edit/civil-service-eligibility/civil-service-eligibility.component';
-import { WorkExperienceComponent } from './personal-data-sheet/edit/work-experience/work-experience.component';
-import { VoluntaryWorkComponent } from './personal-data-sheet/edit/voluntary-work/voluntary-work.component';
-import { LearningAndDevelopmentInterventionsComponent } from './personal-data-sheet/edit/learning-and-development-interventions/learning-and-development-interventions.component';
-import { OtherInformationComponent } from './personal-data-sheet/edit/other-information/other-information.component';
+import { PersonalInformationComponent } from './module2/personal-data-sheet/edit/personal-information/personal-information.component';
+import { FamilyBackgroundComponent } from './module2/personal-data-sheet/edit/family-background/family-background.component';
+import { EducationalBackgroundComponent } from './module2/personal-data-sheet/edit/educational-background/educational-background.component';
+import { CivilServiceEligibilityComponent } from './module2/personal-data-sheet/edit/civil-service-eligibility/civil-service-eligibility.component';
+import { WorkExperienceComponent } from './module2/personal-data-sheet/edit/work-experience/work-experience.component';
+import { VoluntaryWorkComponent } from './module2/personal-data-sheet/edit/voluntary-work/voluntary-work.component';
+import { LearningAndDevelopmentInterventionsComponent } from './module2/personal-data-sheet/edit/learning-and-development-interventions/learning-and-development-interventions.component';
+import { OtherInformationComponent } from './module2/personal-data-sheet/edit/other-information/other-information.component';
 
 import { NgModule } from '@angular/core';
-import { ViewPDSComponent } from './personal-data-sheet/view/view.component';
-import { EditPDSComponent } from './personal-data-sheet/edit/edit.component';
-import { GeneralInformationComponent } from './personal-data-sheet/view/general-information/general-information.component';
-import { LeavesAttendanceRecordsComponent } from './leaves-attendance-records/leaves-attendance-records.component';
-import { RequestsComponent } from './requests/requests.component';
+import { ViewPDSComponent } from './module2/personal-data-sheet/view/view.component';
+import { EditPDSComponent } from './module2/personal-data-sheet/edit/edit.component';
+import { GeneralInformationComponent } from './module2/personal-data-sheet/view/general-information/general-information.component';
+import { LeavesAttendanceRecordsComponent } from './module2/leaves-attendance-records/leaves-attendance-records.component';
+import { RequestsComponent } from './module2/requests/requests.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -45,9 +43,6 @@ export const routes: Routes = [
   { path: 'requests', component: RequestsComponent, canActivate: [authGuard]},
   { path: 'loan-information', component: LoanInformationComponent, canActivate: [authGuard] },
 
-  //OLD PDS
-  { path: 'pds', component: PDSComponent, canActivate: [authGuard] },
-  { path: 'pds-family-background', component: PdsFamilyBackgroundComponent, canActivate: [authGuard] },
   //REDESIGNED PDS
   { path: 'personal-data-sheet', canActivate: [authGuard],
     children: [
