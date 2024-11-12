@@ -1,0 +1,804 @@
+<!-- Flexible container that holds a sidebar navigation component and user-management area -->
+<div class="flex">
+    <div class="flex-grow"> 
+      <!-- Main componenet -->
+      <div class="min-h-screen">
+        <main class="p-6">
+          <div class="mb-6">
+            <p class="mb-2 text-3xl font-bold text-neutral-900">User Management<br></p>
+            <p class="mb-2 pb-5 text-slate-500 text-sm">Configure employee details and access rights</p>
+            <div class="flex">
+              <button (click)="setActiveTab('users')" [ngClass]="activeTab === 'users' ? 'text-blue-500 border-b-4 border-blue-500 rounded pb-1 mb-[-4px]' : 'text-gray-500 pb-1'" class="mr-4">Users</button>
+              <button (click)="setActiveTab('roles')" [ngClass]="activeTab === 'roles' ? 'text-blue-500 border-b-4 border-blue-500 rounded pb-1 mb-[-4px]' : 'text-gray-500 pb-1'" class="mr-4">Roles</button>
+            </div>
+          </div>
+  
+          <!-- Ticket Details Modal -->
+          <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" *ngIf="isModalVisible">
+            <div class="bg-white rounded p-4 max-w-md w-full">
+              <div class="flex justify-between items-center border-b pb-2">
+                <h2 class="text-xl font-semibold">Ticket Details</h2>
+                <button class="text-white hover:text-gray-700 bg-red-400 rounded py-2 px-2" (click)="closeModal()">X</button>
+              </div>
+              <div class="mt-4">
+                <p><strong>Title:</strong> {{ selectedTicket?.title }}</p>
+                <p><strong>Email:</strong> {{ selectedTicket?.email }}</p>
+                <p><strong>Status:</strong>
+                  <span [ngClass]="{
+                    'text-green-700': selectedTicket?.status === 'Open',
+                    'text-blue-700': selectedTicket?.status === 'In Progress',
+                    'text-red-700': selectedTicket?.status === 'Closed'
+                  }">{{ selectedTicket?.status }}</span>
+                </p>
+                <div class="mt-2">
+                  <p class="font-semibold text-gray-700">Description:</p>
+                  <div class="border border-gray-300 rounded p-4 bg-gray-50 mt-2 max-h-48 overflow-y-auto w-full break-words">
+                      {{ selectedTicket?.description }}
+                  </div>
+                </div>
+                <div class="mt-4">
+                  <p><strong>Admin Reply:</strong></p>
+                  <textarea [(ngModel)]="replyText" class="w-full p-2 border rounded" placeholder="Type your reply here..."></textarea>
+                </div>
+              </div>
+              <div class="mt-4 flex justify-end">
+                <button class="bg-blue-500 text-white px-4 py-2 rounded mr-2" (click)="replyTicket()">Reply</button>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Users active tab -->
+          <div *ngIf="activeTab === 'users'" class="flex flex-col">
+        <section id="user-list" class="flex flex-col h-full"> 
+          <!-- Adding New Employee -->
+          <div *ngIf="showModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center"(click)="toggleModal()">
+            <div class="relative px-4 w-full max-w-4xl" (click)="$event.stopPropagation()">
+              <div class="relative bg-white rounded shadow">
+                <div class="flex items-center justify-between px-4 md:p-5 rounded-t dark:border-gray-600">
+                  <p class="text-xl font-semibold text-black text-center"> {{ isEditing ? 'Update Employee' : 'Create New Employee' }}</p>
+                    <button type="button" (click)="toggleModal()" class="text-gray-400 bg-transparent rounded text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
+                      <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                      </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <div class="px-4 -my-10 md:p-5">
+                      <form class="space-y-4" (ngSubmit)="onSubmit()">
+                        <div class="grid grid-cols-4 gap-4">
+                          <div class="md:col-span-1 col-span-4 flex flex-col items-center">
+                            <img [src]="photoPreviewUrl" alt="Employee Photo" class="w-48 h-48 object-cover rounded mb-2 mt-3">
+                            <p *ngIf="showFileTypeAlert" class="text-red-600 text-sm mb-2">Please select a PNG file.</p>
+                            <p *ngIf="showFileSizeAlert" class="text-red-600 text-sm mb-2">The photo you selected exceeds 2MB. Please try again.</p>
+                            <input type="file" id="photoInput" accept="image/png,image/jpeg" class="hidden" (change)="onPhotoChange($event)">
+                            <label for="photoInput" class="w-48 text-center bg-blue-500 text-white py-2 px-4 rounded cursor-pointer hover:bg-blue-600 transition duration-300 mt-3">Choose Photo</label>
+                          </div>                  
+                          <div class="md:col-span-3 col-span-4 space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                              <div class="flex flex-col">
+                                <label for="email" class="mb-1 text-sm font-medium text-gray-500">Email*</label>
+                                <input type="email" id="email" [(ngModel)]="employee.email" name="email" class="bg-gray-50 border border-gray-300 text-black text-sm rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5" required>
+                              </div>
+                              <div class="flex flex-col">
+                                <label for="password" class="mb-1 text-sm font-medium text-gray-500">Password*</label>
+                                <div class="relative">
+                                  <input 
+                                    [type]="showPassword ? 'text' : 'password'" 
+                                    id="password" 
+                                    [(ngModel)]="employee.password" 
+                                    name="password" 
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5" 
+                                    required
+                                  >
+                                  <button 
+                                    type="button" 
+                                    (click)="togglePasswordVisibility()" 
+                                    class="absolute inset-y-0 right-0 flex items-center pr-3"
+                                  >
+                                    <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                    <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4">
+                              <div>
+                                <label for="firstname" class="block mb-1 text-sm font-medium text-gray-500">First Name*</label>
+                                <input type="text" id="firstname" [(ngModel)]="employee.firstname" name="firstname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                              </div>
+                              <div>
+                                <label for="midname" class="block mb-1 text-sm font-medium text-gray-500">Middle Name</label>
+                                <input type="text" id="midname" [(ngModel)]="employee.midname" name="midname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                              </div>
+                              <div>
+                                <label for="surname" class="block mb-1 text-sm font-medium text-gray-500">Last Name*</label>
+                                <input type="text" id="surname" [(ngModel)]="employee.surname" name="surname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                              </div>
+                            </div>
+                            <div>
+                              <h4 class="text-lg font-medium text-white mb-2">Contract</h4>
+                              <div class="grid grid-cols-3 gap-4">
+                                <div>
+                                  <label for="position" class="block mb-1 text-sm font-medium text-gray-500">Position*</label>
+                                  <select id="position" [(ngModel)]="employee.position" name="position" class="bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                                    <option value="" disabled selected>Select a position</option>
+                                    <option *ngFor="let role of roles" [value]="role.role_name">{{ role.role_name }}</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label for="department" class="block mb-1 text-sm font-medium text-gray-500">Department*</label>
+                                  <select id="department" [(ngModel)]="employee.department" name="department" class="bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                                    <option value="" disabled selected>Select a department</option>
+                                    <option value="IT">IT</option>
+                                    <option value="Human Resources">Human Resources</option>
+                                    <option value="Finance">Finance</option>
+                                    <option value="Marketing">Marketing</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label for="type" class="block mb-1 text-sm font-medium text-gray-500">Type*</label>
+                                  <select id="type" [(ngModel)]="employee.type" name="type" class="bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                                    <option value="" disabled selected>Select a type</option>
+                                    <option value="Full-Time">Full-time</option>
+                                    <option value="Part-Time">Part-time</option>
+                                    <option value="Contract">Contract</option>
+                                    <option value="Intern">Intern</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="flex justify-end space-x-2 mt-6">
+                          <button type="button" (click)="toggleModal()" class="text-white bg-gray-500 hover:bg-gray-600 rounded border border-gray-200 text-sm font-medium px-5 py-2.5 focus:z-10 transition duration-300">
+                            Cancel
+                          </button>
+                          <button type="submit" class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition duration-300">
+                            {{ isEditing ? 'Update' : 'Create' }}
+                          </button>
+                        </div>
+                      </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--Upper Padding-->
+          <div class="rounded-xl shadow-lg bg-white">
+            <!-- Row with search input and buttons -->
+            <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-4">
+              <div class="relative w-[20%]">
+                <input type="text" [(ngModel)]="searchTerm" placeholder="Search Employees..." (input)="searchTable()" class="w-full h-full p-2 pr-8 border rounded-full border-gray-300"/>
+                    <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
+              </div>          
+                <div class="flex items-center space-x-4">
+                  <!--Filter Feature-->
+                  <div class="relative">
+                    <select (change)="onSortOptionChange($event)" class="border px-4 py-2 rounded appearance-none pr-10">
+                      <option value="none">Default</option>
+                      <option value="asc">Sort A-Z</option>
+                      <option value="desc">Sort Z-A</option>
+                    </select>
+                    <i class="fa fa-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                  </div>
+                    
+                  <!-- Delete button only displayed when in editing mode -->
+                  <button *ngIf="isEditing" class="bg-red-500 text-white px-4 pr-8 py-2 rounded" (click)="deleteUsers()">Delete</button>
+                  <!-- Manage User button -->
+                  <button [ngClass]="{ 'bg-green-500 hover:bg-green-600': !isEditing, 'bg-pink-500 hover:bg-pink-600': isEditing }"
+                          class="text-white px-4 py-2 rounded transition duration-300 ease-in-out" (click)="toggleEditMode()">
+                        {{ isEditing ? 'Stop Managing' : 'Manage User' }}
+                  </button>
+                  <!-- New Employee button, disabled when isEditing is true -->
+                  <button (click)="toggleModal()"
+                        [ngClass]="{ 'bg-blue-500': !isEditing, 'bg-gray-500 cursor-not-allowed': isEditing }"
+                        [disabled]="isEditing"
+                        class="text-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300
+                        font-medium rounded text-sm px-4 py-2 text-center dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        type="button">+ New Employee
+                  </button>
+                  <button class=" text-black p-1 bg-gray-100 rounded-md" (click)="prevPage()" [disabled]="currentPage === 1"><</button>
+                  <span class="text-gray-600 text-center">{{ currentPage }} of {{ totalPages }}</span>
+                  <button class=" text-black p-1 bg-gray-100 rounded-md" (click)="nextPage()" [disabled]="currentPage === totalPages">></button>
+                </div>
+            </div>
+                <!-- Users active tab -->
+              <div *ngIf="filteredUsers.length > 0" class="overflow-x-hidden overflow-y-auto max-h-[28rem] custom-scrollbar">
+                <table class="table-fixed w-full">
+                  <thead>
+                    <tr class="bg-gray-100 text-gray-700 leading-normal sticky z-10">
+                      <th *ngIf="isEditing" class="font-thin py-3 px-6 text-center">Select</th>
+                      <th class="z-1 top-0 sticky bg-gray-100 py-3 px-4 w-2/12 text-left font-medium text-gray-500">PROFILE</th>
+                      <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">NAME</th>
+                      <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">EMAIL</th> 
+                      <th class="z-10 top-0 sticky bg-gray-100 py-3 px-2 w-1/12 text-left font-medium text-gray-500">PASSWORD</th>
+                      <th class="z-10 top-0 sticky bg-gray-100 py-3 px-2 w-1/12 text-left font-medium text-gray-500">ROLE</th>
+                      <th class="z-10 top-0 sticky bg-gray-100 py-3 px-2 w-1/12 text-left font-medium text-gray-500">STATUS</th>
+                      <th class="z-10 top-0 sticky bg-gray-100 py-3 px-2 w-1/12 text-center font-medium text-gray-500">ACCESS</th>
+                      <th *ngIf="isEditing" class="z-10 top-0 sticky bg-gray-100 y-3 px-6 text-center text-lg">EDIT</th>
+                    </tr>
+                  </thead>                
+                  <tbody class="text-gray-500 text-sm font-light">
+                    <tr *ngFor="let user of paginatedUsers; let i = index" class="border-b border-gray-200 hover:bg-gray-50">
+                      <td *ngIf="isEditing" class="py-3 px-6 text-center -z-10">
+                        <input type="checkbox" [checked]="user.selected" (change)="toggleUserSelection(user)">
+                      </td>
+                      <td class="py-3 px-4 w-2/12 text-left whitespace-nowrap">
+                        <div class="flex items-center"><img [src]="user.profile" alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-gray-200"></div>
+                      </td>              
+                      <td class="py-3 px-6 text-left truncate">{{ user.name }}</td>
+                      <td class="py-3 px-6 text-left truncate">{{ user.email }}</td>
+                      <td class="py-3 px-1 w-1/12 text-left">
+                        <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">Hidden</span>
+                      </td>
+                      <td class="py-3 px-2 w-1/12 text-left">{{ user.position }}<br>{{ getContractType(user.position) }}</td>
+                      <td class="py-3 px-2 w-1/12 text-left">
+                        <span [ngClass]="{'bg-green-200 text-green-700': user.status === 'Active', 'bg-red-200 text-red-700': user.status === 'Inactive'}" class="py-1 px-3 rounded-full text-xs">{{ user.status }}</span>
+                      </td>
+                      <td class="py-3 px-2 w-1/12 text-center">
+                        <button 
+                          (click)="!showModal && toggleUserAccess(user)"
+                          class="relative inline-flex items-center w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                          [ngClass]="{
+                            'bg-blue-600': user.access && !showModal,
+                            'bg-gray-200': !user.access && !showModal,
+                            'bg-[#0D47A1]': user.access && showModal,
+                            'bg-gray-300': !user.access && showModal,
+                            'cursor-not-allowed': showModal
+                          }"
+                          [attr.disabled]="showModal ? '' : null"
+                          aria-label="Toggle user access"
+                        >
+                          <span 
+                            class="inline-block w-5 h-5 transform transition-transform duration-200 ease-in-out bg-white rounded-full"
+                            [ngClass]="{'translate-x-6': user.access, 'translate-x-1': !user.access}"
+                          ></span>
+                        </button>
+                      </td>
+                      <td *ngIf="isEditing" class="py-3 px-6 text-center">
+                        <button (click)="editUser(user)" class="text-blue-500 hover:text-blue-700">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-1.5a2.5 2.5 0 113.536-3.536L15.232 5.232zM4 13.5V21h7.5l11-11.5a2.5 2.5 0 00-3.5-3.5L4 13.5z"/>
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                         
+              </div>      
+          </div>
+        </section>
+          </div>
+  
+          <!-- Roles Active tab -->
+          <div *ngIf="activeTab === 'roles'">
+          <section id="user-list">
+              <div class="rounded-xl shadow-lg bg-white">
+                <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-4">
+                  <div class="relative w-[20%]">
+                    <input 
+                      type="text" 
+                      [(ngModel)]="searchRoleTerm" 
+                      placeholder="Search Roles..." 
+                      class="w-full h-full p-2 pr-8 border rounded-full border-gray-300"
+                    />
+                    <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
+                  </div>
+                  
+                  <div class="flex items-center space-x-4">
+                    <div class="relative">
+                      <select class="border px-4 py-2 rounded appearance-none pr-10" (change)="onSortChange($event)">
+                        <option value="none">Default</option>
+                        <option value="asc">Sort A-Z</option>
+                        <option value="desc">Sort Z-A</option>
+                      </select>
+                      <i class="fa fa-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    <button class="text-white rounded px-4 py-2 whitespace-nowrap w-full text-center transition duration-300" [ngClass]="{'bg-blue-500 hover:bg-blue-600': !isManageMode, 'bg-red-500 hover:bg-red-600': isManageMode}" (click)="toggleManageMode()">
+                      {{ isManageMode ? 'Stop Managing' : 'Manage Roles' }}
+                    </button>
+                  </div>
+                
+                  <p *ngIf="showRoleSuccessMessage" class="border w-[20%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded bg-green-50 border-green-500 text-green-700">Role has been created successfully.</p> 
+                  <p *ngIf="showRoleErrorMessage" class="border w-[25%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded bg-red-50 border-red-500 text-red-700">There was an error creating the role.</p>        
+                  <p *ngIf="showEmpSuccessMessage" class="border w-[25%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded bg-green-50 border-green-500 text-green-700">Employee has been unassigned successfully.</p>   
+                  <p *ngIf="showEmpErrorMessage" class="border w-[20%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded bg-red-50 border-red-500 text-red-700">There was an error unassigning the employee.</p>    
+                </div>
+                
+              
+              <div class="flex space-x-4 max-h-[28rem] rounded-xl">
+                <div class="flex-1 h-full rounded-tr-xl border bg-white border-gray-300">
+                  <div class="m-10">
+                    <div class="flex justify-between items-center">
+                      <p class="text-2xl font-black">Roles</p>
+                      <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" (click)="openRolePopup()" *ngIf="!isManageMode">Add Role</button>
+                    </div>
+                    <div class="custom-scrollbar overflow-y-auto overflow-x-hidden" style="height: calc(450px - 8rem);">
+                      <table class="table-auto w-[100%] mt-4">
+                        <tbody>
+                          <ng-container *ngIf="searchroletab.length > 0; else noMatch">
+                            <tr class="hover:bg-gray-100 h-9 text-gray-600 text-sm font-light border-b" *ngFor="let role of searchroletab" [ngClass]="{'bg-gray-100': selectedRole.role_id === role.role_id}">
+                              <td class="w-full" [ngClass]="{'bg-gray-100': clickedRoleId === role.role_id}" (click)="onRoleClick(role)" (click)="selectRoleForEditing(role)">
+                                <ng-container *ngIf="editingRoleId === role.role_id; else displayRoleName">
+                                  <input [(ngModel)]="role.role_name" class="border rounded outline-none" />
+                                </ng-container>
+                                <ng-template #displayRoleName>
+                                  {{ role.role_name }}
+                                </ng-template>
+                              </td>
+                              <td *ngIf="isManageMode" class="text-center" style="min-width: 35px;">
+                                <ng-container *ngIf="editingRoleId === role.role_id; else editIcon">
+                                  <button (click)="updateRoleName(role)" class="text-green-500 hover:text-green-700" style="padding: 0;">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                  </button>
+                                </ng-container>
+                                <ng-template #editIcon>
+                                  <button (click)="startEdit(role)" class="text-blue-500 hover:text-blue-700" style="padding: 0;">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                  </button>
+                                </ng-template>
+                              </td>
+                              <td *ngIf="isManageMode" class="text-center" style="min-width: 35px;">
+                                <ng-container *ngIf="editingRoleId === role.role_id; else deleteIcon">
+                                  <button (click)="cancelEdit()" class="text-gray-500 hover:text-gray-700" style="padding: 0;">
+                                    <i class="fa fa-ban" aria-hidden="true"></i>
+                                  </button>
+                                </ng-container>
+                                <ng-template #deleteIcon>
+                                  <button (click)="deleteRole(role)" class="text-red-500 hover:text-red-700 pr-1" style="padding: 0;">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                  </button>
+                                </ng-template>
+                              </td>
+                            </tr>
+                          </ng-container>
+                          <ng-template #noMatch>
+                            <tr class="h-9 text-gray-600 text-sm font-light">
+                              <td colspan="3" class="text-center p-4">No matching roles found</td>
+                            </tr>
+                          </ng-template>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="flex-1 h-full rounded-tl-xl rounded-tr-xl mx-2 border bg-white border-gray-300">
+                  <div class="m-10" *ngIf="assignedRole">
+                    <div class="flex justify-between items-center">
+                      <p class=" text-2xl font-black">{{ assignedRole.role_name }}</p>
+                      <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" (click)="openAssignPopup()" *ngIf="!isManageMode">Assign</button>
+                    </div>
+                    <div class="overflow-y-auto overflow-x-hidden custom-scrollbar" style="height: calc(450px - 8rem);">
+                      <table class="table-auto w-full">
+                        <tbody>
+                          <ng-container *ngIf="assignedUsers.length > 0; else noRoleMatch">
+                            <tr class="h-9 text-gray-600 text-sm font-light w-full" *ngFor="let user of assignedUsers">
+                              <td class="w-full">{{ user.first_name }} {{ user.mid_name }} {{ user.surname }}</td>
+                              <td>
+                                <button class="text-red-500 hover:text-red-700 pr-1" *ngIf="isManageMode" (click)="openDeleteAssigneePopup(user.user_id, assignedRole.role_id)">
+                                  <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                              </td>
+                            </tr>                      
+                          </ng-container>
+                          <ng-template #noRoleMatch>
+                            <tr class="h-9 text-gray-600 text-sm font-light">
+                              <td colspan="3" class="text-center p-4">No assigned employees</td>
+                            </tr>
+                          </ng-template>
+                        </tbody>
+                      </table>  
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="flex-1 h-full rounded-tl-xl mx-2 border bg-white border-gray-300">
+                  <div class="m-10">
+                    <div class="flex justify-between items-center">
+                      <p class="text-2xl font-black">
+                        Access Rights &nbsp;
+                        <span class="text-lg text-blue-600" style="width: 24px; display: inline-block;" *ngIf="isManageMode">
+                          <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </span>
+                        <span class="text-lg text-blue-600" style="width: 24px; display: inline-block;" *ngIf="!isManageMode">&nbsp;</span>
+                      </p>
+                    </div>
+                    <div class="overflow-y-auto overflow-x-hidden custom-scrollbar" style="height: calc(450px - 8rem);">
+                      <table class="table-auto w-full">
+                        <tbody>
+                          <tr class="h-9 text-gray-600 text-sm font-light">
+                            <td class="font-black w-full">User Management</td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3">None</td>
+                            <td class="whitespace-nowrap text-center px-3">View</td>
+                            <td class="whitespace-nowrap text-center px-3">Edit</td>
+                          </tr>
+                          <tr class="h-7 text-gray-600 text-sm font-light">
+                            <td class="w-full">Users</td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="users" value="none" [disabled]="!isManageMode" [checked]="usersRights === 'none'" [(ngModel)]="selectedRole.users_rights" (change)="onAccessRightChange('users_rights', $event)">
+                            </td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="users" value="view" [disabled]="!isManageMode" [checked]="usersRights === 'view'" [(ngModel)]="selectedRole.users_rights" (change)="onAccessRightChange('users_rights', $event)">
+                            </td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="users" value="edit" [disabled]="!isManageMode" [checked]="usersRights === 'edit'" [(ngModel)]="selectedRole.users_rights" (change)="onAccessRightChange('users_rights', $event)">
+                            </td>
+                          </tr>
+                          <tr class="h-7 text-gray-600 text-sm font-light">
+                            <td class="w-full">Roles</td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="roles" value="none" [disabled]="!isManageMode" [checked]="rolesRights === 'none'" [(ngModel)]="selectedRole.roles_rights" (change)="onAccessRightChange('roles_rights', $event)">
+                            </td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="roles" value="view" [disabled]="!isManageMode" [checked]="rolesRights === 'view'" [(ngModel)]="selectedRole.roles_rights" (change)="onAccessRightChange('roles_rights', $event)">
+                            </td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="roles" value="edit" [disabled]="!isManageMode" [checked]="rolesRights === 'edit'" [(ngModel)]="selectedRole.roles_rights" (change)="onAccessRightChange('roles_rights', $event)">
+                            </td>
+                          </tr>
+                          <tr class="h-7 text-gray-600 text-sm font-light">
+                            <td class="w-full">Support Tickets</td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="supportTickets" value="none" [disabled]="!isManageMode" [checked]="supportRights === 'none'" [(ngModel)]="selectedRole.sup_rights" (change)="onAccessRightChange('sup_rights', $event)">
+                            </td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="supportTickets" value="view" [disabled]="!isManageMode" [checked]="supportRights === 'view'" [(ngModel)]="selectedRole.sup_rights" (change)="onAccessRightChange('sup_rights', $event)">
+                            </td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="supportTickets" value="edit" [disabled]="!isManageMode" [checked]="supportRights === 'edit'" [(ngModel)]="selectedRole.sup_rights" (change)="onAccessRightChange('sup_rights', $event)">
+                            </td>
+                          </tr>
+                      
+                          <tr class="h-9 text-gray-600 text-sm font-light">
+                            <td class="font-black w-full">System Management</td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                          </tr>
+                          <tr class="h-7 text-gray-600 text-sm font-light">
+                            <td class="w-full">Parameters</td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="parameters" value="none" [disabled]="!isManageMode" [checked]="parametersRights === 'none'" [(ngModel)]="selectedRole.par_rights" (change)="onAccessRightChange('par_rights', $event)">
+                            </td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="parameters" value="view" [disabled]="!isManageMode" [checked]="parametersRights === 'view'" [(ngModel)]="selectedRole.par_rights" (change)="onAccessRightChange('par_rights', $event)">
+                            </td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="parameters" value="edit" [disabled]="!isManageMode" [checked]="parametersRights === 'edit'" [(ngModel)]="selectedRole.par_rights" (change)="onAccessRightChange('par_rights', $event)">
+                            </td>
+                          </tr>
+                      
+                          <tr class="h-9 text-gray-600 text-sm font-light">
+                            <td class="font-black w-full">Daily Time Record</td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                          </tr>
+                          <tr class="h-7 text-gray-600 text-sm font-light">
+                            <td class="w-full">Daily</td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="dailyTimeRecord" value="none" [disabled]="!isManageMode" [checked]="dailyRights === 'none'" [(ngModel)]="selectedRole.daily_rights" (change)="onAccessRightChange('daily_rights', $event)">
+                            </td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="dailyTimeRecord" value="view" [disabled]="!isManageMode" [checked]="dailyRights === 'view'" [(ngModel)]="selectedRole.daily_rights" (change)="onAccessRightChange('daily_rights', $event)">
+                            </td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="dailyTimeRecord" value="edit" [disabled]="!isManageMode" [checked]="dailyRights === 'edit'" [(ngModel)]="selectedRole.daily_rights" (change)="onAccessRightChange('daily_rights', $event)">
+                            </td>
+                          </tr>
+                          <tr class="h-7 text-gray-600 text-sm font-light">
+                            <td class="w-full">Monthly</td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="monthlyTimeRecord" value="none" [disabled]="!isManageMode" [checked]="monthlyRights === 'none'" [(ngModel)]="selectedRole.monthly_rights" (change)="onAccessRightChange('monthly_rights', $event)">
+                            </td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="monthlyTimeRecord" value="view" [disabled]="!isManageMode" [checked]="monthlyRights === 'view'" [(ngModel)]="selectedRole.monthly_rights" (change)="onAccessRightChange('monthly_rights', $event)">
+                            </td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="monthlyTimeRecord" value="edit" [disabled]="!isManageMode" [checked]="monthlyRights === 'edit'" [(ngModel)]="selectedRole.monthly_rights" (change)="onAccessRightChange('monthly_rights', $event)">
+                            </td>
+                          </tr>
+                          <tr class="h-7 text-gray-600 text-sm font-light">
+                            <td class="w-full">Weekly</td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="weeklyTimeRecord" value="none" [disabled]="!isManageMode" [checked]="weeklyRights === 'none'" [(ngModel)]="selectedRole.weekly_rights" (change)="onAccessRightChange('weekly_rights', $event)">
+                            </td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="weeklyTimeRecord" value="view" [disabled]="!isManageMode" [checked]="weeklyRights === 'view'" [(ngModel)]="selectedRole.weekly_rights" (change)="onAccessRightChange('weekly_rights', $event)">
+                            </td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="weeklyTimeRecord" value="edit" [disabled]="!isManageMode" [checked]="weeklyRights === 'edit'" [(ngModel)]="selectedRole.weekly_rights" (change)="onAccessRightChange('weekly_rights', $event)">
+                            </td>
+                          </tr>
+                      
+                          <tr class="h-9 text-gray-600 text-sm font-light">
+                            <td class="font-black w-full">Audit Trail</td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                          </tr>
+                          <tr class="h-7 text-gray-600 text-sm font-light">
+                            <td class="w-full">Entries</td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3"></td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="entries" value="none" [disabled]="!isManageMode" [checked]="entriesRights === 'none'" [(ngModel)]="selectedRole.entries" (change)="onAccessRightChange('entries', $event)">
+                            </td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="entries" value="view" [disabled]="!isManageMode" [checked]="entriesRights === 'view'" [(ngModel)]="selectedRole.entries" (change)="onAccessRightChange('entries', $event)">
+                            </td>
+                            <td class="whitespace-nowrap text-center px-3">
+                              <input type="radio" name="entries" value="edit" [disabled]="!isManageMode" [checked]="entriesRights === 'edit'" [(ngModel)]="selectedRole.entries" (change)="onAccessRightChange('entries', $event)">
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>                                                                 
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+  
+              <!-- Popup Modal -->
+              <div *ngIf="showRolePopup" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                <div class="bg-white p-6 rounded shadow-lg w-[30%] h-[80%]">
+                  <p class="text-2xl font-black mb-4">Add Role</p>
+                  <input type="text" id="role" [(ngModel)]="newRole" placeholder="Enter role name" class="border p-2 mb-4 w-full"/>
+                  
+                  <!-- Add the table here -->
+                  <div class="overflow-y-auto overflow-x-hidden custom-scrollbar" style="height: calc(80% - 2rem);">
+                    <table class="table-auto w-full">
+                      <tbody>
+                        <tr class="h-9 text-gray-600 text-sm font-light">
+                          <td class="font-black w-full">User Management</td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3">None</td>
+                          <td class="whitespace-nowrap text-center px-3">View</td>
+                          <td class="whitespace-nowrap text-center px-3">Edit</td>
+                        </tr>
+                        <tr class="h-7 text-gray-600 text-sm font-light">
+                          <td class="w-full">Users</td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupUsers"  [(ngModel)]="popupUsersRights" value="none">
+                          </td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupUsers"  [(ngModel)]="popupUsersRights" value="view">
+                          </td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupUsers"  [(ngModel)]="popupUsersRights" value="edit">
+                          </td>
+                        </tr>
+                        <tr class="h-7 text-gray-600 text-sm font-light">
+                          <td class="w-full">Roles</td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popRoles" [(ngModel)]="popupRolesRights" value="none">
+                          </td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popRoles" [(ngModel)]="popupRolesRights" value="view">
+                          </td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popRoles" [(ngModel)]="popupRolesRights" value="edit">
+                          </td>
+                        </tr>
+                        <tr class="h-7 text-gray-600 text-sm font-light">
+                          <td class="w-full">Support Tickets</td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupSupportTickets" [(ngModel)]="popupSupportRights" value="none">
+                          </td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupSupportTickets" [(ngModel)]="popupSupportRights" value="view">
+                          </td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupSupportTickets" [(ngModel)]="popupSupportRights" value="edit">
+                          </td>
+                        </tr>
+                    
+                        <tr class="h-9 text-gray-600 text-sm font-light">
+                          <td class="font-black w-full">System Management</td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                        </tr>
+                        <tr class="h-7 text-gray-600 text-sm font-light">
+                          <td class="w-full">Parameters</td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupParameters" [(ngModel)]="popupParametersRights" value="none">
+                          </td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupParameters" [(ngModel)]="popupParametersRights" value="view">
+                          </td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupParameters" [(ngModel)]="popupParametersRights" value="edit">
+                          </td>
+                        </tr>
+                    
+                        <tr class="h-9 text-gray-600 text-sm font-light">
+                          <td class="font-black w-full">Daily Time Record</td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                        </tr>
+                        <tr class="h-7 text-gray-600 text-sm font-light">
+                          <td class="w-full">Daily</td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupDaily" [(ngModel)]="popupDailyRights" value="none">
+                          </td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupDaily" [(ngModel)]="popupDailyRights" value="view">
+                          </td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupDaily" [(ngModel)]="popupDailyRights" value="edit">
+                          </td>
+                        </tr>
+                        <tr class="h-7 text-gray-600 text-sm font-light">
+                          <td class="w-full">Monthly</td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupMonthly" [(ngModel)]="popupMonthlyRights" value="none">
+                          </td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupMonthly" [(ngModel)]="popupMonthlyRights" value="view">
+                          </td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupMonthly" [(ngModel)]="popupMonthlyRights" value="edit">
+                          </td>
+                        </tr>
+                        <tr class="h-7 text-gray-600 text-sm font-light">
+                          <td class="w-full">Weekly</td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupWeekly" [(ngModel)]="popupWeeklyRights" value="none">
+                          </td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupWeekly" [(ngModel)]="popupWeeklyRights" value="view">
+                          </td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupWeekly" [(ngModel)]="popupWeeklyRights" value="edit">
+                          </td>
+                        </tr>
+                    
+                        <tr class="h-9 text-gray-600 text-sm font-light">
+                          <td class="font-black w-full">Audit Trail</td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                        </tr>
+                        <tr class="h-7 text-gray-600 text-sm font-light">
+                          <td class="w-full">Entries</td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3"></td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupEntries" [(ngModel)]="popupEntriesRights" value="none" >
+                          </td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupEntries" [(ngModel)]="popupEntriesRights" value="view" >
+                          </td>
+                          <td class="whitespace-nowrap text-center px-3">
+                            <input type="radio" name="popupEntries" [(ngModel)]="popupEntriesRights" value="edit" >
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>              
+                </div>
+                  
+                  <div class="flex justify-start">
+                    <button (click)="addRole()" class="bg-green-500 text-white px-4 py-2 rounded mr-2">Add</button>
+                    <button (click)="cancelRolePopup()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                  </div>
+                </div>
+              </div>
+              
+  
+              <div *ngIf="showAssignPopup" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                <div class="w-[25%] h-[70%] shadow-xl rounded bg-white flex flex-col">
+                  <div class="flex flex-col h-full p-6">
+                    <div class="flex justify-start flex-col mb-3">
+                      <p class="text-2xl font-black">
+                        Assign for <span class="text-blue-600">{{ assignedRole.role_name }}</span>
+                      </p>
+                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search Employees..." class="w-full p-2 border rounded">
+                    </div>
+                    <p *ngIf="selectedUserIds.size > 0" class="text-gray-400 text-sm">
+                      <button type="button" class="focus:outline-none text-red-700" (click)="deselectAllCheckboxes()">Deselect All</button>
+                      {{selectedUserIds.size}} assigned
+                    </p>
+                    <div class="flex-grow overflow-y-auto overflow-x-hidden custom-scrollbar min-h-[150px]">
+                      <table class="table-auto w-full">
+                        <tbody>
+                          <ng-container *ngIf="searchEmpRole.length > 0; else noMatch">
+                            <tr class="h-9 text-gray-600 text-sm font-light" *ngFor="let emp of searchEmpRole">
+                              <td>
+                                <input type="checkbox" (change)="onCheckboxChange(emp.user_id, $event)">
+                              </td>
+                              <td class="w-full">{{ emp.firstname }} {{ emp.midname }} {{ emp.surname }}</td>
+                            </tr>
+                          </ng-container>
+                          <ng-template #noMatch>
+                            <tr class="h-9 text-gray-600 text-sm font-light">
+                              <td colspan="2" class="text-center p-4">No matching employees found</td>
+                            </tr>
+                          </ng-template>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="flex gap-2 justify-start mt-3">
+                      <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" (click)="assignRole()">Assign</button>
+                      <button class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" (click)="closeAssignPopup()">Cancel</button>
+                    </div>
+                  </div>
+                </div>                        
+              </div>
+  
+              <div *ngIf="showDeleteAssigneePopup" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                <div class="w-[20%] shadow-xl rounded bg-white flex flex-col">
+                  <div class="flex flex-col h-full p-4 md:p-6 justify-between">
+                    <div class="flex flex-col justify-center items-center mb-2">
+                      <p class="text-xl md:text-2xl font-black text-center">Delete Assignee</p>
+                      <p class="text-gray-600 text-center">This action cannot be undone. By deleting the assignee, all associated information will be permanently lost.</p>
+                    </div>
+                    <div class="flex gap-2 justify-center w-full">
+                      <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 flex-grow" (click)="confirmDeleteAssignee()">Delete</button>
+                      <button class="border border-gray-500 text-gray-500 px-4 py-2 rounded hover:bg-gray-100 flex-grow" (click)="closeDeleteAssigneePopup()">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+                </div>
+              </div>        
+              
+              
+  
+  
+          </section>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+    
