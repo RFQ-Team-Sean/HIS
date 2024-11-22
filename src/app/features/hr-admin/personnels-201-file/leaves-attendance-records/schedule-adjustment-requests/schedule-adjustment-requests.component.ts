@@ -6,14 +6,13 @@ import { FormGroup, FormsModule, ReactiveFormsModule, FormBuilder, Validators } 
 type ScheduleStatus = 'Pending' | 'Approved' | 'Rejected';
 
 @Component({
-  selector: 'app-leaves-attendance-records',
+  selector: 'app-schedule-adjustment-requests',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
-  templateUrl: './leaves-attendance-records.component.html',
-  styleUrls: ['./leaves-attendance-records.component.css']
+  templateUrl: './schedule-adjustment-requests.component.html',
+  styleUrl: './schedule-adjustment-requests.component.css'
 })
-export class LeavesAttendanceRecordsComponent implements OnInit {
-
+export class ScheduleAdjustmentRequestsComponent implements OnInit {
   scheduleAdjustmentRequests: any[] = [];
   employees: any[] = [];
   
@@ -171,5 +170,4 @@ export class LeavesAttendanceRecordsComponent implements OnInit {
     }
     this.scheduleAdjustmentRequests = await this.supabaseService.getScheduleAdjustmentRequests()
   }
-
 }

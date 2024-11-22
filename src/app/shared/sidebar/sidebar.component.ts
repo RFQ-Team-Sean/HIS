@@ -210,7 +210,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
                 ]
               },
               { name: 'Compensation & Benefits', route: '/hr/personnel-201-file/compensation' },
-              { name: 'Leaves & Attendance', route: '/hr/personnel-201-file/leaves-attendance-records' },
+              { name: 'Leaves & Attendance', route: '/hr/personnel-201-file/leaves-attendance-records',
+                subItems:[
+                  { name: 'Daily Time Logs', route: '/hr/personnel-201-file/leaves-attendance-records/daily-time-logs' },
+                  { name: 'Schedule Adjustment Requests', route: '/hr/personnel-201-file/leaves-attendance-records/schedule-adjustment-requests' },
+                ]
+              },
               { name: 'Requests Management', route: '/hr/personnel-201-file/requests' },
               { name: 'Personnel Movement', route: '/hr/personnel-201-file/movement' },
               { name: 'Loan Information', route: '/hr/personnel-201-file/loan-information' },

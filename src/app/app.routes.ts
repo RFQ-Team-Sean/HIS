@@ -17,10 +17,11 @@ import { WorkExperienceComponent } from './features/hr-admin/personnels-201-file
 import { VoluntaryWorkComponent } from './features/hr-admin/personnels-201-file/general-information/personal-data-sheet/edit/voluntary-work/voluntary-work.component';
 import { LearningAndDevelopmentInterventionsComponent } from './features/hr-admin/personnels-201-file/general-information/personal-data-sheet/edit/learning-and-development-interventions/learning-and-development-interventions.component';
 import { OtherInformationComponent } from './features/hr-admin/personnels-201-file/general-information/personal-data-sheet/edit/other-information/other-information.component';
-import { LeavesAttendanceRecordsComponent } from './features/hr-admin/personnels-201-file/leaves-attendance-records/leaves-attendance-records.component';
 import { LoanInformationComponent } from './features/hr-admin/personnels-201-file/loan-information/loan-information.component';
 import { RequestsComponent } from './features/hr-admin/personnels-201-file/requests/requests.component';
 import { MeritsAndViolationsComponent } from './features/hr-admin/personnels-201-file/employment-records/merits-and-violations/merits-and-violations.component';
+import { DailyTimeLogsComponent } from './features/hr-admin/personnels-201-file/leaves-attendance-records/dtr/dtr.component';
+import { ScheduleAdjustmentRequestsComponent } from './features/hr-admin/personnels-201-file/leaves-attendance-records/schedule-adjustment-requests/schedule-adjustment-requests.component';
 
 // Feature Components
 // import { UserManagementComponent } from './features/systems-administration/user-management/user-management.component';
@@ -134,12 +135,19 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: ADashboardComponent },
-      { path: 'personnel-201-file/leaves-attendance-records', component: LeavesAttendanceRecordsComponent },
+      { path: 'personnel-201-file/leaves-attendance-records',
+        // component: LayoutComponent,
+        children: [
+          { path: '', redirectTo: 'daily-time-logs', pathMatch: 'full' }, // Add this
+          { path: 'daily-time-logs', component: DailyTimeLogsComponent },
+          { path: 'schedule-adjustment-requests', component: ScheduleAdjustmentRequestsComponent },
+        ]
+      },
       { path: 'personnel-201-file/loan-information', component: LoanInformationComponent },
       { path: 'personnel-201-file/requests', component: RequestsComponent },
       { 
         path: 'personnel-201-file/employment-records',
-        component: LayoutComponent,
+        // component: LayoutComponent,
         children: [
           { path: '', redirectTo: 'merits&violations', pathMatch: 'full' }, // Add this
           { path: 'merits&violations', component: MeritsAndViolationsComponent },

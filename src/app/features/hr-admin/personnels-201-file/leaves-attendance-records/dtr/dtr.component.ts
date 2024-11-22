@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { SidebarNavigationModule } from './../sidebar-navigation/sidebar-navigation.module';
-import { SupabaseService } from '../Supabase/supabase.service';
+import { SupabaseService } from 'src/app/Supabase/supabase.service';
 
 // Interface defining the structure of an Attendance record
 interface Attendance {
@@ -22,11 +21,11 @@ interface Attendance {
 @Component({
   selector: 'app-dtr',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, SidebarNavigationModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './dtr.component.html',
   styleUrls: ['./dtr.component.css']
 })
-export class DtrComponent implements OnInit {
+export class DailyTimeLogsComponent implements OnInit {
   public today: Date = new Date();
   public showPopup = false;
   public showTable = true;
