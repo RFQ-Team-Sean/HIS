@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarComponent } from 'src/app/shared/sidebar/sidebar.component';
 import { SupabaseService } from 'src/app/Supabase/supabase.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -7,7 +6,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-merits-and-violations',
   standalone: true,
-  imports: [SidebarComponent, ReactiveFormsModule, CommonModule , FormsModule],
+  imports: [ReactiveFormsModule, CommonModule , FormsModule],
   templateUrl: './merits-and-violations.component.html',
   styleUrls: ['./merits-and-violations.component.css']
 })

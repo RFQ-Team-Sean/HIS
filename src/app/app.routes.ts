@@ -22,6 +22,7 @@ import { RequestsComponent } from './features/hr-admin/personnels-201-file/reque
 import { MeritsAndViolationsComponent } from './features/hr-admin/personnels-201-file/employment-records/merits-and-violations/merits-and-violations.component';
 import { DailyTimeLogsComponent } from './features/hr-admin/personnels-201-file/leaves-attendance-records/dtr/dtr.component';
 import { ScheduleAdjustmentRequestsComponent } from './features/hr-admin/personnels-201-file/leaves-attendance-records/schedule-adjustment-requests/schedule-adjustment-requests.component';
+import { EmployeeLeaveBalanceComponent } from './features/hr-admin/personnels-201-file/leaves-attendance-records/employee-leave-balance/employee-leave-balance.component';
 
 // Feature Components
 // import { UserManagementComponent } from './features/systems-administration/user-management/user-management.component';
@@ -141,6 +142,7 @@ export const routes: Routes = [
           { path: '', redirectTo: 'daily-time-logs', pathMatch: 'full' }, // Add this
           { path: 'daily-time-logs', component: DailyTimeLogsComponent },
           { path: 'schedule-adjustment-requests', component: ScheduleAdjustmentRequestsComponent },
+          { path: 'employee-leave-balance', component: EmployeeLeaveBalanceComponent },
         ]
       },
       { path: 'personnel-201-file/loan-information', component: LoanInformationComponent },

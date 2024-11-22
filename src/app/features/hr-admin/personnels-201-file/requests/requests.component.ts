@@ -73,7 +73,7 @@ export class RequestsComponent implements OnInit{
   onManageButtonClick(requestType: String){
     if (requestType === "Leaves"){
       this.isManagingLeaves = !this.isManagingLeaves;
-      this.manageLeaveButtonText = this.manageLeaveButtonText === 'Manage Requests' ? 'Stop Managing Requests' : 'Manage Requests'
+      this.manageLeaveButtonText = this.manageLeaveButtonText === 'Manage' ? 'Stop Managing' : 'Manage'
     }
   }
 
