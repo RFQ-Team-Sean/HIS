@@ -5,74 +5,72 @@
             <p class="mb-2 pb-5 text-slate-500 text-sm">View and Manage Employee Leave Balance</p>
 
             <div class="z-10 relative rounded-xl shadow-lg bg-white">
-                <div *ngIf="!selectedProfile">
-                    <!-- Row with search input and buttons -->
-                    <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-4">
-                        <div class="relative w-[20%]">
-                            <input type="text" [(ngModel)]="searchTerm" placeholder="Search Employees..." (input)="searchTable()" class="w-full h-full p-2 pr-8 border rounded-full border-gray-300"/>
-                            <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
+                
+                <!-- Row with search input and buttons -->
+                <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-4">
+                    <div class="relative w-[20%]">
+                        <input type="text" [(ngModel)]="searchTerm" placeholder="Search Employees..." (input)="searchTable()" class="w-full h-full p-2 pr-8 border rounded-full border-gray-300"/>
+                        <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <!-- Filter Feature -->
+                        <div class="relative">
+                            <select (change)="onSortOptionChange($event)" class="border px-4 py-2 rounded appearance-none pr-10">
+                                <option value="none">Default</option>
+                                <option value="asc">Sort A-Z</option>
+                                <option value="desc">Sort Z-A</option>
+                            </select>
+                            <i class="fa fa-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                         </div>
 
-                        <div class="flex items-center space-x-4">
-                            <!-- Filter Feature -->
-                            <div class="relative">
-                                <select (change)="onSortOptionChange($event)" class="border px-4 py-2 rounded appearance-none pr-10">
-                                    <option value="none">Default</option>
-                                    <option value="asc">Sort A-Z</option>
-                                    <option value="desc">Sort Z-A</option>
-                                </select>
-                                <i class="fa fa-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                            </div>
 
-
-                            <!-- Manage Button -->
-                            <button [ngClass]="{ 'bg-green-500 hover:bg-green-600': !isManaging, 'bg-pink-500 hover:bg-pink-600': isManaging }"
-                            class="text-white rounded border border-gray-200 text-sm font-medium px-5 py-2.5 transition duration-300 ease-in-out" (click)="onManageButtonClick()">
-                                {{ manageButtonText }}
-                            </button>
-                    
-                    
-                            <!-- Pagination -->
-                            <button class="text-black p-1 bg-gray-100 rounded-md" (click)="prevPage()" [disabled]="currentPage === 1"><</button>
-                            <span class="text-gray-600 text-center">{{ currentPage }} of {{ totalPages }}</span>
-                            <button class="text-black p-1 bg-gray-100 rounded-md" (click)="nextPage()" [disabled]="currentPage === totalPages">></button>
-                        </div>
+                        <!-- Manage Button -->
+                        <button [ngClass]="{ 'bg-green-500 hover:bg-green-600': !isManaging, 'bg-pink-500 hover:bg-pink-600': isManaging }"
+                        class="text-white rounded border border-gray-200 text-sm font-medium px-5 py-2.5 transition duration-300 ease-in-out" (click)="onManageButtonClick()">
+                            {{ manageButtonText }}
+                        </button>
+                
+                
+                        <!-- Pagination -->
+                        <button class="text-black p-1 bg-gray-100 rounded-md" (click)="prevPage()" [disabled]="currentPage === 1"><</button>
+                        <span class="text-gray-600 text-center">{{ currentPage }} of {{ totalPages }}</span>
+                        <button class="text-black p-1 bg-gray-100 rounded-md" (click)="nextPage()" [disabled]="currentPage === totalPages">></button>
                     </div>
                 </div>
+                
 
                 <!-- Display the employee list -->
-                <div *ngIf="!selectedProfile">
-                    <div *ngIf="filteredProfiles.length > 0" class="overflow-x-hidden overflow-y-auto max-h-[28rem] custom-scrollbar">
-                        <table class="table-fixed w-full">
-                            <thead>
-                                <tr class="bg-gray-100 text-gray-700 leading-normal sticky z-10">
-                                <th class="z-1 top-0 sticky bg-gray-100 py-3 px-4 w-2/12 text-left font-medium text-gray-500">PROFILE</th>
-                                <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">NAME</th>
-                                <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">EMAIL</th>
-                                <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-center font-medium text-gray-500">CURRENT LEAVE BALANCE</th>
-                                <th *ngIf="isManaging" class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-gray-500 text-sm font-light">
-                                <tr *ngFor="let user of paginatedProfiles; let i = index" class="border-b border-gray-200">
-                                <td class="py-3 px-4 w-2/12 text-left whitespace-nowrap">
-                                    <div class="flex items-center"><img [src]="user.photo_url" alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-gray-200"></div>
-                                </td>
-                                <td class="py-3 px-6 text-left truncate">{{ user.first_name }} {{ user.surname }}</td>
-                                <td class="py-3 px-6 text-left truncate">{{ user.email }}</td>
-                                <td class="py-3 px-6 text-center">{{ user.leave_balance }}</td>
-                                <td *ngIf="isManaging" class="px-3 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                    <button (click)="openManageModal()" class="text-blue-500 hover:text-blue-700 mx-4">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-pencil-square h-6 w-6" viewBox="0 0 16 16">
-                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                                        </svg>
-                                    </button>
-                                </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div *ngIf="filteredProfiles.length > 0" class="overflow-x-hidden overflow-y-auto max-h-[28rem] custom-scrollbar">
+                    <table class="table-fixed w-full">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-700 leading-normal sticky z-10">
+                            <th class="z-1 top-0 sticky bg-gray-100 py-3 px-4 w-2/12 text-left font-medium text-gray-500">PROFILE</th>
+                            <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">NAME</th>
+                            <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">EMAIL</th>
+                            <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-center font-medium text-gray-500">CURRENT LEAVE BALANCE</th>
+                            <th *ngIf="isManaging" class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-500 text-sm font-light">
+                            <tr *ngFor="let user of paginatedProfiles; let i = index" class="border-b border-gray-200">
+                            <td class="py-3 px-4 w-2/12 text-left whitespace-nowrap">
+                                <div class="flex items-center"><img [src]="user.photo_url" alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-gray-200"></div>
+                            </td>
+                            <td class="py-3 px-6 text-left truncate">{{ user.first_name }} {{ user.surname }}</td>
+                            <td class="py-3 px-6 text-left truncate">{{ user.email }}</td>
+                            <td class="py-3 px-6 text-center">{{ user.leave_balance }}</td>
+                            <td *ngIf="isManaging" class="px-3 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                <button (click)="openManageModal(user)" class="text-blue-500 hover:text-blue-700 mx-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-pencil-square h-6 w-6" viewBox="0 0 16 16">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                    </svg>
+                                </button>
+                            </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -81,8 +79,28 @@
     <div *ngIf="isManageModalOpen" class="fixed inset-0 flex items-center justify-center z-50">
         <div class="absolute inset-0 bg-black opacity-50"></div>
         <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow-lg p-6 w-96 z-10">
+        <div class="relative bg-white rounded-lg shadow-lg p-6 min-w-1/3 z-10">
             <h2 class="text-xl font-semibold mb-4">Update Employee Leave Balance</h2>
+
+            <p><strong>Employee:</strong></p>
+            <p class="font-bold">{{ selectedProfile.first_name }} {{ selectedProfile.surname }}</p>
+            <p>{{ selectedProfile.email }}</p>
+
+             <!-- Input fields for adding and deducting leave balance -->
+             <div class="my-4">
+                <label for="addLeave" class="block text-sm font-medium text-gray-700">Add/Deduct Leave Balance</label>
+                <label for="addLeave" class="block text-xs font-medium text-gray-500">Enter amount to add or deduct (negative number for deduction)</label>
+                <input type="number" [(ngModel)]="adjustLeaveAmount" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300" />
+            </div>
+
+            <div class="flex justify-end mt-6">
+                <button (click)="onUpdateClicked()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mr-2">
+                    Update
+                </button>
+                <button (click)="closeManageModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+                    Cancel
+                </button>
+            </div>
         </div>
     </div>
 </div>

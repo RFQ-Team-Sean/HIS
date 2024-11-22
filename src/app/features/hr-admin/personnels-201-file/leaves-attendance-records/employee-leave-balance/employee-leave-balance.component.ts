@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from 'src/app/Supabase/supabase.service';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-employee-leave-balance',
@@ -15,6 +15,7 @@ export class EmployeeLeaveBalanceComponent implements OnInit {
   profiles: any[] = [];
   filteredProfiles: any[] = []; 
   selectedProfile: any = null;
+  adjustLeaveAmount: number = 0;
 
   //Booleans and Strings
   manageButtonText: string = 'Manage'
@@ -84,6 +85,21 @@ export class EmployeeLeaveBalanceComponent implements OnInit {
     this.paginatedProfiles = this.getPaginatedProfiles(); 
   }
 
+  onUpdateClicked() {
+    const newBalance = (this.selectedProfile.leave_balance || 0) + this.adjustLeaveAmount;
+    this.supabaseService.updateLeaveBalance(this.selectedProfile.user_id, newBalance)
+      .then(updatedData => {
+        if (updatedData) {
+            console.log('Status updated in Supabase:', updatedData);
+            this.selectedProfile.leave_balance = newBalance;
+            this.adjustLeaveAmount = 0;
+            this.closeManageModal();
+        } else {
+            console.log('Failed to update status in Supabase');
+        }
+      });
+  }
+
   getPaginatedProfiles() {
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
@@ -104,9 +120,14 @@ export class EmployeeLeaveBalanceComponent implements OnInit {
     }
   }
   
-  openManageModal(){
+  openManageModal(user: any){
     this.isManageModalOpen = true;
+    this.selectedProfile = user;
+  }
 
+  closeManageModal(){
+    this.isManageModalOpen = false;
+    this.adjustLeaveAmount = 0;
   }
 
 
