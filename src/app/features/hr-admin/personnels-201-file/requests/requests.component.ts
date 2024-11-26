@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } 
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from 'src/app/Supabase/supabase.service';
 
-type LeaveStatus = 'Pending' | 'Approved' | 'Rejected';
+type RequestStatus = 'Pending' | 'Approved' | 'Rejected';
 
 @Component({
   selector: 'app-requests',
@@ -20,38 +20,33 @@ export class RequestsComponent implements OnInit{
   selectedRequest: any = null;
   isSubmitting: boolean = false;
 
-  //Leave Requests
-  leaveRequests: any[] = [];
-  addLeaveForm: FormGroup;
-  leaveTypes: any[] = ['Sick Leave', 'Maternity Leave', 'Vacation Leave'];
+  //Requests
+  requests: any[] = [];
+  addRequestForm: FormGroup;
+  requestTypes: any[] = ['Leave Request', 'Overtime Request', 'DTR Adjustment Request', 'Certifications', 'Membership Forms', 'Monetization of Leave Credits'];
   isManagingLeaves: boolean = false;
   isManageLeaveModalOpen: boolean = false;
   manageLeaveButtonText: String = 'Manage Requests';
-  newLeaveStatus: LeaveStatus = 'Pending';
-  adjustLeaveAmount: number = 0;
+  newLeaveStatus: RequestStatus = 'Pending';
 
-  //For adding leave requests
+  //For adding requests
   isAddLeaveModalOpen = false;
   selectedFile: File | null = null;
   selectedEmployeeId: number | null = null;
-  selectedLeaveType: string | null = null;
-  selectedStartDate: string | null = null;
-  selectedEndDate: string | null = null;
+  selectedRequestType: string | null = null;
   file: File | null = null;
 
   constructor(private fb: FormBuilder, private supabaseService: SupabaseService){
-    this.addLeaveForm = this.fb.group({
-      leaveType: ['', Validators.required],
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
+    this.addRequestForm = this.fb.group({
+      requestType: ['', Validators.required],
       request: ['', Validators.required]
     });
   }
 
   async ngOnInit() {
-    this.leaveRequests = await this.supabaseService.getLeaveRequests();
-    for (const request of this.leaveRequests) {
-      request.fileUrl = await this.supabaseService.getFileUrl(request.request, 'leave-requests-documents');
+    this.requests = await this.supabaseService.getRequests();
+    for (const request of this.requests) {
+      request.fileUrl = await this.supabaseService.getFileUrl(request.request, 'requests-documents');
     }
 
     this.loadEmployees();
@@ -77,58 +72,32 @@ export class RequestsComponent implements OnInit{
     }
   }
 
-  openManageRequestModal(requestType: String, request: any) {
-    switch (requestType) {
-      case 'Leaves':
-        this.selectedRequest = request;
-        this.isManageLeaveModalOpen = true;
-        this.newLeaveStatus = request.status;
-        break;
-      default:
-        break;
-    }
+  openManageRequestModal(request: any) {
+    this.selectedRequest = request;
+    this.isManageLeaveModalOpen = true;
+    this.newLeaveStatus = request.status;
   }
 
   openAddLeaveModal() {
     this.isAddLeaveModalOpen = true;
   }
 
-  closeManageRequestModal(requestType: String){
-    switch (requestType) {
-      case 'Leaves':
-        this.isManageLeaveModalOpen = false;
-        break;
-      default:
-        break;
-    }
+  closeManageRequestModal(){
+    this.isManageLeaveModalOpen = false;
   }
 
-  closeAddLeaveModal() {
+  closeAddRequestModal() {
     this.isAddLeaveModalOpen = false;
     this.selectedEmployeeId = null;
-    this.selectedLeaveType = null;
-    this.selectedStartDate = null;
-    this.selectedEndDate = null;
+    this.selectedRequestType = null;
     this.file = null;
   }
   
-  onUpdateLeaveClicked() {
-    //update leave balance
-    const newBalance = (this.selectedRequest.profile.leave_balance || 0) + this.adjustLeaveAmount;
-    this.supabaseService.updateLeaveBalance(this.selectedRequest.profile?.user_id, newBalance)
-      .then(updatedData => {
-        if (updatedData) {
-            console.log('Status updated in Supabase:', updatedData);
-        } else {
-            console.error('Failed to update status in Supabase');
-        }
-      });
-    this.selectedRequest.profile.leave_balance = newBalance;
-    this.adjustLeaveAmount = 0;
+  onUpdateClicked() {
     //update request status
     if (this.selectedRequest) {
         this.selectedRequest.status = this.newLeaveStatus;
-        this.supabaseService.updateLeaveRequestStatus(this.selectedRequest.id, this.newLeaveStatus)
+        this.supabaseService.updateRequestStatus(this.selectedRequest.id, this.newLeaveStatus)
             .then(updatedData => {
                 if (updatedData) {
                     console.log('Status updated in Supabase:', updatedData);
@@ -136,11 +105,11 @@ export class RequestsComponent implements OnInit{
                     console.error('Failed to update status in Supabase');
                 }
             });
-        this.closeManageRequestModal('Leaves')
+        this.closeManageRequestModal()
     }
   }
 
-  async onAddLeaveSubmit() {
+  async onAddRequestSubmit() {
     if (!this.selectedEmployeeId || !this.file) return;
 
     this.isSubmitting = true;
@@ -148,7 +117,7 @@ export class RequestsComponent implements OnInit{
     //Upload file to supabase bucket
     const filePath = `${Date.now()}_${this.file.name}`;
     const { error: uploadError } = await this.supabaseService.uploadRequestFile(
-        'leave-requests-documents',
+        'requests-documents',
         filePath,
         this.file
     );
@@ -159,23 +128,21 @@ export class RequestsComponent implements OnInit{
         return;
     }
 
-    //Submit data to leave_requests table
+    //Submit data to requests table
     const { error: insertError } = await this.supabaseService.insertRequest({
         employee_id: this.selectedEmployeeId,
-        leave_type: this.selectedLeaveType,
-        request: filePath,
-        start_date: this.selectedStartDate, 
-        end_date: this.selectedEndDate,     
+        request_type: this.selectedRequestType,
+        request: filePath, 
         status: 'Pending',
-    }, 'leave_requests');
+    }, 'requests');
 
 
-    this.leaveRequests = await this.supabaseService.getLeaveRequests()
+    this.requests = await this.supabaseService.getRequests()
 
     if (insertError) {
         console.error('Error inserting schedule adjustment request:', insertError);
     } else {
-        this.closeAddLeaveModal();
+        this.closeAddRequestModal();
     }
 
     this.isSubmitting = false;

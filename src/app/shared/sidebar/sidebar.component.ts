@@ -218,7 +218,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
                   { name: 'Employee Leave Balance', route: '/hr/personnel-201-file/leaves-attendance-records/employee-leave-balance' },
                 ]
               },
-              { name: 'Requests Management', route: '/hr/personnel-201-file/requests' },
+              { name: 'Requests Management', icon: 'assignment', route: '/hr/personnel-201-file/requests' },
               { name: 'Personnel Movement', route: '/hr/personnel-201-file/movement' },
               { name: 'Loan Information', route: '/hr/personnel-201-file/loan-information' },
               { name: 'Additional Contributions', route: '/hr/personnel-201-file/contributions' }

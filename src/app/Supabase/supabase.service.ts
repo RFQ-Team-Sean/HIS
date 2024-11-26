@@ -1530,8 +1530,8 @@ async getParameters() {
 
   //LEAVE REQUESTS
 
-  async getLeaveRequests() {
-    const { data, error } = await this.supabase.from('leave_requests').select('* , profile(*)');
+  async getRequests() {
+    const { data, error } = await this.supabase.from('requests').select('* , profile(*)');
     if (error) {
       console.error('Error fetching leave requests:', error);
       return [];
@@ -1539,9 +1539,9 @@ async getParameters() {
     return data;
   }
 
-  async updateLeaveRequestStatus(requestId: number, newStatus: 'Pending' | 'Approved' | 'Rejected') {
+  async updateRequestStatus(requestId: number, newStatus: 'Pending' | 'Approved' | 'Rejected') {
     const { data, error } = await this.supabase
-         .from('leave_requests')
+         .from('requests')
          .update({ status: newStatus })
          .eq('id', requestId);
 
@@ -1614,7 +1614,7 @@ async getParameters() {
 
   async deleteScheduleAdjustmentRequest(requestId: number, filename: string) {
     try {
-        // Step 1: Delete the file from the bucket
+        // Delete the file from the bucket
         const { error: storageError } = await this.supabase
             .storage
             .from('schedule-adjustment-requests-documents')
@@ -1625,7 +1625,7 @@ async getParameters() {
             return null;
         }
 
-        // Step 2: Delete the request entry from the table
+        // Delete the request entry from the table
         const { data, error } = await this.supabase 
             .from('schedule_adjustment_requests')
             .delete()
