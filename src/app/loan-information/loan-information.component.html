@@ -90,7 +90,7 @@
                   <td>{{ loan.type }}</td>
                   <td>{{ loan.outstandingBalance | currency: 'PHP' }}</td>
                   <td>{{ loan.totalPaid | currency: 'PHP' }}</td>
-                  <td>{{ loan.lastPayment | date: 'MM/dd/yyyy' }}</td>
+                  <td>{{ loan.lastPayment | date}}</td>
                   <td class="flex justify-center items-center py-2">
                     <span [ngClass]="{
                       'bg-yellow-500': loan.status === 'Pending',
@@ -229,25 +229,25 @@
       </button>
     </div>
     <!-- Modal Form -->
-    <form>
+    <form (submit)="addLoan(); $event.preventDefault()">
       <div class="grid grid-cols-2 gap-y-4">
         <label for="name" class="text-sm flex items-center font-medium text-gray-700">Loan Name</label>
-        <input id="loan-name-input" type="text" class="input-field rounded-lg border" placeholder="e.g., Personal Loan" required>
-
+        <input #loanNameInput id="loan-name-input" type="text" class="input-field rounded-lg border" placeholder="e.g., Personal Loan" required>
+    
         <label for="type" class="text-sm flex items-center font-medium text-gray-700">Loan Type</label>
-        <input id="loan-type-input" type="text" class="input-field rounded-lg border" placeholder="e.g., School" required>
-
+        <input #loanTypeInput id="loan-type-input" type="text" class="input-field rounded-lg border" placeholder="e.g., School" required>
+    
         <label for="outstandingBalance" class="text-sm flex items-center font-medium text-gray-700">Outstanding Balance</label>
-        <input id="loan-outstandingBalance-input" type="number" class="input-field rounded-lg border" placeholder="e.g., 5000" required>
-
+        <input #loanOutstandingBalanceInput id="loan-outstandingBalance-input" type="number" class="input-field rounded-lg border" placeholder="e.g., 5000" required>
+    
         <label for="totalPaid" class="text-sm flex items-center font-medium text-gray-700">Total Paid</label>
-        <input id="loan-totalPaid-input" type="number" class="input-field rounded-lg border" placeholder="e.g., 2000" required>
-
+        <input #loanTotalPaidInput id="loan-totalPaid-input" type="number" class="input-field rounded-lg border" placeholder="e.g., 2000" required>
+    
         <label for="lastPayment" class="text-sm flex items-center font-medium text-gray-700">Last Payment</label>
-        <input id="loan-lastPayment-input" type="date" class="input-field rounded-lg border" required>
-
+        <input #loanLastPaymentInput id="loan-lastPayment-input" type="date" class="input-field rounded-lg border" required>
+    
         <label for="status" class="text-sm flex items-center font-medium text-gray-700">Status</label>
-        <select id="loan-status-input" class="input-field rounded-lg border">
+        <select #loanStatusInput id="loan-status-input" class="input-field rounded-lg border">
           <option value="Pending">Pending</option>
           <option value="Approved">Approved</option>
           <option value="Active">Active</option>
@@ -261,7 +261,7 @@
           <option value="Cancelled">Cancelled</option>
         </select>
         <div class="col-span-2 flex justify-center">
-          <button (click)="addLoan()" type="submit" class="col-span-2 mt-2 w-auto bg-blue-600 hover:bg-blue-800 text-white font-medium rounded-lg p-2 px-4">
+          <button type="submit" class="col-span-2 mt-2 w-auto bg-blue-600 hover:bg-blue-800 text-white font-medium rounded-lg p-2 px-4">
             Add Loan
           </button>
         </div>

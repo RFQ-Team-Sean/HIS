@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SidebarNavigationModule } from '../sidebar-navigation/sidebar-navigation.module';
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../Supabase/supabase.service';
 import { FormsModule } from '@angular/forms';
 
+
+
 interface Loan {
+  loan_id: number,
   name: string;
   type: string;
   outstandingBalance: number;
@@ -20,38 +23,57 @@ interface Loan {
   standalone: true,
   imports: [RouterModule, SidebarNavigationModule, CommonModule, FormsModule],
   templateUrl: './loan-information.component.html',
-  styleUrl: './loan-information.component.css'
+  styleUrls: ['./loan-information.component.css']
 })
-
-export class LoanInformationComponent {
-  loanRecords = [
-    { name: 'Personal Loan', type: 'School', outstandingBalance: 5000, totalPaid: 2000, lastPayment: new Date('2024-09-15'), status: 'Pending' },
-    { name: 'BDO Bank Loan', type: 'Bank', outstandingBalance: 150000, totalPaid: 50000, lastPayment: new Date('2024-09-01'), status: 'Active' },
-    { name: 'Utang kay Jaycel', type: 'Calamity', outstandingBalance: 12000, totalPaid: 7000, lastPayment: new Date('2024-08-30'), status: 'Late' },
-    { name: 'Car Loan', type: 'Auto', outstandingBalance: 450000, totalPaid: 200000, lastPayment: new Date('2024-07-15'), status: 'Closed' },
-    { name: 'Emergency Loan', type: 'Personal', outstandingBalance: 8000, totalPaid: 3000, lastPayment: new Date('2024-10-05'), status: 'Past Due' },
-    { name: 'Home Loan', type: 'Mortgage', outstandingBalance: 1200000, totalPaid: 300000, lastPayment: new Date('2024-06-01'), status: 'In Collections' },
-    { name: 'Student Loan', type: 'Education', outstandingBalance: 30000, totalPaid: 15000, lastPayment: new Date('2024-07-20'), status: 'Deferred' },
-    { name: 'Credit Card', type: 'Revolving Credit', outstandingBalance: 8000, totalPaid: 3000, lastPayment: new Date('2024-08-15'), status: 'Defaulted' },
-    { name: 'Small Business Loan', type: 'Commercial', outstandingBalance: 500000, totalPaid: 100000, lastPayment: new Date('2024-09-10'), status: 'Cancelled' },
-    { name: 'Motorcycle Loan', type: 'Auto', outstandingBalance: 30000, totalPaid: 12000, lastPayment: new Date('2024-09-22'), status: 'Restructured' },
-    { name: 'Medical Bill Loan', type: 'Medical', outstandingBalance: 15000, totalPaid: 5000, lastPayment: new Date('2024-10-02'), status: 'Pending' },
-    { name: 'Furniture Loan', type: 'Personal', outstandingBalance: 2000, totalPaid: 1000, lastPayment: new Date('2024-08-20'), status: 'Late' },
-    { name: 'Wedding Loan', type: 'Personal', outstandingBalance: 50000, totalPaid: 20000, lastPayment: new Date('2024-09-08'), status: 'Closed' },
-    { name: 'Business Expansion Loan', type: 'Commercial', outstandingBalance: 250000, totalPaid: 50000, lastPayment: new Date('2024-07-01'), status: 'In Collections' },
-    { name: 'Refinancing Loan', type: 'Mortgage', outstandingBalance: 1000000, totalPaid: 300000, lastPayment: new Date('2024-09-10'), status: 'Restructured' },
-    { name: 'Travel Loan', type: 'Personal', outstandingBalance: 8000, totalPaid: 3000, lastPayment: new Date('2024-08-11'), status: 'Defaulted' },
-    { name: 'Green Energy Loan', type: 'Commercial', outstandingBalance: 70000, totalPaid: 10000, lastPayment: new Date('2024-10-01'), status: 'Cancelled' },
-    { name: 'Holiday Loan', type: 'Personal', outstandingBalance: 20000, totalPaid: 10000, lastPayment: new Date('2024-09-25'), status: 'Deferred' },
-    { name: 'Consolidation Loan', type: 'Personal', outstandingBalance: 15000, totalPaid: 5000, lastPayment: new Date('2024-08-28'), status: 'Closed' },
-    { name: 'Appliance Loan', type: 'Revolving Credit', outstandingBalance: 2000, totalPaid: 1000, lastPayment: new Date('2024-09-30'), status: 'In Collections' },
-  ];
-
+export class LoanInformationComponent implements OnInit {
+  loanRecords: Loan[] = [];
   searchTerm: string = '';
-  filteredLoanRecords: Loan[] = []; //[...this.loanRecords]; // Initially all records are shown
+  filteredLoanRecords: Loan[] = [];
+  showManageColumn: boolean = false;
+  manageButtonText: string = 'Manage Loan Records';
+  manageButtonIcon: string = 'edit_note';
+  sortColumn: string = '';
+  isAscending: boolean = true;
+  selectedLoan: Loan | null = null;
+  selectedCount: number = 0;
+
+  @ViewChild('loanNameInput') loanNameInput!: ElementRef;
+  @ViewChild('loanTypeInput') loanTypeInput!: ElementRef;
+  @ViewChild('loanOutstandingBalanceInput') loanOutstandingBalanceInput!: ElementRef;
+  @ViewChild('loanTotalPaidInput') loanTotalPaidInput!: ElementRef;
+  @ViewChild('loanLastPaymentInput') loanLastPaymentInput!: ElementRef;
+  @ViewChild('loanStatusInput') loanStatusInput!: ElementRef;
+
+  constructor(private supabaseService: SupabaseService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.filteredLoanRecords = this.loanRecords;// Initially all records are shown
+    this.fetchLoans(); // Fetch data from Supabase
+  }
+
+  async fetchLoans() {
+    try {
+      const { data, error } = await this.supabaseService.getLoanInfo();
+      if (error) {
+        console.error('Error fetching loan records:', error);
+      } else {
+        console.log('Raw data from Supabase:', data);
+        if (data) {
+          this.loanRecords = data.map((loan: any) => ({
+            loan_id: loan.loan_id,
+            name: loan.loan_name,
+            type: loan.loan_type,
+            outstandingBalance: loan.outstandingBalance,
+            totalPaid: loan.totalPaid,
+            lastPayment: loan.lastPayment,
+            status: loan.status
+          }));
+          this.filteredLoanRecords = [...this.loanRecords];
+          console.log('Mapped loan records:', this.loanRecords);
+        }
+      }
+    } catch (error) {
+      console.error('Unexpected error:', error);
+    }
   }
 
   // SEARCH BY FILTERING TABLE
@@ -66,142 +88,185 @@ export class LoanInformationComponent {
     });
   }
 
-  trackByFn(index: number, item: any): any {
-    return item.name; // or another unique identifier for each loan
-  }
-
-  showManageColumn : boolean = false
-  manageButtonText : string = 'Manage Loan Records';
-  manageButtonIcon : string = 'edit_note';
-
+  trackByFn: (index: number, loan: Loan) => any = (index, loan) => loan.name;
   // SORTING TABLE BY COLUMN HEADER
-  sortColumn: string = ''; // Stores the current column being sorted
-  isAscending: boolean = true; // Tracks sorting direction
-
   sortTable(column: keyof Loan): void {
-    if(column === 'selected') {
-      return;
-    }
+    if(column === 'selected') return;
     if (this.sortColumn === column) {
-      this.isAscending = !this.isAscending; // Toggle sort direction
+      this.isAscending = !this.isAscending;
     } else {
       this.sortColumn = column;
-      this.isAscending = true; // Default to ascending on a new column
+      this.isAscending = true;
     }
 
     this.filteredLoanRecords.sort((a, b) => {
-      if(column === 'outstandingBalance' || column === 'totalPaid') {
+      if (column === 'outstandingBalance' || column === 'totalPaid') {
         const valueA = a[column] as number;
         const valueB = b[column] as number;
-        if (valueA < valueB) return this.isAscending ? -1 : 1;
-        if (valueA > valueB) return this.isAscending ? 1 : -1;
-        return 0;
-      }
-      else {
-        const valueA = column === 'lastPayment' ? a[column].getTime() : a[column] ? a[column].toString().toLowerCase() : '';
-        const valueB = column === 'lastPayment' ? b[column].getTime() : b[column] ? b[column].toString().toLowerCase() : '';
-        if (valueA < valueB) return this.isAscending ? -1 : 1;
-        if (valueA > valueB) return this.isAscending ? 1 : -1;
-        return 0;
+        return this.isAscending ? valueA - valueB : valueB - valueA;
+      } else {
+        const valueA = column === 'lastPayment' ? a[column].getTime() : a[column]?.toString().toLowerCase();
+        const valueB = column === 'lastPayment' ? b[column].getTime() : b[column]?.toString().toLowerCase();
+        return this.isAscending ? (valueA < valueB ? -1 : 1) : (valueA > valueB ? -1 : 1);
       }
     });
-
-    console.log(`Sorted by ${column}:`, this.filteredLoanRecords);
   }
 
   toggleManageColumn() {
     this.showManageColumn = !this.showManageColumn;
-
-    this.manageButtonText = this.showManageColumn? 'Return to View Mode' : 'Manage Loan Records';
-    this.manageButtonIcon = this.showManageColumn? 'visibility' : 'edit_note';
+    this.manageButtonText = this.showManageColumn ? 'Return to View Mode' : 'Manage Loan Records';
+    this.manageButtonIcon = this.showManageColumn ? 'visibility' : 'edit_note';
   }
 
-  selectedLoan: Loan | null = null;
-  toggleModal(modalId: string, loan? : Loan) {
+  toggleModal(modalId: string, loan?: Loan) {
     const modal = document.getElementById(modalId) as HTMLElement;
-
-    if(modal) {
-      modal.classList.toggle('hidden');
-    }
-
-    if (loan) {
-      // Clone the selected loan to avoid direct mutation
-      this.selectedLoan = { ...loan };
-    }
-    console.log(this.selectedLoan);
+    if(modal) modal.classList.toggle('hidden');
+    if (loan) this.selectedLoan = { ...loan };
   }
+  
 
-  addLoan() {
-    const nameInput = document.getElementById('loan-name-input') as HTMLInputElement | null;
-    const typeInput = document.getElementById('loan-type-input') as HTMLInputElement | null;
-    const outBalanceInput = document.getElementById('loan-outstandingBalance-input') as HTMLInputElement | null;
-    const totalPaidInput = document.getElementById('loan-totalPaid-input') as HTMLInputElement | null;
-    const lastPayInput = document.getElementById('loan-lastPayment-input') as HTMLInputElement | null;
-    const statusInput = document.getElementById('loan-status-input') as HTMLInputElement | null;
-
-    let hasEmptyField : string | boolean = nameInput?.value === '' || typeInput?.value === ''
-    || outBalanceInput?.value === '' || totalPaidInput?.value === ''
-    || lastPayInput?.value === '' || statusInput?.value === '';
-
-    if(hasEmptyField) {
-      return;
-    }
-
-    if (nameInput && typeInput && outBalanceInput && totalPaidInput && lastPayInput && statusInput) {
-        this.loanRecords.push({
-            name: nameInput.value,
-            type: typeInput.value,
-            outstandingBalance: Number(outBalanceInput.value),
-            totalPaid: Number(totalPaidInput.value),
-            lastPayment: new Date(lastPayInput.value),
-            status: statusInput.value,
-        });
-
-        console.log(this.loanRecords);
-
-        nameInput.value = '';
-        typeInput.value = '';
-        outBalanceInput.value = '';
-        totalPaidInput.value = '';
-        lastPayInput.value = '';
-        statusInput.value = '';
-
-        this.toggleModal('add-loan-modal');
-    } else {
-        console.error("One or more input elements are missing.");
-    }
-  }
-
-  editLoan() {
-    if (this.selectedLoan) {
-      const index = this.loanRecords.findIndex(
-        (loan) => loan.name === this.selectedLoan?.name
-      );
-
-      if (index > -1) {
-        // Update the loan record with edited data
-        this.loanRecords[index] = { ...this.selectedLoan };
+  async addLoan() {
+    const newLoan = {
+      loan_name: this.loanNameInput.nativeElement.value,
+      loan_type: this.loanTypeInput.nativeElement.value,
+      outstandingBalance: +this.loanOutstandingBalanceInput.nativeElement.value,
+      totalPaid: +this.loanTotalPaidInput.nativeElement.value,
+      lastPayment: this.loanLastPaymentInput.nativeElement.value,
+      status: this.loanStatusInput.nativeElement.value,
+    };
+  
+    try {
+      // Attempt to add the loan to Supabase
+      const { data, error } = await this.supabaseService.addLoan(newLoan);
+  
+      if (error) {
+        console.error('Error adding loan to Supabase:', error.message || error);
+        return; // Exit if there is an error
       }
+  
+      if (data && data.length > 0) {
+        // If successful, update local loan records
+        const newLoanRecord = {
+          loan_id: data[0].loan_id,
+          name: newLoan.loan_name,
+          type: newLoan.loan_type,
+          outstandingBalance: newLoan.outstandingBalance,
+          totalPaid: newLoan.totalPaid,
+          lastPayment: newLoan.lastPayment,
+          status: newLoan.status,
+        };
+  
+        this.loanRecords.push(newLoanRecord);
+  
+        // Reassign to trigger change detection
+        this.filteredLoanRecords = [...this.loanRecords];
+  
+        // Close the modal and reset the input fields
+        this.toggleModal('add-loan-modal');
+        this.clearInputs();
+  
+        // Force Angular to detect changes
+        this.cdr.detectChanges();
+  
+        console.log('Loan added successfully:', newLoanRecord);
+      } else {
+        console.warn('No data returned from Supabase after adding the loan.');
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+    }
+  }
+  
+  // Helper function to clear input fields
+  clearInputs() {
+    this.loanNameInput.nativeElement.value = '';
+    this.loanTypeInput.nativeElement.value = '';
+    this.loanOutstandingBalanceInput.nativeElement.value = '';
+    this.loanTotalPaidInput.nativeElement.value = '';
+    this.loanLastPaymentInput.nativeElement.value = '';
+    this.loanStatusInput.nativeElement.value = '';
+  }
+  
 
-      console.log(this.loanRecords);
-      this.filteredLoanRecords = [...this.loanRecords];
-      // console.log(this.filteredLoanRecords);
-      // Close the modal
-      this.toggleModal('edit-loan-modal');
+
+
+  async editLoan() {
+    console.log('Selected Loan:', this.selectedLoan);
+  
+    if (this.selectedLoan?.loan_id) {  // Check for loan_id
+      console.log('Loan ID:', this.selectedLoan.loan_id);
+  
+      const index = this.loanRecords.findIndex(
+        loan => loan.loan_id === this.selectedLoan?.loan_id
+      );
+  
+      if (index > -1) {
+        try {
+          // Prepare only the necessary fields for update, can be edited if need i-edit yung ibang fields
+          const loanData = {
+            loan_id: this.selectedLoan.loan_id,
+            outstandingBalance: this.selectedLoan.outstandingBalance,
+            totalPaid: this.selectedLoan.totalPaid,
+            lastPayment: this.selectedLoan.lastPayment,
+            status: this.selectedLoan.status,
+          };
+  
+          console.log('Sending to Supabase:', loanData);
+          const response = await this.supabaseService.editLoan(loanData);
+          const { data, error } = response;
+  
+          if (error) {
+            console.error('Error updating loan in Supabase:', error);
+          } else {
+            console.log('Successfully updated loan:', data);
+            // Update the loan record locally after a successful update
+            this.loanRecords[index] = { ...this.selectedLoan };
+            this.filteredLoanRecords = [...this.loanRecords];
+            this.toggleModal('edit-loan-modal');
+          }
+        } catch (e) {
+          console.error('Unexpected error during loan update:', e);
+        }
+      } else {
+        console.warn('Loan not found in records:', this.selectedLoan?.loan_id);
+      }
+    } else {
+      console.warn('No loan selected for editing.');
     }
   }
 
-  deleteLoan() {
+  async deleteLoan() {
     if (this.selectedLoan) {
-      this.loanRecords = this.loanRecords.filter(loan => loan.name !== this.selectedLoan?.name);
-      this.toggleModal('delete-loan-modal');
+      // Get the id of the selected loan for deletion
+      const loanIdToDelete = this.selectedLoan.loan_id;
+  
+      if (loanIdToDelete) {
+        try {
+          // Delete the loan by its loan_id
+          const { data, error } = await this.supabaseService.deleteLoan(loanIdToDelete);
+  
+          if (error) {
+            console.error("Error deleting loan:", error);
+          } else {
+            console.log("Successfully deleted loan:", data);
+            // Update the filtered loan records to remove the deleted loan
+            this.filteredLoanRecords = this.filteredLoanRecords.filter(
+              loan => loan.loan_id !== loanIdToDelete
+            );
+            this.selectedLoan = null;  // Clear selected loan after deletion
+            this.selectedCount = 0;
+            this.toggleModal('delete-loan-modal'); // Close the modal after deletion
+          }
+        } catch (e) {
+          console.error("Unexpected Error during deletion:", e);
+        }
+      } else {
+        console.warn("No loan selected for deletion.");
+      }
     }
-
-    this.filteredLoanRecords = [...this.loanRecords];
-    console.log(this.filteredLoanRecords);
   }
+  
 
-  selectedCount : number = 0;
   toggleSelectAll() {
     const selectAllChecked = this.selectedCount === this.filteredLoanRecords.length;
     this.selectedCount = selectAllChecked ? 0 : this.filteredLoanRecords.length;
@@ -212,9 +277,32 @@ export class LoanInformationComponent {
     this.selectedCount = this.filteredLoanRecords.filter(loan => loan.selected).length;
   }
 
-  deleteSelectedLoans() {
-    this.filteredLoanRecords = this.filteredLoanRecords.filter(loan => !loan.selected);
-    this.selectedCount = 0; // Reset the count after deletion
-    this.toggleModal('batch-delete-modal');
-  }
+  //for batch deletion
+  async deleteSelectedLoans(){
+    const loanIdsToDelete = this.filteredLoanRecords
+    .filter(loan => loan.selected)
+    .map(loan => loan.loan_id);
+
+    if (loanIdsToDelete.length > 0){
+      try{
+        const { data, error } = await this.supabaseService.deleteLoansBatch(loanIdsToDelete);
+
+        if (error){
+          console.error("Error deleting loans: ", error);
+        }
+        else{
+          console.log("Successfully deleted loans: ", data)
+          this.filteredLoanRecords = this.filteredLoanRecords.filter(
+            loan => !loanIdsToDelete.includes(loan.loan_id)
+          );
+          this.selectedCount = 0;
+          this.toggleModal('batch-delete-modal');
+        }
+      }
+      catch (e){
+        console.error("Unexpected error during batch deletion: ", e);
+      }
+      }
+    }
 }
+
