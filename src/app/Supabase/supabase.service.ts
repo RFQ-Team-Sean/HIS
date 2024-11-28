@@ -1523,9 +1523,121 @@ async getParameters() {
     return { data, error };
   }
 
-  async getLoanInfo() {
-
-  }
+  //loan info 
+    //for fetching loan data
+    async getLoanInfo() {
+      const { data, error } = await this.supabase
+      .from('loan_information')
+      .select(`
+        loan_id,
+        loan_name,
+        loan_type,
+        outstandingBalance,
+        totalPaid,
+        status,
+        lastPayment`);
+        
+        return { data, error};
+    }
+  
+      //for adding new loan
+    async addLoan(loanData: {
+      loan_name: string;
+      loan_type: string;
+      outstandingBalance: number;
+      totalPaid: number;
+      lastPayment: Date;
+      status: string;
+    }): Promise<{ data: any; error: any }> {
+      try {
+        const { data, error } = await this.supabase
+          .from('loan_information')
+          .insert([loanData])
+          .select();
+  
+        if (error) {
+          console.error('Error adding loan to Supabase:', error.message || error);
+          throw error; // Re-throw for further handling in the component
+        }
+        
+        return { data, error };
+      } catch (error) {
+        console.error('An unexpected error occurred while adding the loan:', error);
+        throw error; // Re-throw for further handling in the component
+      }
+    }
+  
+      //for editing loan
+    async editLoan(loanData: any) {
+      console.log('Updating loan with data:', loanData);
+  
+      //checking if loan id is correct
+      if (loanData.loan_id === loanData.loan_id ){
+        console.log('ID match')
+      }
+      else{
+        console.log("ID mismatch")
+      }
+  
+      try {
+        const { data, error } = await this.supabase
+          .from('loan_information')
+          .update({
+            outstandingBalance: loanData.outstandingBalance,
+            totalPaid: loanData.totalPaid,
+            lastPayment: loanData.lastPayment,
+            status: loanData.status,
+          })
+          .eq('loan_id', loanData.loan_id);
+    
+          if (error) {
+            console.error('Error updating loan in Supabase:', error);
+            return { data: null, error }; // Return the error as is
+          }
+      
+          return { data, error: null }; // Return the successful response with data
+        } catch (e) {
+          console.error('Unexpected error during loan update:', e);
+          return { data: null, error: e }; // Return the error object directly
+        }
+      }
+  
+          //for deleting loan
+    async deleteLoan(loanId: number) {
+       const { data, error } = await this.supabase
+          .from('loan_information') // Ensure this is your actual table name
+          .delete()
+          .eq('loan_id', loanId); // Deleting based on loan_id
+          
+           if (error) {
+          // Log the error to the console
+            console.error(`Error deleting loan with loan_id ${loanId}:`, error);
+            }
+             else {
+            console.log(`Successfully deleted loan with loan_id ${loanId}:`, data);
+            }
+          
+          return { data, error }; // Return the response data and any potential error
+       }
+  
+        //for deleting loans by batch
+    async deleteLoansBatch(loanIds: number []): Promise<{data: any; error: any}>{
+        try{
+          const { data, error } = await this.supabase
+          .from('loan_information')
+          .delete()
+          .in('loan_id', loanIds);
+        if (error){
+          console.error("Error deleting loans in supabase:", error);
+          throw error;
+        }
+        return { data, error };
+        }
+        catch (error){
+          console.error("An unexpected error occured during batch deletion:", error);
+          throw error;
+        }
+       }
 
 
   //LEAVE REQUESTS
