@@ -9,11 +9,11 @@
       </span>
     </div>
 
-    <nav class="flex-grow">
+    <nav class="flex flex-grow flex-col items-center justify-between">
       <ul class="py-2" *ngIf="sidebarItems.length > 0; else noItemsTemplate">
         <li *ngFor="let item of sidebarItems">
           <!-- Main menu item -->
-          <div 
+          <div
             (click)="item.subItems ? toggleSubMenu(item) : navigateTo(item.route)"
             class="flex items-center py-3 px-4 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all ease-in-out cursor-pointer"
             [ngClass]="{'justify-start': !isExpanded}">
@@ -35,13 +35,12 @@
       <ng-template #noItemsTemplate>
         <li class="text-gray-500 px-4 py-2">No items available</li>
       </ng-template>
+      <button (click)="toggleSidebar()" class="bg-white rounded-full p-1 mb-2 shadow-md focus:outline-none
+      hover:brightness-90 z-[9999] transition-all duration-300 justify-self-end min-h-4 min-w-4">
+        <span class="material-icons transition-[transform] align-middle" [ngClass]="{'rotate-180': !isExpanded}">
+          {{'chevron_left'}}
+        </span>
+      </button>
     </nav>
   </div>
-
-  <button (click)="toggleSidebar()" class="fixed top-3 left-10 bg-[var(--color-secondary)] rounded-full p-1 shadow-md focus:outline-none hover:brightness-90 z-[9999] transition-all duration-300">
-    
-    <span class="material-icons">
-      {{ isExpanded ? 'chevron_left' : 'chevron_right' }}
-    </span>
-  </button>
 </div>
