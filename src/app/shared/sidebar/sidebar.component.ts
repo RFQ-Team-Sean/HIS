@@ -155,7 +155,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
             icon: 'group',
             subItems: [
               { name: 'Create/Edit/Delete Users', route: '/admin/user-management' },
-              { name: 'Role Management', route: '/admin/user-management/roles' },
+              { name: 'Role Management', route: '/admin/role-management' },
               { name: 'Access Rights', route: '/admin/user-management/access-rights' },
               { name: 'Password Management', route: '/admin/user-management/password' },
               { name: 'MFA/OTP Configuration', route: '/admin/user-management/mfa-otp' }

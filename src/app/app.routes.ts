@@ -5,6 +5,7 @@ import { ADashboardComponent } from './features/systems-admin/dashboard/dashboar
 import { LoginLayoutComponent } from './features/auth/login-layout/login-layout.component';
 import { LayoutComponent } from './shared/layout/layout.component';
 import { UserManagementComponent } from './features/systems-admin/user-management/user-management.component';
+import { RoleManagementComponent } from './features/systems-admin/role-management/role-management.component';
 import { ViewPDSComponent } from './features/hr-admin/personnels-201-file/general-information/personal-data-sheet/view/view.component';
 import { GeneralInformationComponent } from './features/hr-admin/personnels-201-file/general-information/personal-data-sheet/view/general-information/general-information.component';
 import { CompensationRecordsComponent } from './features/hr-admin/personnels-201-file/general-information/personal-data-sheet/view/compensation-records/compensation-records.component';
@@ -124,6 +125,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: ADashboardComponent },
       { path: 'user-management', component: UserManagementComponent },
+      { path: 'role-management', component: RoleManagementComponent },
       // { path: 'system-configuration', component: SystemConfigurationComponent },
       // { path: 'approval-workflow', component: ApprovalWorkflowComponent },
       // { path: 'audit-trail', component: AuditTrailComponent },
