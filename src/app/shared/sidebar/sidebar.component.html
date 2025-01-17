@@ -1,12 +1,9 @@
 <div class="flex h-screen">
-  <div class="bg-white shadow-xl transition-all duration-200 ease-in-out fixed top-0 left-0 h-full overflow-y-auto flex flex-col z-50"
-    [ngClass]="{'w-64': isExpanded, 'w-16': !isExpanded}"
-    (mouseenter)="expandSidebar()"
-    (mouseleave)="collapseSidebar()">
-    <div class="p-4 bg-blue-600 text-white flex items-center justify-center h-16">
-      <span class="material-icons text-2xl transition-transform duration-300 ease-in-out"
+  <div class="bg-white shadow-xl  fixed top-0 left-0 h-full overflow-y-auto flex flex-col z-50">
+    <div class="relative p-4 bg-blue-600 text-white flex items-center justify-center h-16">
+      <span class="material-icons text-2xl transition-transform"
             [ngClass]="{'scale-125': !isExpanded, 'mr-2': isExpanded}">business</span>
-      <span class="font-bold text-lg transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden"
+      <span class="font-bold text-lg transition-all ease-in-out whitespace-nowrap overflow-hidden"
             [ngClass]="{'opacity-0 max-w-0': !isExpanded, 'opacity-100 max-w-full': isExpanded}">
         HRIS Dashboard
       </span>
@@ -29,74 +26,22 @@
               {{item.name}}
             </span>
             <!-- Arrow icon for items with subitems -->
-            <span *ngIf="item.subItems && isExpanded" class="material-icons ml-auto text-sm transition-transform"
-                  [ngClass]="{'rotate-180': item.isExpanded}">
+            <span *ngIf="item.subItems && isExpanded" class="material-icons ml-auto text-sm transition-transform">
               expand_more
             </span>
           </div>
-    
-          <!-- First level sub-menu items -->
-          <ul *ngIf="item.subItems && item.isExpanded && isExpanded" 
-              class="ml-4 border-l border-gray-200">
-            <li *ngFor="let subItem of item.subItems">
-              <!-- Sub-menu item -->
-              <div
-                (click)="subItem.subItems ? toggleSubSubMenu(subItem) : navigateTo(subItem.route)"
-                class="flex items-center py-2 px-4 text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-600 cursor-pointer">
-                <span class="material-icons text-sm mr-2">{{subItem.icon || 'subdirectory_arrow_right'}}</span>
-                <span>{{subItem.name}}</span>
-                <!-- Arrow icon for items with sub-subitems -->
-                <span *ngIf="subItem.subItems" class="material-icons ml-auto text-xs transition-transform"
-                      [ngClass]="{'rotate-180': subItem.isExpanded}">
-                  expand_more
-                </span>
-              </div>
-    
-              <!-- Second level sub-menu items -->
-              <ul *ngIf="subItem.subItems && subItem.isExpanded" 
-                  class="ml-6 border-l border-gray-200">
-                <li *ngFor="let subSubItem of subItem.subItems">
-                  <a (click)="navigateTo(subSubItem.route)"
-                     class="flex items-center py-2 px-4 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600 cursor-pointer">
-                    <span class="material-icons text-xs mr-2">{{subSubItem.icon || 'radio_button_unchecked'}}</span>
-                    {{subSubItem.name}}
-                  </a>
-                </li>
-              </ul>
-            </li>
-          </ul>
         </li>
       </ul>
-    
       <ng-template #noItemsTemplate>
-        <p class="text-center text-gray-500 py-4">No items available</p>
+        <li class="text-gray-500 px-4 py-2">No items available</li>
       </ng-template>
     </nav>
-    
-    <div class="border-t border-gray-200">
-      <a (click)="navigateTo('/support-ticket')"
-         class="flex items-center py-3 px-4 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 ease-in-out cursor-pointer"
-         [ngClass]="{'justify-center': !isExpanded}">
-        <span class="material-icons text-xl transition-transform duration-300 ease-in-out"
-              [ngClass]="{'mr-3': isExpanded, 'scale-125': !isExpanded}">support_agent</span>
-        <span class="transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden"
-              [ngClass]="{'opacity-0 max-w-0': !isExpanded, 'opacity-100 max-w-full': isExpanded}">
-          Support Ticket
-        </span>
-      </a>
-    </div>
-    
-    <div class="border-t border-gray-200">
-      <a (click)="signOut($event)"
-         class="flex items-center py-3 px-4 text-red-600 hover:text-red-800 hover:bg-red-50 transition-all duration-300 ease-in-out cursor-pointer"
-         [ngClass]="{'justify-center': !isExpanded}">
-        <span class="material-icons text-xl transition-transform duration-300 ease-in-out"
-              [ngClass]="{'mr-3': isExpanded, 'scale-125': !isExpanded}">logout</span>
-        <span class="transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden"
-              [ngClass]="{'opacity-0 max-w-0': !isExpanded, 'opacity-100 max-w-full': isExpanded}">
-          Logout
-        </span>
-      </a>
-    </div>
   </div>
+
+  <button (click)="toggleSidebar()" class="fixed top-3 left-10 bg-[var(--color-secondary)] rounded-full p-1 shadow-md focus:outline-none hover:brightness-90 z-[9999] transition-all duration-300">
+    
+    <span class="material-icons">
+      {{ isExpanded ? 'chevron_left' : 'chevron_right' }}
+    </span>
+  </button>
 </div>

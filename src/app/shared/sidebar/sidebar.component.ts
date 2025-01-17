@@ -119,6 +119,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.currentModuleSubscription?.unsubscribe();
   }
 
+  toggleSidebar(): void {
+    this.isExpanded = !this.isExpanded;
+  }
+
   toggleSubMenu(item: SidebarItem): void {
     item.isExpanded = !item.isExpanded;
   }
