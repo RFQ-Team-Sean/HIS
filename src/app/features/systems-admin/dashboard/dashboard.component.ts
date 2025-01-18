@@ -31,8 +31,6 @@ export class ADashboardComponent implements OnInit {
 
   constructor(private router: Router, private supabaseService: SupabaseService) {}
 
-  
-    
   async ngOnInit() {
     await this.fetchUserEmail();
     await this.fetchDashboardData();
@@ -256,4 +254,6 @@ export class ADashboardComponent implements OnInit {
     }
   }  
   
+// REQUESTS
+
 }
