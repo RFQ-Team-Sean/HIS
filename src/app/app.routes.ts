@@ -25,6 +25,7 @@ import { ScheduleAdjustmentRequestsComponent } from './features/hr-admin/personn
 import { EmployeeLeaveBalanceComponent } from './features/hr-admin/personnels-201-file/leaves-attendance-records/employee-leave-balance/employee-leave-balance.component';
 
 // Feature Components
+import { SystemsConfigComponent } from './features/systems-admin/systems-config/systems-config.component';
 // import { UserManagementComponent } from './features/systems-administration/user-management/user-management.component';
 // import { SystemConfigurationComponent } from './features/systems-administration/system-configuration/system-configuration.component';
 // import { ApprovalWorkflowComponent } from './features/systems-administration/approval-workflow/approval-workflow.component';
@@ -124,7 +125,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: ADashboardComponent },
       { path: 'user-management', component: UserManagementComponent },
-      // { path: 'system-configuration', component: SystemConfigurationComponent },
+      { path: 'systems-config', component: SystemsConfigComponent },
       // { path: 'approval-workflow', component: ApprovalWorkflowComponent },
       // { path: 'audit-trail', component: AuditTrailComponent },
       // { path: 'system-integration', component: SystemIntegrationComponent }

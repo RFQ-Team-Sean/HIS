@@ -166,7 +166,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
             route: '/admin/system-configuration',
             icon: 'settings',
             subItems: [
-              { name: 'Parameter Management', route: '/admin/system-configuration/parameters' },
+              { name: 'Parameter Management', route: '/admin/systems-config/' },
               { name: 'Audit Trail Viewing', route: '/admin/system-configuration/audit' }
             ]
           },
