@@ -22,6 +22,12 @@ export class LoginComponent {
   @ViewChild('popupHostContainer', { read: ViewContainerRef }) popupHostContainerRef!: ViewContainerRef;
   popupComponentInstance!: ComponentRef<SubmitTicketComponent>;
 
+  constructor(
+    private supabaseService: SupabaseService,
+    public loginAttemptService: LoginAttemptService,
+    private router: Router
+  ) {}
+
   displayCustomPopup() {
     this.popupHostContainerRef.clear();
     this.popupComponentInstance = this.popupHostContainerRef.createComponent(SubmitTicketComponent);
@@ -32,13 +38,7 @@ export class LoginComponent {
     this.popupComponentInstance.destroy();
   }
 
-  constructor(
-    private supabaseService: SupabaseService,
-    public loginAttemptService: LoginAttemptService,
-    private router: Router
-  ) {}
-
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     if (this.loginAttemptService.isAttemptsExhausted()) {
       this.router.navigate(['/login-failed']);
       return;
@@ -46,7 +46,7 @@ export class LoginComponent {
 
     if (this.validateForm()) {
       this.loginAttemptService.incrementLoginAttempts();
-      this.authenticateUser();
+      await this.authenticateUser();
     }
   }
 
@@ -100,8 +100,6 @@ export class LoginComponent {
   }
 
   submitTicket() {
-    // Implement the logic to navigate to the ticket submission page
-    // For example, you could use Angular's Router to navigate to a specific route
     this.displayCustomPopup();
   }
 
