@@ -25,7 +25,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
         this.loadUserAndSession();
       }
     }
-  
+
     private async loadUserAndSession() {
       const { data: { user }, error: userError } = await this.supabase.auth.getUser();
       if (!userError && user) {
@@ -92,7 +92,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 //CRUD Operations for Payroll Management Tables
 
-//MERITS AND VIOLATIONS
+  //merits and violations
 async insertMeritOrViolation(record: {
     violations: string,
     merits: string,
@@ -112,7 +112,6 @@ async insertMeritOrViolation(record: {
 
     return { data, error }; 
   }
-
   async getProfiles() {
     const { data, error } = await this.supabase
       .from('profile')
@@ -120,7 +119,6 @@ async insertMeritOrViolation(record: {
 
     return { data, error }; 
   }
-
   async getRecords() {
     const { data, error } = await this.supabase
       .from('merits_and_violations')
@@ -129,6 +127,26 @@ async insertMeritOrViolation(record: {
     return { data, error };
   }
 
+   //compensation and benefits
+   async getEmployeeCompensationRecords(): Promise<any>{
+    const {data, error} = await this.supabase
+      .from('employee')
+      .select('compensation_benefits(*), employee_compensation(*), employee_deductions(*), employee_payslips(*)')
+    return {
+      compensation_benefits: data?.[0]['compensation_benefits'],
+      employee_compensation: data?.[0]['employee_compensation'],
+      employee_deductions: data?.[0]['employee_deductions'],
+      employee_payslips: data?.[0]['employee_payslips']
+    };
+  }
+  async insertEmployeeCompensationRecord(data: any) {
+    const { data: insertedData, error } = await this.supabase
+      .from('compensation_benefits')
+      .insert(data);
+    return { data: insertedData, error };
+  }
+
+  //loan informarion
   async getLoanInfo() {
     const { data, error } = await this.supabase
     .from('loan_information')
@@ -145,7 +163,6 @@ async insertMeritOrViolation(record: {
       return { data, error};
   }
 
-    //for adding new loan
   async addLoan(loanData: {
     loan_name: string;
     loan_type: string;
@@ -172,8 +189,6 @@ async insertMeritOrViolation(record: {
       throw error; // Re-throw for further handling in the component
     }
   }
-
-    //for editing loan
   async editLoan(loanData: any) {
     console.log('Updating loan with data:', loanData);
 
@@ -206,9 +221,7 @@ async insertMeritOrViolation(record: {
         console.error('Unexpected error during loan update:', e);
         return { data: null, error: e }; // Return the error object directly
       }
-    }
-
-        //for deleting loan
+  }
   async deleteLoan(loanId: number) {
      const { data, error } = await this.supabase
         .from('loan_information') // Ensure this is your actual table name
@@ -224,9 +237,7 @@ async insertMeritOrViolation(record: {
           }
         
         return { data, error }; // Return the response data and any potential error
-     }
-
-      //for deleting loans by batch
+  }
   async deleteLoansBatch(loanIds: number []): Promise<{data: any; error: any}>{
       try{
         const { data, error } = await this.supabase
@@ -243,11 +254,11 @@ async insertMeritOrViolation(record: {
         console.error("An unexpected error occured during batch deletion:", error);
         throw error;
       }
-     }
+  }
 
 
-  //LEAVE REQUESTS
-
+  
+  //leave requests
   async getLeaveRequests() {
     const { data, error } = await this.supabase.from('leave_requests').select('* , profile(email)');
     if (error) {
@@ -256,7 +267,6 @@ async insertMeritOrViolation(record: {
     }
     return data;
   }
-
   async updateLeaveRequestStatus(requestId: number, newStatus: 'Pending' | 'Approved' | 'Rejected') {
     const { data, error } = await this.supabase
          .from('leave_requests')
@@ -282,8 +292,6 @@ async insertMeritOrViolation(record: {
     }
     return { data };
   }
-
-
   async getScheduleAdjustmentRequests() {
     const { data, error } = await this.supabase.from('schedule_adjustment_requests').select('* , profile(email)');
     if (error) {
@@ -292,7 +300,6 @@ async insertMeritOrViolation(record: {
     }
     return data;
   }
-
   async updateScheduleAdjustmentRequestStatus(requestId: number, newStatus: 'Pending' | 'Approved' | 'Rejected') {
     const { data, error } = await this.supabase
          .from('schedule_adjustment_requests')

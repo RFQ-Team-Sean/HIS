@@ -105,296 +105,227 @@ export class SupabaseService {
 
 //CRUD Operations for Employee Management Tables
 
-//for department position
-async getRoles() {
-  const { data, error } = await this.supabase
-    .from('roles')
-    .select('role_name, role_id');
-
-  if (error) {
-    throw error;
-  }
-
-  return data;
-}
-
-async createRole(roleData: any): Promise<PostgrestSingleResponse<any>> {
-  const response = await this.supabase.from('roles').insert([{
-    role_name: roleData.role_name,
-    users_rights: roleData.users_rights,
-    roles_rights: roleData.roles_rights,
-    sup_rights: roleData.sup_rights,
-    par_rights: roleData.par_rights,
-    daily_rights: roleData.daily_rights,
-    monthly_rights: roleData.monthly_rights,
-    weekly_rights: roleData.weekly_rights,
-    entries: roleData.entries,
-  }]);
-
-  if (response.error) {
-    console.error('Error creating role:', response.error.message);
-  } else {
-    console.log('Role created successfully:', response.data);
-  }
-
-  return response;
-}
-
-async deleteRole(roleName: string): Promise<void> {
-  const { error } = await this.supabase
-    .from('roles')
-    .delete()
-    .eq('role_name', roleName);
-
-  if (error) {
-    console.error('Error deleting role:', error.message);
-  }
-  await this.refreshSession();
-}
-
-async updateRoleName(role_id: number, role_name: string): Promise<any> {
-  const { data, error } = await this.supabase
-    .from('roles')
-    .update({ role_name })
-    .eq('role_id', role_id);
-
-  if (error) {
-    throw new Error(error.message);
-  }
-  return data;
-}
-
-async getRoleById(roleId: number): Promise<PostgrestSingleResponse<any>> {
-  const response = await this.supabase.from('roles').select('*').eq('role_id', roleId).single();
-  if (response.error) {
-    console.error('Error fetching role by ID:', response.error.message);
-  } else {
-    console.log('Role fetched successfully:', response.data);
-  }
-  return response;
-}
-
-async fetchRoleAccessRights(roleId: string) {
-  const { data, error } = await this.supabase
-    .from('roles')
-    .select('users_rights, roles_rights, sup_rights, par_rights, daily_rights, weekly_rights, monthly_rights, entries')
-    .eq('role_id', roleId)
-    .single();
-
-  if (error) throw error;
-  return data;
-}
-
-async updateRoleAccessRight(roleId: string, rightType: string, value: string) {
-  const { data, error } = await this.supabase
-    .from('roles')
-    .update({ [rightType]: value })
-    .eq('role_id', roleId);
-
-  if (error) throw error;
-  return data;
-}
-
-  // CRUD operations for user roles
-async getUsersAssignedToRole(roleId: number): Promise<any[]> {
-  const { data, error } = await this.supabase
-    .from('user_roles')
-    .select(`
-      user_id,
-      profile:profile(first_name, mid_name, surname)
-    `)
-    .eq('role_id', roleId);
-
-  if (error) {
-    console.error('Error fetching assigned users:', error.message);
-    return [];
-  }
-  return data.map(user => ({
-    user_id: user.user_id,
-    ...user.profile
-  }));
-}
-
-  async getEmployeeNames() {
-    let { data, error } = await this.supabase
-      .from('profile')
-      .select('user_id, first_name, mid_name, surname');
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    return data;
-  }
-
-  async checkEmailExists(email: string): Promise<boolean> {
+    // employee information 
+  async getEmployeeInformation(): Promise<any> {
     const { data, error } = await this.supabase
-      .from('profile')
-      .select('email')
-      .eq('email', email);
-
-    if (error) {
-      console.error('Error checking email:', error.message);
-      return false;
-    }
-
-    return data.length > 0;
-  }
-
-
-
-
-
-
-
-
-
-
-  
-// parameters
-async getParameters() {
-  const { data, error } = await this.supabase
-    .from('parameters')
-    .select('*');
-  if (error) throw error;
-
-  // Sort the data by id in descending order (assuming higher id means newer)
-  const sortedData = data.sort((a, b) => b.id - a.id);
-
-  console.log('Fetched and sorted data from Supabase:', sortedData);
-  return sortedData;
-}
-
-  async createParameter(parameter: any) {
-    const { data, error } = await this.supabase
-      .from('parameters')
-      .insert(parameter);
-    if (error) throw error;
-    return data;
-  }
-
-  async deleteParameter(parameterName: string): Promise<void> {
-    const { error } = await this.supabase
-      .from('parameters')
-      .delete()
-      .eq('parameter_name', parameterName);
-
-    if (error) {
-      throw error;
-    }
-  }
-
-  async updateParameter(parameter: any) {
-    const { data, error } = await this.supabase
-      .from('parameters') // Replace 'parameters' with your actual table name
-      .update({
-        parameter_name: parameter.parameter_name,
-        parameter_type: parameter.parameter_type,
-        parameter_date: parameter.parameter_date,
-        parameter_time: parameter.parameter_time,
-        parameter_time2: parameter.parameter_time2
-        // Add any other fields that your parameter object has
-      })
-      .eq('id', parameter.id); // Assuming 'id' is the unique identifier
-
-    if (error) {
-      throw error;
-    }
-
-    return data;
-  }
-
-
-
-  // PIMAM DASHBOARD
-  async getEmployeesTable(): Promise<any> {
-    const { data, error } = await this.supabase
-        .from('profile')
+        .from('employee_information')
         .select('*')
     return data;
   }
+  async addEmployee(employeeData: {
+    first_name: Text;
+    middle_type: Text;
+    last_name: Text;
+    suffix: Text;
+    birth_date: Date;
+    age: number;
+    gender: Text;
+    contact_num:number;
+    email: string;
+    address: Text;
+    updated_at: Date;
+  }): Promise<{ data: any; error: any }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('employee_information')
+        .insert([employeeData])
+        .select();
 
-  // PDS READING
+      if (error) {
+        console.error('Error adding Empoyee Information to Supabase:', error.message || error);
+        throw error; // Re-throw for further handling in the component
+      }
+      
+      return { data, error };
+    } catch (error) {
+      console.error('An unexpected error occurred while adding Empoyee Information:', error);
+      throw error; // Re-throw for further handling in the component
+    }
+  }
+  async editEmployeeInformation(employeeData: any) {
+    console.log('Updating Employee Information with data:', employeeData);
 
-  async getPersonalInfo(): Promise<any>{
+    //checking if employee id is correct
+    if (employeeData.employee_id === employeeData.employee_id ){
+      console.log('ID match')
+    }
+    else{
+      console.log("ID mismatch")
+    }
+
+    try {
+      const { data, error } = await this.supabase
+        .from('employee_information')
+        .update({ })
+        .eq('employee_id', employeeData.employee_id);
+  
+        if (error) {
+          console.error('Error updating Employee Information in Supabase:', error);
+          return { data: null, error }; // Return the error as is
+        }
+    
+        return { data, error: null }; // Return the successful response with data
+      } catch (e) {
+        console.error('Unexpected error during Employee Information update:', e);
+        return { data: null, error: e }; // Return the error object directly
+      }
+  }
+
+    //employee personal information
+  async getPersonalData(): Promise<any>{
     const {data, error} = await this.supabase
-      .from('personal_information')
+      .from('pds')
+      .select('*')
+    return data;
+  }
+  async addPersonalData(personalData: {
+    gsis_id: number;
+    pagibig_id: number;
+    philhealth_no: number;
+    sss_no: number;
+    tin_no: number;
+    height: number;
+    weight: number;
+    blood_type: Text;
+    citizenship: Text;
+    civil_status: Text;
+    residential_add: Text;
+    residential_zip: number;
+    permanent_add: Text;
+    created_at: Date;
+  }): Promise<{ data: any; error: any }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('pds')
+        .insert([personalData])
+        .select();
+
+      if (error) {
+        console.error('Error adding Personal Data to Supabase:', error.message || error);
+        throw error; // Re-throw for further handling in the component
+      }
+      
+      return { data, error };
+    } catch (error) {
+      console.error('An unexpected error occurred while adding Personal Data:', error);
+      throw error; // Re-throw for further handling in the component
+    }
+  }
+  async editPersonalData(personalData: any) {
+    console.log('Updating Employee Personal Data with:', personalData);
+
+    //checking if employee id is correct
+    if (personalData.employee_id === personalData.employee_id ){
+      console.log('ID match')
+    }
+    else{
+      console.log("ID mismatch")
+    }
+
+    try {
+      const { data, error } = await this.supabase
+        .from('pds')
+        .update({ })
+        .eq('employee_id', personalData.employee_id);
+  
+        if (error) {
+          console.error('Error updating Personal Data in Supabase:', error);
+          return { data: null, error }; // Return the error as is
+        }
+    
+        return { data, error: null }; // Return the successful response with data
+      } catch (e) {
+        console.error('Unexpected error during Personal Data update:', e);
+        return { data: null, error: e }; // Return the error object directly
+      }
+  }
+
+  //employement records
+  async getEmployementRecords() {
+    const { data, error } = await this.supabase
+      .from('employment_records')
+      .select('*');
+
+    if (error) {
+      throw error;
+    }
+    return data;
+  }
+  async addEmploymentRecords(employmentRecordData: {
+    position: Text;
+    department: Text;
+    employment_stat: Text;
+    date_hired: Date;
+  }): Promise<{ data: any; error: any }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('employment_records')
+        .insert([employmentRecordData])
+        .select();
+
+      if (error) {
+        console.error('Error adding Employment Records to Supabase:', error.message || error);
+        throw error; // Re-throw for further handling in the component
+      }
+      
+      return { data, error };
+    } catch (error) {
+      console.error('An unexpected error occurred while adding Employment Records:', error);
+      throw error; // Re-throw for further handling in the component
+    }
+  }
+  async editEmploymentRecordData(employmentRecordData: any) {
+    console.log('Updating Employee Information with data:', employmentRecordData);
+
+    //checking if employee id is correct
+    if (employmentRecordData.employee_id === employmentRecordData.employee_id ){
+      console.log('ID match')
+    }
+    else{
+      console.log("ID mismatch")
+    }
+
+    try {
+      const { data, error } = await this.supabase
+        .from('employment_records')
+        .update({ })
+        .eq('employee_id', employmentRecordData.employee_id);
+
+        if (error) {
+          console.error('Error updating Employment Records in Supabase:', error);
+          return { data: null, error }; // Return the error as is
+        }
+    
+        return { data, error: null }; // Return the successful response with data
+      } catch (e) {
+        console.error('Unexpected error during Employment Records update:', e);
+        return { data: null, error: e }; // Return the error object directly
+      }
+  }
+
+  //personnel movement
+  async getPersonnelMovement(): Promise<any>{
+    const {data, error} = await this.supabase
+      .from('personnel_movement')
+      .select('*')
+    return data;
+  }
+ 
+  //employment records
+  async getEmploymentRecords(): Promise<any>{
+    const {data, error} = await this.supabase
+      .from('employment_records')
       .select('*')
     return data;
   }
 
-  //COMPENSATION RECORDS PAGE QUERIES
-  async getEmployeeCompensationRecords(): Promise<any>{
+  //employee related reports
+  async getReports(): Promise<any>{
     const {data, error} = await this.supabase
-      .from('employee')
-      .select('compensation_benefits(*), employee_compensation(*), employee_deductions(*), employee_payslips(*)')
-    return {
-      compensation_benefits: data?.[0]['compensation_benefits'],
-      employee_compensation: data?.[0]['employee_compensation'],
-      employee_deductions: data?.[0]['employee_deductions'],
-      employee_payslips: data?.[0]['employee_payslips']
-    };
-  }
-
-  async insertEmployeeCompensationRecord(data: any) {
-    const { data: insertedData, error } = await this.supabase
-      .from('compensation_benefits')
-      .insert(data);
-    return { data: insertedData, error };
-  }
-
-  // WRITING ACCESS STARTS HERE
-  async insertFamilyBackground(data: any) {
-    const { data: insertedData, error } = await this.supabase
-      .from('family_background')
-      .insert(data);
-
-    return { data: insertedData, error };
-  }
-
-  async insertEducationalBackground(data: any) {
-    const { data: result, error } = await this.supabase
-      .from('educational_background')
-      .insert([data]);
-
-    return { result, error };
-  }
-
-  async insertPersonalInformation(formData: any) {
-    const { data, error } = await this.supabase
-      .from('personal_information_pds')
-      .insert([formData]);
-
-    if (error) {
-      throw error;
-    }
-
+      .from('employee_related_reports')
+      .select('*')
     return data;
   }
 
-  async insertPersonalInformationTest(formData: any) {
-    const { data, error } = await this.supabase
-      .from('personal_information')
-      .insert([formData]);
-
-    if (error) {
-      throw error;
-    }
-
-    return data;
-  }
-
-
-  async insertCivilServiceEligibility(tableName: string, formData: any) {
-
-    const { data, error } = await this.supabase
-      .from('civil_service_eligibility')
-      .insert([formData]);
-
-    if (error) {
-      throw error;
-    }
-    return data;
-  }
 
 }

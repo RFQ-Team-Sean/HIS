@@ -90,6 +90,6 @@ export class SupabaseService {
     this.databaseChangeSubject.next(true);
   }
 
-//CRUD Operations for Exit/Separation Management Tables
+//CRUD Operations for Exit Separateion Management Tables
 
 }

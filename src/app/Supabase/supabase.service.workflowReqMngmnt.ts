@@ -90,5 +90,5 @@ import { BehaviorSubject, Observable } from 'rxjs';
       this.databaseChangeSubject.next(true);
     }
   
-  //CRUD Operations for Payroll Management Tables
+  //CRUD Operations for Workflow & Requests Tables
   }
