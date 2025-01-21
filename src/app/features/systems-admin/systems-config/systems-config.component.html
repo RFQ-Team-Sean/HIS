@@ -1,118 +1,145 @@
-<div class="flex">
-    <div class="flex flex-col w-full h-full px-6 pt-6">
-        <div class="flex flex-col justify-between">
-            <h1 class="flex justify-between items-center mb-6">Systems Configuration Overview</h1>
-       </div>
-       <!-- CATEGORIES SECTION -->
-       <div>
-            <div class="space-y-8">
-                    <!-- ORGANIZATION Section -->
-                    <div class="space-y-4">
-                        <h2 class="font-semibold text-base text-gray-800">ORGANIZATION</h2>
-                        <div class="flex gap-6">
-                            <div class="w-48 h-24 flex flex-col items-center text-center p-4 bg-white border rounded-lg shadow-sm hover:shadow-lg transition-all cursor-pointer"
-                            (click)="openModal('Add New Department')">
-                                <h2 class="font-small text-base text-gray-700">Add New Department</h2>
-                            </div>
+<div class="h-screen flex flex-col">
+    <!-- Header Section -->
+    <header class="bg-white h-28 flex flex-col justify-between px-8">
+        <h1 class="mb-2 text-3xl font-bold text-neutral-900">Systems Configuration</h1>
+        <h2 class="mb-2 text-3xl font-bold text-neutral-900">Configure Parameters and Metrics</h2>  
+    </header>
 
-                            <div class="w-48 h-24 flex flex-col items-center text-center p-4 bg-white border rounded-lg shadow-sm hover:shadow-lg transition-all cursor-pointer"
-                            (click)="openModal('Add New Department')">
-                                <h2 class="font-medium text-base text-gray-700">Configure ID Format</h2>                        
-                            </div>
-                            
-                            <div class="w-48 h-24 flex flex-col items-center justify-center p-4 border-2 border-dashed border-blue-200 rounded-lg hover:bg-blue-50/50 transition-all cursor-pointer">
-                                <span class="text-lg text-blue-500">+ New Parameter</span>
-                            </div>
-                        </div>
+    <!-- Main Content Area -->
+     <div class="flex-1 bg-white flex flex-col">
+        <div class="rounded-xl shadow-lg w-full max-w-4x1 h-full">
+            <div class="bg-white p-5 h-3/5">
+                <section class="bg-white p-4 flex-grow h-4/5 mt-20">
+                    <!-- Users active tab -->
+                    <div class="overflow-x-hidden overflow-y-auto max-auto rounded-md">
+                        <table class="table-fixed w-full">
+                            <thead>
+                                <tr class="text-blue-700 leading-normal sticky z-10">
+                                    <th class="z-1 top-0 sticky py-3 px-4 w-2/12 text-left font-medium text-gray-500">PROFILE</th>
+                                    <th class="z-10 top-0 sticky py-3 px-6 text-left font-medium text-gray-500">NAME</th>
+                                    <th class="z-10 top-0 sticky py-3 px-6 text-left font-medium text-gray-500">EMAIL</th> 
+                                    <th class="z-10 top-0 sticky py-3 px-2 w-1/12 text-left font-medium text-gray-500">PASSWORD</th>
+                                    <th class="z-10 top-0 sticky py-3 px-2 w-1/12 text-left font-medium text-gray-500">ROLE</th>
+                                    <th class="z-10 top-0 sticky py-3 px-2 w-1/12 text-left font-medium text-gray-500">STATUS</th>
+                                </tr>
+                            </thead>                
+                            <tbody class="text-gray-500 text-sm font-light">
+                                <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="py-3 px-4 w-2/12 text-left whitespace-nowrap">
+                                        <div class="flex items-center"><img alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-gray-200"></div>
+                                    </td>              
+                                    <td class="py-3 px-6 text-left truncate">JOHN DOE</td>
+                                    <td class="py-3 px-6 text-left truncate">sampleemail.com</td>
+                                    <td class="py-3 px-1 w-1/12 text-left">
+                                        <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">Hidden</span>
+                                    </td>
+                                    <td class="py-3 px-2 w-1/12 text-left">Manager<br>Full Time</td>
+                                    <td class="py-3 px-2 w-1/12 text-left">
+                                        <span class="py-1 px-3 rounded-full text-xs">Active</span>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="py-3 px-4 w-2/12 text-left whitespace-nowrap">
+                                        <div class="flex items-center"><img alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-gray-200"></div>
+                                    </td>              
+                                    <td class="py-3 px-6 text-left truncate">YU DI PHO TAH</td>
+                                    <td class="py-3 px-6 text-left truncate">parotmo.com</td>
+                                    <td class="py-3 px-1 w-1/12 text-left">
+                                        <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">Hidden</span>
+                                    </td>
+                                    <td class="py-3 px-2 w-1/12 text-left">Manager<br>Full Time</td>
+                                    <td class="py-3 px-2 w-1/12 text-left">
+                                        <span class="py-1 px-3 rounded-full text-xs">Active</span>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="py-3 px-4 w-2/12 text-left whitespace-nowrap">
+                                        <div class="flex items-center"><img alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-gray-200"></div>
+                                    </td>              
+                                    <td class="py-3 px-6 text-left truncate">YU DI PHO TAH</td>
+                                    <td class="py-3 px-6 text-left truncate">parotmo.com</td>
+                                    <td class="py-3 px-1 w-1/12 text-left">
+                                        <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">Hidden</span>
+                                    </td>
+                                    <td class="py-3 px-2 w-1/12 text-left">Manager<br>Full Time</td>
+                                    <td class="py-3 px-2 w-1/12 text-left">
+                                        <span class="py-1 px-3 rounded-full text-xs">Active</span>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="py-3 px-4 w-2/12 text-left whitespace-nowrap">
+                                        <div class="flex items-center"><img alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-gray-200"></div>
+                                    </td>              
+                                    <td class="py-3 px-6 text-left truncate">YU DI PHO TAH</td>
+                                    <td class="py-3 px-6 text-left truncate">parotmo.com</td>
+                                    <td class="py-3 px-1 w-1/12 text-left">
+                                        <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">Hidden</span>
+                                    </td>
+                                    <td class="py-3 px-2 w-1/12 text-left">Manager<br>Full Time</td>
+                                    <td class="py-3 px-2 w-1/12 text-left">
+                                        <span class="py-1 px-3 rounded-full text-xs">Active</span>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="py-3 px-4 w-2/12 text-left whitespace-nowrap">
+                                        <div class="flex items-center"><img alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-gray-200"></div>
+                                    </td>              
+                                    <td class="py-3 px-6 text-left truncate">YU DI PHO TAH</td>
+                                    <td class="py-3 px-6 text-left truncate">parotmo.com</td>
+                                    <td class="py-3 px-1 w-1/12 text-left">
+                                        <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">Hidden</span>
+                                    </td>
+                                    <td class="py-3 px-2 w-1/12 text-left">Manager<br>Full Time</td>
+                                    <td class="py-3 px-2 w-1/12 text-left">
+                                        <span class="py-1 px-3 rounded-full text-xs">Active</span>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="py-3 px-4 w-2/12 text-left whitespace-nowrap">
+                                        <div class="flex items-center"><img alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-gray-200"></div>
+                                    </td>              
+                                    <td class="py-3 px-6 text-left truncate">YU DI PHO TAH</td>
+                                    <td class="py-3 px-6 text-left truncate">parotmo.com</td>
+                                    <td class="py-3 px-1 w-1/12 text-left">
+                                        <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">Hidden</span>
+                                    </td>
+                                    <td class="py-3 px-2 w-1/12 text-left">Manager<br>Full Time</td>
+                                    <td class="py-3 px-2 w-1/12 text-left">
+                                        <span class="py-1 px-3 rounded-full text-xs">Active</span>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="py-3 px-4 w-2/12 text-left whitespace-nowrap">
+                                        <div class="flex items-center"><img alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-gray-200"></div>
+                                    </td>              
+                                    <td class="py-3 px-6 text-left truncate">YU DI PHO TAH</td>
+                                    <td class="py-3 px-6 text-left truncate">parotmo.com</td>
+                                    <td class="py-3 px-1 w-1/12 text-left">
+                                        <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">Hidden</span>
+                                    </td>
+                                    <td class="py-3 px-2 w-1/12 text-left">Manager<br>Full Time</td>
+                                    <td class="py-3 px-2 w-1/12 text-left">
+                                        <span class="py-1 px-3 rounded-full text-xs">Active</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>    
+                    </div> 
 
+                    <!-- Pagination -->
+                    <div class="flex justify-between items-center mt-4">
+                        <button class="text-gray-400 px-3 py-1 hover:bg-gray-200 rounded" disabled>
+                            &larr;
+                        </button>
+                        <span class="text-gray-400">Page 1 | Page N</span>
+                        <button class="text-gray-400 px-3 py-1 hover:bg-gray-200 rounded">
+                            &rarr;
+                        </button>
                     </div>
-                    <!-- PERSONNEL SECTION -->
-                    <div class="space-y-4">
-                        <h2 class="font-semibold text-base text-gray-800">PERSONNEL</h2>
-                        <div class="flex gap-6">
-                            <div class="w-48 h-24 flex flex-col items-center text-center p-4 bg-white border rounded-lg shadow-sm hover:shadow-lg transition-all cursor-pointer"
-                            (click)="openModal('Add New Department')">
-                                <h2 class="font-medium text-base text-gray-700 ">Contract Types</h2> 
-                            </div>
-
-                            <div class="w-48 h-24 flex flex-col items-center text-center p-4 bg-white border rounded-lg shadow-sm hover:shadow-lg transition-all cursor-pointer"
-                            (click)="openModal('Add New Department')">
-                                <h2 class="font-medium text-base text-gray-700">Employment Status</h2>
-                            </div>
-
-                            <div class="w-48 h-24 flex flex-col items-center text-center p-4 border-2 border-dashed border-blue-200 rounded-lg hover:bg-blue-50/50 transition-all cursor-pointer cursor-pointer">
-                                <span class="text-base text-blue-500">+ New Parameter</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- TIME & ATTENDANCE SECTION -->
-                    <div class="space-y-4">
-                        <h2 class="font-semibold text-base text-gray-800"> TIME & ATTENDANCE</h2>
-                        <div class="flex gap-6">
-                            <div class="w-48 h-24 flex flex-col items-center text-center p-4 bg-white border rounded-lg shadow-sm hover:shadow-lg transition-all"
-                            (click)="openModal('Add New Department')">
-                                <h2 class="font-medium text-base text-gray-700">Work Schedule</h2>
-                            </div>
-
-                            <div class="w-48 h-24 flex flex-col items-center text-center p-4 bg-white border rounded-lg shadow-sm hover:shadow-lg transition-all"
-                            (click)="openModal('Add New Department')">
-                                <h2 class="font-medium text-base text-gray-700">Calendar Types</h2>
-                            </div>
-
-                            <div class="w-48 h-24 flex flex-col items-center text-center p-4 bg-white border rounded-lg shadow-sm hover:shadow-lg transition-all"
-                            (click)="openModal('Add New Department')">
-                                <h2 class="font-medium text-base text-gray-700">Leave Management</h2>
-                            </div>
-
-                            <div class="w-48 h-24 flex flex-col items-center justify-center p-4 border-2 border-dashed border-blue-200 rounded-lg hover:bg-blue-50/50 transition-all cursor-pointer">
-                                <span class="text-base text-blue-500">+ New Parameter</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- SYSTEM SECURITY SECTION -->
-                    <div class="space-y-4">
-                        <h2 class="font-semibold text-base text-gray-800">SYSTEM</h2>
-                        <div class="flex gap-6">
-                            <div class="w-48 h-24 flex flex-col items-center text-center p-4 bg-white border rounded-lg shadow-sm hover:shadow-lg transition-all"
-                            >
-                                <h2 class="font-medium text-base text-gray-700">Approval Workflow</h2>
-                            </div>
-                            
-                            <div class="flex flex-col items-center justify-center p-4 border-dashed border-2 border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition">
-                                <span class="text-base text-blue-500">+ New Parameter</span>
-                            </div>
-                        </div>
-                    </div>
-
-            </div>
+                    
+                </section>
+            </div>]
         </div>
-    </div>    
-</div>
-
-<div *ngIf="isModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
->
-  <div
-    class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative"
-    role="dialog"
-    aria-modal="true"
-  >
-    <h2 class="text-xl font-semibold mb-4">{{ modalTitle }}</h2>
-    <p class="text-gray-700 mb-6">
-      This is the popup modal content for "{{ modalTitle }}".
-    </p>
-    <div class="flex justify-end gap-4">
-      <button
-        class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-        (click)="closeModal()"
-      >
-        Cancel
-      </button>
-      <button
-        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        Confirm
-      </button>
     </div>
-  </div>
 </div>
-
+  
