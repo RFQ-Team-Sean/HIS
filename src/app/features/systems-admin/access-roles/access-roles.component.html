@@ -48,13 +48,13 @@
                   <p *ngIf="showEmpErrorMessage" class="border w-[20%] h-full flex items-center justify-center whitespace-nowrap px-2 rounded bg-red-50 border-red-500 text-red-700">There was an error unassigning the employee.</p>
                 </div>
 
-
-              <div class="flex gap-2 max-h-[28rem] rounded-xl">
+              <!-- FLEX DIV FOR THE TWO SUB DIVS -->
+              <div class="flex gap max-h-[28rem] rounded-xl">
                 <!-- DIV FOR ROLES -->
-                <div class="flex-1 h-full rounded-l-xl border bg-white border-gray-300">
+                <div class="flex-1 h-full rounded-l-xl border-r bg-white border-gray-300">
                   <div class="m-10">
                     <div class="flex justify-between items-center">
-                      <p class="text-2xl font-black">Roles</p>
+                      <p class="text-2xl font-black">Select Role</p>
                       <button class="flex justify-between gap-2 items-center bg-blue-500 text-white py-2 px-3 rounded-2xl hover:bg-blue-600" (click)="openRolePopup()" *ngIf="!isManageMode">
                         <span class="ms-2">Add New Role</span>
                         <span class="material-icons">add</span>
@@ -111,10 +111,10 @@
                 </div>
 
                 <!-- DIV FOR ACCESS RIGHTS -->
-                <div class="flex-1 flex-col h-full rounded-r-xl border bg-white border-gray-300 p-10">
+                <div class="flex-1 flex-col h-full rounded-r-xl bg-white border-gray-300 p-10">
                   <div class="flex justify-between items-center">
                     <p class="text-2xl font-black inline-block align-middle">
-                      Access Rights &nbsp;
+                      Assign Access Rights &nbsp;
                         <span class="text-lg text-blue-600 w-6 inline-block material-icons" *ngIf="isManageMode">
                           edit
                         </span>
@@ -122,6 +122,9 @@
                     </p>
                   </div>
                     <div class="overflow-y-auto overflow-x-hidden custom-scrollbar"  style="height: calc(450px - 7.8rem)">
+                      <div class="grid grid-cols-4">
+
+                      </div>
                       <table class="table-auto w-full h-full">
                         <tbody>
                           <tr class="h-9 text-gray-600 text-sm font-light">
