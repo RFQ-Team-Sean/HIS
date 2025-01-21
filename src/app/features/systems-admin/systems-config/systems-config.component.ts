@@ -13,6 +13,10 @@ export class SystemsConfigComponent {
   isModalOpen: boolean = false;
   modalTitle: string = '';
 
+  // Side Drawer State
+  isDrawerOpen: boolean = false;
+  activeTab: string  ='organization';
+
   openModal(title: string) {
     this.modalTitle = title;
     this.isModalOpen = true;

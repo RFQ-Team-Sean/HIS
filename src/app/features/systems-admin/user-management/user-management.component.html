@@ -13,43 +13,9 @@
             </div>
           </div>
   
-          <!-- Ticket Details Modal -->
-          <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" *ngIf="isModalVisible">
-            <div class="bg-white rounded p-4 max-w-md w-full">
-              <div class="flex justify-between items-center border-b pb-2">
-                <h2 class="text-xl font-semibold">Ticket Details</h2>
-                <button class="text-white hover:text-gray-700 bg-red-400 rounded py-2 px-2" (click)="closeModal()">X</button>
-              </div>
-              <div class="mt-4">
-                <p><strong>Title:</strong> {{ selectedTicket?.title }}</p>
-                <p><strong>Email:</strong> {{ selectedTicket?.email }}</p>
-                <p><strong>Status:</strong>
-                  <span [ngClass]="{
-                    'text-green-700': selectedTicket?.status === 'Open',
-                    'text-blue-700': selectedTicket?.status === 'In Progress',
-                    'text-red-700': selectedTicket?.status === 'Closed'
-                  }">{{ selectedTicket?.status }}</span>
-                </p>
-                <div class="mt-2">
-                  <p class="font-semibold text-gray-700">Description:</p>
-                  <div class="border border-gray-300 rounded p-4 bg-gray-50 mt-2 max-h-48 overflow-y-auto w-full break-words">
-                      {{ selectedTicket?.description }}
-                  </div>
-                </div>
-                <div class="mt-4">
-                  <p><strong>Admin Reply:</strong></p>
-                  <textarea [(ngModel)]="replyText" class="w-full p-2 border rounded" placeholder="Type your reply here..."></textarea>
-                </div>
-              </div>
-              <div class="mt-4 flex justify-end">
-                <button class="bg-blue-500 text-white px-4 py-2 rounded mr-2" (click)="replyTicket()">Reply</button>
-              </div>
-            </div>
-          </div>
-  
           <!-- Users active tab -->
           <div *ngIf="activeTab === 'users'" class="flex flex-col">
-        <section id="user-list" class="flex flex-col h-full"> 
+          <section id="user-list" class="flex flex-col h-full"> 
           <!-- Adding New Employee -->
           <div *ngIf="showModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center"(click)="toggleModal()">
             <div class="relative px-4 w-full max-w-4xl" (click)="$event.stopPropagation()">
@@ -175,7 +141,7 @@
                 <input type="text" [(ngModel)]="searchTerm" placeholder="Search Employees..." (input)="searchTable()" class="w-full h-full p-2 pr-8 border rounded-full border-gray-300"/>
                     <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
               </div>          
-                <div class="flex items-center space-x-4">
+              <div class="flex items-center space-x-4">
                   <!--Filter Feature-->
                   <div class="relative">
                     <select (change)="onSortOptionChange($event)" class="border px-4 py-2 rounded appearance-none pr-10">
@@ -204,10 +170,10 @@
                   <button class=" text-black p-1 bg-gray-100 rounded-md" (click)="prevPage()" [disabled]="currentPage === 1"><</button>
                   <span class="text-gray-600 text-center">{{ currentPage }} of {{ totalPages }}</span>
                   <button class=" text-black p-1 bg-gray-100 rounded-md" (click)="nextPage()" [disabled]="currentPage === totalPages">></button>
-                </div>
+              </div>
             </div>
-                <!-- Users active tab -->
-              <div *ngIf="filteredUsers.length > 0" class="overflow-x-hidden overflow-y-auto max-h-[28rem] custom-scrollbar">
+            <!-- Users active tab -->
+            <div *ngIf="filteredUsers.length > 0" class="overflow-x-hidden overflow-y-auto max-h-[28rem] custom-scrollbar">
                 <table class="table-fixed w-full">
                   <thead>
                     <tr class="bg-gray-100 text-gray-700 leading-normal sticky z-10">
@@ -268,11 +234,11 @@
                       </td>
                     </tr>
                   </tbody>
-                </table>
-                         
-              </div>      
+                </table>    
+            </div> 
+
           </div>
-        </section>
+          </section>
           </div>
   
           <!-- Roles Active tab -->
