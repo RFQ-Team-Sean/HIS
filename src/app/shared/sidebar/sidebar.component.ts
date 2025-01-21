@@ -52,7 +52,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     '/admin/system-configuration/parameters': 'tune',
     '/admin/system-configuration/audit': 'fact_check',
     '/admin/approval-workflow': 'approval',
-    '/admin/approval-workflow/process': 'account_tree',
+    '/admin/approval-workflow/process': 'workflow-approval',
     '/admin/approval-workflow/delegation': 'switch_account',
     '/admin/approval-workflow/oic': 'assignment_ind',
     '/admin/audit-trail': 'history',
@@ -179,8 +179,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
             route: '/admin/approval-workflow',
             icon: 'approval',
             subItems: [
-              { name: 'Approval Process', route: '/admin/approval-workflow/process' },
-              { name: 'Delegation of Authority', route: '/admin/approval-workflow/delegation' },
+              { name: 'Approval Process', route: '/admin/approval-workflow' },
+              { name: 'Delegation of Authority', route: '/admin/workflow-approval-user' },
               { name: 'OIC Approval', route: '/admin/approval-workflow/oic' }
             ]
           }

@@ -5,6 +5,8 @@ import { ADashboardComponent } from './features/systems-admin/dashboard/dashboar
 import { LoginLayoutComponent } from './features/auth/login-layout/login-layout.component';
 import { LayoutComponent } from './shared/layout/layout.component';
 import { UserManagementComponent } from './features/systems-admin/user-management/user-management.component';
+import { WorkflowApprovalComponent } from './features/systems-admin/approval-workflow/workflow-approval/workflow-approval.component';
+import { WorkflowApprovalUserComponent } from './features/systems-admin/approval-workflow/workflow-approval-user/workflow-approval-user.component';
 import { ViewPDSComponent } from './features/hr-admin/personnels-201-file/general-information/personal-data-sheet/view/view.component';
 import { GeneralInformationComponent } from './features/hr-admin/personnels-201-file/general-information/personal-data-sheet/view/general-information/general-information.component';
 import { CompensationRecordsComponent } from './features/hr-admin/personnels-201-file/general-information/personal-data-sheet/view/compensation-records/compensation-records.component';
@@ -125,7 +127,8 @@ export const routes: Routes = [
       { path: 'dashboard', component: ADashboardComponent },
       { path: 'user-management', component: UserManagementComponent },
       // { path: 'system-configuration', component: SystemConfigurationComponent },
-      // { path: 'approval-workflow', component: ApprovalWorkflowComponent },
+      { path: 'approval-workflow', component: WorkflowApprovalComponent },
+      { path: 'workflow-approval-user', component: WorkflowApprovalUserComponent },
       // { path: 'audit-trail', component: AuditTrailComponent },
       // { path: 'system-integration', component: SystemIntegrationComponent }
     ]

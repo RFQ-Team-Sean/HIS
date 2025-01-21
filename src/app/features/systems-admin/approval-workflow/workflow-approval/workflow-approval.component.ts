@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from 'src/app/environments/environment';
+import { SidebarComponent } from 'src/app/shared/sidebar/sidebar.component';
 
 interface Workflow {
   id: number;
@@ -17,13 +18,13 @@ interface Workflow {
 }
 
 @Component({
-  selector: 'app-workflow',
+  selector: 'app-workflow-approval',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, SidebarComponent],
   templateUrl: './workflow-approval.component.html',
   styleUrls: ['./workflow-approval.component.css'],
 })
-export class WorkflowComponent implements OnInit {
+export class WorkflowApprovalComponent implements OnInit {
   private supabase: SupabaseClient;
   workflows: Workflow[] = [];
   filteredWorkflows: Workflow[] = [];
@@ -33,6 +34,7 @@ export class WorkflowComponent implements OnInit {
   currentPage: number = 1;
   totalPages: number = 1;
   itemsPerPage: number = 10;
+  showPath2: boolean = false;
 
   constructor(private router: Router) {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
@@ -104,7 +106,7 @@ export class WorkflowComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/system-management']);
+    this.router.navigate(['/admin/approval-workflow']);
   }
 
   onStatusChange() {
@@ -129,4 +131,7 @@ export class WorkflowComponent implements OnInit {
     console.log('Reject workflow:', workflowId);
     // Implement rejection logic
   } 
-}
+  redirectToPath2() {
+    this.showPath2 = true;
+  }
+} 
