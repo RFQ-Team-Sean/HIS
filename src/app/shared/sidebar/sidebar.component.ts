@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { SupabaseService } from 'src/app/Supabase/supabase.service';
 import { SidebarService } from 'src/app/services/sidebar.service';
 import { Subscription } from 'rxjs';
+import { HostListener } from '@angular/core';
 
 interface SidebarItem {
   name: string;
@@ -57,7 +58,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     '/admin/approval-workflow/oic': 'assignment_ind',
     '/admin/audit-trail': 'history',
     '/admin/system-integration': 'integration_instructions',
-  
+
     // HR routes
     '/hr/dashboard': 'dashboard',
     '/hr/personnel-201-file': 'folder_shared',
@@ -74,7 +75,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     '/hr/health-wellness/medical': 'medical_services',
     '/hr/health-wellness/sick-leave': 'sick',
     '/hr/health-wellness/statistics': 'analytics',
-  
+
     // Common routes
     '/support-ticket': 'support',
     '/dtr': 'schedule',
@@ -131,12 +132,23 @@ export class SidebarComponent implements OnInit, OnDestroy {
     subItem.isExpanded = !subItem.isExpanded;
   }
 
+  // Expand sidebar after a delay
   expandSidebar(): void {
     setTimeout(() => this.isExpanded = true, 100);
   }
 
+  // Collapse sidebar after a delay
   collapseSidebar(): void {
-    setTimeout(() => this.isExpanded = false, 300);
+    setTimeout(() => this.isExpanded = false, 100);
+  }
+
+  // Close sidebar when user clicks outside of it
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('#sidebar') && this.isExpanded) {
+      this.collapseSidebar();
+    }
   }
 
   navigateTo(route: string): void {
@@ -186,7 +198,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
           }
         ];
         break;
-  
+
       case 'hr':
         this.sidebarItems = [
           { name: 'Dashboard', route: '/hr/dashboard', icon: 'dashboard' },
@@ -195,8 +207,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
             route: '/hr/personnel-201-file',
             icon: this.getIconForRoute('/hr/personnel-201-file'),
             subItems: [
-              { 
-                name: 'General Information', 
+              {
+                name: 'General Information',
                 route: '/hr/personnel-201-file/general-info',
                 icon: 'person',
                 subItems: [
@@ -205,8 +217,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
                   { name: 'Family Background', route: '/hr/personnel-201-file/general-info/family' }
                 ]
               },
-              { 
-                name: 'Employment Records', 
+              {
+                name: 'Employment Records',
                 route: '/hr/personnel-201-file/employment-records',
                 icon: 'work',
                 subItems: [
@@ -241,7 +253,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
           }
         ];
         break;
-  
+
       // Add other cases similarly...
     }
   }
@@ -256,3 +268,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
   }
 }
+
+
+

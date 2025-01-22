@@ -475,9 +475,6 @@ cancelEdit() {
   showEmpErrorMessage: boolean = false;
 
 
-
-
-
   async uploadPhoto(): Promise<string | null> {
     if (!this.photoFile) {
       console.log('No photo file selected');
