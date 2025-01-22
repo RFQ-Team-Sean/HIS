@@ -91,16 +91,16 @@
          [ngClass]="{'justify-center': !isExpanded}">
         <span class="material-icons text-xl transition-transform duration-300 ease-in-out"
               [ngClass]="{'mr-3': isExpanded, 'scale-125': !isExpanded}">logout</span>
-        <span class="transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden"
+        <span class="transition-all duration-300 ease-linear whitespace-nowrap overflow-hidden"
               [ngClass]="{'opacity-0 max-w-0': !isExpanded, 'opacity-100 max-w-full': isExpanded}">
           Logout
         </span>
       </button>
     </div>
 
-    <div class="border-t border-gray-200 w-full h-12 flex items-center justify-center">
-      <button (click)="toggleSidebar()" class="hover:brightness-90 z-[0] transition-all duration-300 flex items-center justify-center min-h-4 min-w-4">
-        <span class="material-icons transition-transform ease-in-out align-middle" [ngClass]="{'rotate-180': !isExpanded}">
+    <div class="border-t border-gray-200 w-full h-auto flex items-center justify-center">
+      <button (click)="toggleSidebar()" class="hover:bg-blue-50 z-[0] transition-all duration-300 flex items-center justify-center w-full p-3">
+        <span class="material-icons transition-transform ease-linear align-middle" [ngClass]="{'rotate-180': !isExpanded}">
           {{'chevron_left'}}
         </span>
       </button>

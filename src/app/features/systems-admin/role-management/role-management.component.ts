@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from 'src/app/Supabase/supabase.service';
@@ -101,7 +101,7 @@ export class RoleManagementComponent implements OnInit {
   popupSupportRights: string = 'none';
   popupParametersRights: string = 'none';
   popupDailyRights: string = 'none';
-  popupMonthlyRights: string = 'none'; 
+  popupMonthlyRights: string = 'none';
   popupWeeklyRights: string = 'none';
   popupEntriesRights: string = 'none';
 
@@ -114,16 +114,16 @@ export class RoleManagementComponent implements OnInit {
   showFileTypeAlert = false;
   showFileSizeAlert = false;
   photoFile: File | null = null;
-  
+
   // Functions for Support tickets tab
   paginatedTickets: Ticket[] = [];
   searchTicketTerm: string = '';
   ticket_currentPage: number = 1;
   ticket_itemsPerPage: number = 10;
-  ticket_totalPages: number = 1;  
+  ticket_totalPages: number = 1;
 
   filteredTickets: Ticket[] = []; // Array to hold the tickets after applying any filters
-  selectedTickets: boolean[] = []; // Array to keep track of selected state for each ticket (true if selected, false otherwise)  
+  selectedTickets: boolean[] = []; // Array to keep track of selected state for each ticket (true if selected, false otherwise)
   filterOption: string = 'all'; // Default filter option
 
   selectedTicket: any;
@@ -150,6 +150,10 @@ export class RoleManagementComponent implements OnInit {
     this.showCheckboxes = !this.showCheckboxes;
   }
 
+  isDropdownOpen : boolean = false;
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
 
   showRolePopup: boolean = false;
   newManageRole: string = '';
@@ -168,9 +172,19 @@ export class RoleManagementComponent implements OnInit {
   selectedCount: number = 0;
 
   sortDirection: 'none' | 'asc' | 'desc' = 'none';
+  currentSorting(): string {
+    switch (this.sortDirection) {
+      case 'asc':
+        return 'Ascending';
+      case 'desc':
+        return 'Descending';;
+      default:
+        return 'Default';
+    }
+  }
 
   onSortChange(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
+    const selectElement = event.target as HTMLButtonElement;
     this.sortDirection = selectElement.value as 'none' | 'asc' | 'desc';
     this.sortedRoles();
   }
@@ -184,6 +198,14 @@ export class RoleManagementComponent implements OnInit {
       }
     });
   }
+
+  @HostListener('document:click', ['$event'])
+    onDocumentClick(event: MouseEvent): void {
+      const target = event.target as HTMLElement;
+      if (!target.closest('#dropdown-menu') && !target.closest('#dropdown-button') && this.isDropdownOpen) {
+        this.toggleDropdown();
+      }
+    }
 
   deselectAllCheckboxes(): void {
     this.selectedUserIds.clear();
@@ -277,7 +299,7 @@ cancelEdit() {
     await this.supabaseService.deleteRole(role.role_name);
     this.roles = this.roles.filter(r => r.role_name !== role.role_name);
   }
-  
+
   filteredRoles: any[] = [];
 
   searchRoleTable() {
@@ -286,8 +308,8 @@ cancelEdit() {
       role.role_name.toLowerCase().includes(searchTerm)
     );
   }
-  
-  
+
+
   clickedRoleId: number | null = null;
 
   async onRoleClick(role: { role_id: number, role_name: string }) {
@@ -337,7 +359,7 @@ cancelEdit() {
     const allChars = lowercase + uppercase + numbers + symbols;
 
     let password = '';
-    
+
     // Ensure at least one character from each type
     password += lowercase[Math.floor(Math.random() * lowercase.length)];
     password += uppercase[Math.floor(Math.random() * uppercase.length)];
@@ -354,7 +376,7 @@ cancelEdit() {
     password = password.split('').sort(() => Math.random() - 0.5).join('');
 
     this.employee.password = password;
-    
+
     // Provide visual feedback
     this.showPasswordGeneratedMessage = true;
     setTimeout(() => this.showPasswordGeneratedMessage = false, 3000);
@@ -391,8 +413,8 @@ cancelEdit() {
       reader.readAsDataURL(file);
     }
   }
-  
-  
+
+
   isValidEmail(email: string): boolean {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
@@ -405,10 +427,10 @@ cancelEdit() {
       alert('Please enter a valid email address.');
       return;
     }
-  
+
     try {
       const photoUrl = await this.uploadPhoto();
-  
+
       const employeeData = {
         first_name: this.employee.firstname,
         mid_name: this.employee.midname,
@@ -421,16 +443,16 @@ cancelEdit() {
         access: true,
         photo_url: photoUrl || this.photoPreviewUrl
       };
-  
+
       console.log('Employee data on submit:', this.employee);
       console.log('Employee data to be sent:', employeeData);
-  
+
       let response;
-  
+
       if (this.isEditing) {
         console.log('Updating employee:', employeeData);
         response = await this.supabaseService.updateEmployee(employeeData);
-  
+
         if (response.error) {
           console.error('Error updating employee:', response.error);
           alert('Error updating employee. Please try again.');
@@ -445,10 +467,10 @@ cancelEdit() {
           alert('Email already exists. Please use a different email.');
           return;
         }
-  
+
         console.log('Creating employee:', employeeData);
         response = await this.supabaseService.createEmployee(employeeData);
-  
+
         if (response.error) {
           console.error('Error creating employee:', response.error);
           alert('Error creating employee. Please try again.');
@@ -457,12 +479,12 @@ cancelEdit() {
           console.log('Employee created successfully:', response.data);
         }
       }
-  
+
       alert(`Employee ${this.isEditing ? 'updated' : 'created'} successfully.`);
       this.toggleModal();
       this.resetForm();
       this.loadEmployees();
-  
+
     } catch (error) {
       console.error('Error in onSubmit:', error);
       alert('An unexpected error occurred. Please try again.');
@@ -475,27 +497,27 @@ cancelEdit() {
   showEmpErrorMessage: boolean = false;
 
 
-  
-  
-  
+
+
+
   async uploadPhoto(): Promise<string | null> {
     if (!this.photoFile) {
       console.log('No photo file selected');
       return null;
     }
-  
+
     try {
       console.log('Uploading photo:', this.photoFile.name);
       const fileName = `${Date.now()}_${this.photoFile.name}`;
       const { data, error } = await this.supabaseService.uploadFile('photos', fileName, this.photoFile);
-  
+
       if (error) {
         console.error('Supabase upload error:', error);
         throw error;
       }
-  
+
       console.log('Upload response:', data);
-  
+
       if (data?.path) {
         const fullUrl = `https://vhmftufkipgbxmcimeuq.supabase.co/storage/v1/object/public/photos/${data.path}`;
         console.log('Full photo URL:', fullUrl);
@@ -510,7 +532,7 @@ cancelEdit() {
       return null;
     }
   }
-  
+
 
   addRole() {
     if (!this.newRole) {
@@ -555,12 +577,12 @@ cancelEdit() {
     });
     this.showRolePopup = false;
     this.loadRoles();
-  }  
-  
+  }
+
     async loadAssignedUsers(role: { role_id: number; role_name: string }): Promise<void> {
       this.assignedRole = role;
       console.log('Loading assigned users for role:', this.assignedRole);
-    
+
       try {
         const users = await this.supabaseService.getUsersAssignedToRole(role.role_id);
         this.assignedUsers = users; // Directly assign the fetched users
@@ -589,7 +611,7 @@ cancelEdit() {
         console.error('No role or users selected.');
         return;
       }
-  
+
       try {
         await this.supabaseService.assignRoleToUsers(this.assignedRole.role_id, Array.from(this.selectedUserIds));
         console.log('Role assigned successfully.');
@@ -648,7 +670,7 @@ cancelEdit() {
         console.error('Error fetching access rights:', error);
       }
     }
-    
+
     //for access rights update
     async onAccessRightChange(rightType: string, event: any) {
       this.selectedRole[rightType] = event.target.value;
@@ -658,7 +680,7 @@ cancelEdit() {
     //for updating access rights
     async saveAccessRights(changedRight: string) {
       if (!this.isManageMode) return;
-  
+
       try {
         await this.supabaseService.updateRoleAccessRight(
           this.selectedRole.role_id,
@@ -670,7 +692,7 @@ cancelEdit() {
         console.error(`Error updating ${changedRight}:`, error);
       }
     }
-  
+
   toggleUserSelection(user: User) {
     user.selected = !user.selected;
   }
@@ -682,13 +704,13 @@ cancelEdit() {
   async updateEmployee(employee: any) {
     try {
       console.log('Updating employee:', employee);
-  
+
       // Get the original employee data for audit logging
       const originalEmployee = this.users.find(user => user.email === employee.email);
       if (!originalEmployee) {
         throw new Error('Employee not found for update');
       }
-  
+
       // Upload the photo and get the URL
       let photoUrl = null;
       if (this.photoFile) {
@@ -697,11 +719,11 @@ cancelEdit() {
       } else {
         console.log('No new photo to upload');
       }
-  
+
       // Determine the profile picture URL
       const profileUrl = photoUrl || this.photoPreviewUrl || employee.photo_url || 'path/to/default/image.png';
       console.log('Profile URL to be used:', profileUrl);
-  
+
       const updatedUser: Partial<User> = {
         profile: profileUrl,
         name: `${employee.firstname.trim()} ${employee.midname ? employee.midname.trim() + ' ' : ''}${employee.surname.trim()}`,
@@ -713,22 +735,22 @@ cancelEdit() {
         status: 'Active',
         access: true
       };
-  
+
       console.log('Updated user object:', updatedUser);
-  
+
       // Update user in the database
       const { data, error } = await this.supabaseService.updateEmployee({
         ...employee,
         photo_url: profileUrl
       });
-  
+
       if (error) {
         console.error('Error updating employee in Supabase:', error);
         throw new Error(`Failed to update employee: ${error.message}`);
       }
-  
+
       console.log('Employee updated successfully in Supabase:', data);
-  
+
       // Update user locally
       const index = this.users.findIndex(user => user.email === employee.email);
       if (index !== -1) {
@@ -739,7 +761,7 @@ cancelEdit() {
       }
       this.filteredUsers = this.users;
       this.updatePagination();
-  
+
       // Log the action
       const auditLogEntry: AuditLogEntry = {
         user_id: 'id', // or the ID of the user performing the action
@@ -751,16 +773,16 @@ cancelEdit() {
         ip_address: await this.getClientIpAddress(), // Implement this method to get the client's IP
         date: new Date().toISOString()
       };
-  
+
       await this.supabaseService.logAction(auditLogEntry);
-  
+
       // Close modal and reset form
       this.toggleModal();
       this.resetForm();
-  
+
       // Reload employees to ensure consistency
       await this.loadEmployees();
-  
+
       return updatedUser;
     } catch (error) {
       console.error('Error in updateEmployee:', error);
@@ -769,22 +791,22 @@ cancelEdit() {
       throw error; // Re-throw the error so it can be handled by the caller if needed
     }
   }
-  
+
   // Implement these methods:
-  
+
   private async getClientIpAddress(): Promise<string> {
     // Implement a method to get the client's IP address
     // You might need to use a third-party service or ask your backend to provide this information
     return 'client_ip';
   }
-  
+
   private showErrorMessage(message: string): void {
     // Implement a method to show error messages to the user
     // This could be a modal, toast notification, or alert
     alert(message);
   }
-  
-  
+
+
   resetForm() {
     this.employee = {
       email: '',
@@ -806,13 +828,13 @@ cancelEdit() {
 
   async createEmployee(employee: any) {
     console.log('Received employee data:', employee);
-  
+
     if (!this.isValidEmail(employee.email)) {
       console.error('Invalid email format');
       alert('Please enter a valid email address.');
       return;
     }
-  
+
     // Check for required fields
     const requiredFields = ['firstname', 'surname', 'department', 'position', 'type'];
     for (const field of requiredFields) {
@@ -822,10 +844,10 @@ cancelEdit() {
         return;
       }
     }
-  
+
     try {
       const photoUrl = await this.uploadPhoto();
-  
+
       const newEmployee = {
         profile: photoUrl || this.photoPreviewUrl,
         email: employee.email,
@@ -839,25 +861,25 @@ cancelEdit() {
         status: 'Active',
         access: true
       };
-  
+
       console.log('Sending employee data to Supabase:', newEmployee);
-  
+
       const { data, error } = await this.supabaseService.createEmployee(newEmployee);
-  
+
       if (error) {
         console.error('Error from Supabase:', error);
         alert(`Error creating employee: ${error.message}`);
         return;
       }
-  
+
       if (!data) {
         console.error('No data returned from Supabase');
         alert('Error creating employee: No data returned');
         return;
       }
-  
+
       console.log('Employee created successfully:', data);
-  
+
       // Create audit log
       try {
         const userId = await this.supabaseService.getCurrentUserId();
@@ -866,7 +888,7 @@ cancelEdit() {
         console.error('Error creating audit log:', auditLogError);
         // Log the error but continue with the process
       }
-  
+
       const newUser: User = {
         profile: newEmployee.profile,
         name: `${newEmployee.first_name} ${newEmployee.mid_name ? newEmployee.mid_name + ' ' : ''}${newEmployee.surname}`,
@@ -878,20 +900,20 @@ cancelEdit() {
         status: newEmployee.status,
         access: newEmployee.access
       };
-  
+
       this.users.push(newUser);
       this.filteredUsers = [...this.users];
       this.updatePagination();
       this.toggleModal();
       this.resetForm();
       alert('Employee created successfully.');
-  
+
     } catch (error) {
       console.error('Unexpected error creating employee:', error);
       alert('An unexpected error occurred. Please try again.');
     }
   }
-  
+
   private async createAuditLogWithRetry(userId: string, data: any, retries = 3): Promise<void> {
     for (let i = 0; i < retries; i++) {
       try {
@@ -925,14 +947,14 @@ cancelEdit() {
     this.filterOption = 'none';
     this.filteredUsers = [...this.users];
 
-  } 
+  }
 
   async loadRoles() {
     try {
       this.roles = await this.supabaseService.getRoles();
       this.filteredRoles = this.roles;
 
-      if (this.roles.length > 0) { /*checks if there is a role and displays the first row when you load the page */ 
+      if (this.roles.length > 0) { /*checks if there is a role and displays the first row when you load the page */
         this.clickedRoleId = this.roles[0].role_id;
         this.assignedRole = this.roles[0];
         await this.loadAssignedUsers(this.roles[0]);
@@ -982,12 +1004,12 @@ cancelEdit() {
     try {
       console.log('Fetching employees...');
       const { data, error } = await this.supabaseService.getEmployees();
-  
+
       if (error) {
         console.error('Error fetching employees:', error.message);
         throw error;
       }
-  
+
       if (!data || data.length === 0) {
         console.warn('No employee data received');
         this.users = [];
@@ -995,15 +1017,15 @@ cancelEdit() {
         this.updatePagination();
         return;
       }
-  
+
       console.log(`Raw employee data (${data.length} employees):`, data);
-  
+
       this.users = await Promise.all(data.map(async (employee: any, index: number): Promise<User> => {
         console.log(`Employee ${index} data:`, employee);
-  
+
         let photoUrl: string | null = null;
         let employeeIdentifier: string | null = null;
-  
+
         if (employee.id) {
           employeeIdentifier = employee.id.toString();
         } else if (employee.email) {
@@ -1012,7 +1034,7 @@ cancelEdit() {
         } else {
           console.warn(`Employee at index ${index} has no id or email`);
         }
-  
+
         if (employeeIdentifier) {
           try {
             photoUrl = await this.supabaseService.getPhotoUrl(employeeIdentifier);
@@ -1021,7 +1043,7 @@ cancelEdit() {
             console.error(`Error fetching photo URL for employee ${employeeIdentifier}:`, error);
           }
         }
-  
+
         const user: User = {
           profile: photoUrl || 'photo_url',
           name: `${employee.first_name?.trim() || ''} ${employee.mid_name ? employee.mid_name.trim() + ' ' : ''}${employee.surname?.trim() || ''}`.trim(),
@@ -1033,23 +1055,23 @@ cancelEdit() {
           status: 'Active',
           access: true,
         };
-  
+
         console.log(`Mapped user ${index + 1}:`, user);
-  
+
         return user;
       }));
-  
+
       console.log(`Total users mapped: ${this.users.length}`);
-  
+
       this.filteredUsers = this.users;
       this.updatePagination();
-  
+
       console.log('Employee loading complete');
     } catch (error) {
       console.error('Unexpected error while fetching employees:', error);
       // Here you might want to set some error state or show a user-facing error message
     }
-  }  
+  }
 
   searchTable() {
     this.filteredUsers = this.users.filter(user =>
@@ -1062,15 +1084,15 @@ cancelEdit() {
   }
 
   get searchEmpRole() {
-    return this.employees.filter(emp => 
+    return this.employees.filter(emp =>
       `${emp.firstname} ${emp.midname} ${emp.surname}`
         .toLowerCase()
         .includes(this.searchTerm.toLowerCase())
     );
   }
-  
+
   get searchroletab() {
-    return this.roles.filter(role => 
+    return this.roles.filter(role =>
       role.role_name.toLowerCase().includes(this.searchRoleTerm.toLowerCase())
     );
   }
@@ -1113,22 +1135,22 @@ cancelEdit() {
       console.log("No users selected for deletion");
       return;
     }
-  
+
     // Initialize a counter for successful deletions
     let successfulDeletions = 0;
-  
+
     // Select users to delete
     for (const selectedUser of selectedUsers) {
       try {
         // Delete user profile and associated photo
         const response = await this.supabaseService.deleteUser(selectedUser.email);
-        
+
         if (response.error) {
           console.error('Error deleting user:', response.error.message);
         } else {
           console.log(`User ${selectedUser.email} deleted successfully`);
           successfulDeletions++;
-          
+
           // Remove the user locally
           this.users = this.users.filter(user => user.email !== selectedUser.email);
           this.filteredUsers = this.filteredUsers.filter(user => user.email !== selectedUser.email);
@@ -1137,17 +1159,17 @@ cancelEdit() {
         console.error('Error deleting user:', error);
       }
     }
-  
+
     console.log(`Deleted ${successfulDeletions} users`);
-  
+
     // Update pagination
     this.updatePagination();
-  
+
     // Optionally refresh the page
     // window.location.reload();
   }
-  
-  
+
+
 
 
 clearSelections() {
@@ -1420,14 +1442,14 @@ openTicketDetails(ticket: any) {
 async updateTicketPriority(ticket: Ticket, event: Event): Promise<void> {
   const selectElement = event.target as HTMLSelectElement;
   const newPriority = selectElement.value as 'Low' | 'Medium' | 'High' | 'Urgent';
-  
+
   try {
     // Update in Supabase
     await this.supabaseService.updateTicketPriority(ticket.id, newPriority);
-    
+
     // If successful, update local state
     ticket.priority = newPriority;
-    
+
     console.log(`Ticket ${ticket.id} priority updated to ${newPriority}`);
   } catch (error) {
     console.error('Failed to update ticket priority:', error);
@@ -1521,3 +1543,4 @@ onSortOptionChange(event: Event): void {
 //     this.ticketUpdatePagination();
 //   }
 }
+//
