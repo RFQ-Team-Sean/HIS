@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { environment } from 'src/app/environments/environment';
+import { SidebarComponent } from 'src/app/shared/sidebar/sidebar.component';
 
 interface User {
   name: string;
@@ -13,7 +14,7 @@ interface User {
 @Component({
   selector: 'app-workflow-approval-user',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, SidebarComponent],
   templateUrl: './workflow-approval-user.component.html',
   styleUrls: ['./workflow-approval-user.component.css']
 })
@@ -264,7 +265,7 @@ export class WorkflowApprovalUserComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/system-management']);
+    this.router.navigate(['/admin/workflow-approval-user']);
   }
 
   filterApprovers() {

@@ -7,6 +7,8 @@ import { LayoutComponent } from './shared/layout/layout.component';
 import { UserManagementComponent } from './features/systems-admin/user-management/user-management.component';
 import { RoleManagementComponent } from './features/systems-admin/role-management/role-management.component';
 import { AccessRolesComponent } from './features/systems-admin/access-roles/access-roles.component';
+import { WorkflowApprovalComponent } from './features/systems-admin/approval-workflow/workflow-approval/workflow-approval.component';
+import { WorkflowApprovalUserComponent } from './features/systems-admin/approval-workflow/workflow-approval-user/workflow-approval-user.component';
 import { ViewPDSComponent } from './features/hr-admin/personnels-201-file/general-information/personal-data-sheet/view/view.component';
 import { GeneralInformationComponent } from './features/hr-admin/personnels-201-file/general-information/personal-data-sheet/view/general-information/general-information.component';
 import { CompensationRecordsComponent } from './features/hr-admin/personnels-201-file/general-information/personal-data-sheet/view/compensation-records/compensation-records.component';
@@ -129,7 +131,8 @@ export const routes: Routes = [
       { path: 'role-management', component: RoleManagementComponent },
       { path: 'access-roles', component: AccessRolesComponent },
       // { path: 'system-configuration', component: SystemConfigurationComponent },
-      // { path: 'approval-workflow', component: ApprovalWorkflowComponent },
+      { path: 'approval-workflow', component: WorkflowApprovalComponent },
+      { path: 'workflow-approval-user', component: WorkflowApprovalUserComponent },
       // { path: 'audit-trail', component: AuditTrailComponent },
       // { path: 'system-integration', component: SystemIntegrationComponent }
     ]
@@ -151,7 +154,7 @@ export const routes: Routes = [
       },
       { path: 'personnel-201-file/loan-information', component: LoanInformationComponent },
       { path: 'personnel-201-file/requests', component: RequestsComponent },
-      { 
+      {
         path: 'personnel-201-file/employment-records',
         // component: LayoutComponent,
         children: [
@@ -159,7 +162,7 @@ export const routes: Routes = [
           { path: 'merits&violations', component: MeritsAndViolationsComponent },
         ]
       },
-      { 
+      {
         path: 'personnel-201-file/general-info/personal-data-sheet/view',
         component: ViewPDSComponent,
         children: [

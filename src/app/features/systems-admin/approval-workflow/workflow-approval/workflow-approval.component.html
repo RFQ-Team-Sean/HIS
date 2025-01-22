@@ -1,97 +1,66 @@
-<!-- Main Component -->
 <div class="flex">
-    <div class="flex-grow">
-      <div class="min-h-screen">
-        <main class="p-6">
-          <div class="mb-6 flex justify-between items-center">
-            <div>
-              <p class="max-md:text-xl text-2xl font-bold">Approval Workflows</p>
-              <p class="max-md:text-lg">Manage approvals and reviews</p>
-            </div>
-            
+  <div class="flex-grow">
+    <div class="min-h-screen">
+      <main class="p-6">
+        <div class="mb-6 flex justify-between items-center">
+          <div>
+            <p class="max-md:text-xl text-2xl font-bold">Approval Workflows</p>
+            <p class="max-md:text-lg">Manage approvals and reviews</p>
           </div>
-
-          <div class="rounded-xl shadow-lg bg-white">        
-            <div class="flex flex-col md:flex-row items-center justify-between p-4">
-              <div class="relative w-full md:w-[20%] md:mr-auto">
-                <input type="text" [(ngModel)]="searchTerm" (input)="filterWorkflows()" placeholder="Search workflow..." class="w-full h-full p-2 pr-8 border rounded-full border-gray-300">
-                <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
-              </div>
-            
-              <div class="flex items-center space-x-4 mt-4 md:mt-0">
-                <select [(ngModel)]="selectedStatus" (change)="filterWorkflows()" class="px-2 py-1 bg-white rounded-md border border-solid border-neutral-400 border-opacity-30 text-xs">
-                  <option value="">All</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Approved">Approved</option>
-                  <option value="Rejected">Rejected</option>
-                </select>
-                <button (click)="previousPage()" [disabled]="currentPage === 1" class="text-black p-1 bg-gray-100 rounded-md"><</button>
-                <span class="text-gray-600 text-center">{{ currentPage }} of {{ totalPages }}</span>
-                <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="text-black p-1 bg-gray-100 rounded-md">></button>
-              </div>
+        </div>
+        <!-- Path 1 -->
+        <div class="box-content p-4 border-4">
+          <h1 class="text-2xl font-bold mb-4">Edit Workflow</h1>
+          <div class="mb-8">
+            <h2 class="text-lg font-semibold mb-4">Path 1</h2>
+            <div class="flex items-center space-x-2">
+              <select class="border rounded-md p-1 text-sm w-40">
+                <option>-- Select --</option>
+                <option>Specific Individual</option>
+                <option>Job Title</option>
+              </select>
+              <select class="border rounded-md p-1 text-sm w-40">
+                <option>-- Select --</option>
+                <option>John Doo</option>
+                <option>John Doe</option>
+              </select>
             </div>
-            <div *ngIf="filteredWorkflows.length > 0" class="overflow-x-auto overflow-y-auto max-h[28rem] custom-scrollbar">
-              <table class="w-full">
-                  <thead>
-                    <tr class="bg-gray-100 text-gray-700 leading-normal">
-                      <div class="flex w-full text-sm font-medium text-black bg-gray-100">
-                        <th class="flex-1 p-3 text-left font-medium text-gray-500">Status</th>
-                        <th class="flex-1 p-3 text-left font-medium text-gray-500">Submitted for</th>
-                        <th class="flex-1 p-3 text-left font-medium text-gray-500">Reviewer</th>
-                        <th class="flex-1 p-3 text-left font-medium text-gray-500">Request</th>
-                        <th class="flex-1 p-3 text-left font-medium text-gray-500">Requested by</th>
-                      </div>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let workflow of paginatedWorkflows; trackBy: trackById">
-                      <div class="flex w-full bg-white border-b border-gray-200">
-                        <td class="flex-1 p-3">
-                          <span class="px-2 py-1 text-xs font-semibold rounded"
-                                [ngClass]="{
-                                  'bg-yellow-200 text-yellow-800': workflow.status === 'Pending',
-                                  'bg-green-200 text-green-800': workflow.status === 'Approved',
-                                  'bg-red-200 text-red-800': workflow.status === 'Rejected'
-                                }">
-                            {{ workflow.status }}
-                          </span>
-                        </td>
-                        <td class="flex-1 p-3">
-                          <div class="flex items-center">
-                            <img [src]="'https://api.dicebear.com/7.x/initials/svg?seed=' + workflow.submitted_for" 
-                                [alt]="workflow.submitted_for" 
-                                class="w-8 h-8 mr-2 rounded-full">
-                            <div>
-                              <div class="font-medium">{{ workflow.submitted_for }}</div>
-                              <div class="text-xs text-gray-500">{{ workflow.submitted_for_id }}</div>
-                            </div>
-                          </div>
-                        </td>
-                        <td class="flex-1 p-3">
-                          <div class="flex items-center">
-                            <img [src]="'https://api.dicebear.com/7.x/initials/svg?seed=' + workflow.reviewer" 
-                                [alt]="workflow.reviewer" 
-                                class="w-8 h-8 mr-2 rounded-full">
-                            <div>
-                              <div class="font-medium">{{ workflow.reviewer }}</div>
-                              <div class="text-xs text-gray-500">{{ workflow.reviewer_id }}</div>
-                            </div>
-                          </div>
-                        </td>
-                        <td class="flex-1 p-3">
-                          <div>{{ workflow.request }}</div>
-                          <a href="#" class="text-xs text-blue-600 hover:underline">View</a>
-                        </td>
-                        <td class="flex-1 p-3">
-                          <div>{{ workflow.requested_by }}</div>
-                        </td>
-                      </div>
-                    </tr>
-                  </tbody>
-              </table>
-            </div>
+            <button
+              type="button"
+              (click)="redirectToPath2()"
+              class="bg-blue-500 text-white rounded-md py-1 px-2 text-sm w-40 mt-2"
+            >
+              Add New Path
+            </button>
           </div>
-        </main>
-      </div>
+        </div>
+        <!-- Path 2 -->
+        <div class="box-content p-4 border-4" *ngIf="showPath2">
+          <h2 class="text-lg font-semibold mb-4">Path 2</h2>
+          <table class="border-collapse border border-gray-300 w-full">
+            <thead>
+              <tr class="bg-gray-100">
+                <th class="border border-gray-300 px-4 py-2">Wrestler</th>
+                <th class="border border-gray-300 px-4 py-2">Signature Move(s)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="border border-gray-300 px-4 py-2">"Stone Cold" Steve Austin</td>
+                <td class="border border-gray-300 px-4 py-2">Stone Cold Stunner, Lou Thesz Press</td>
+              </tr>
+              <tr>
+                <td class="border border-gray-300 px-4 py-2">Bret "The Hitman" Hart</td>
+                <td class="border border-gray-300 px-4 py-2">The Sharpshooter</td>
+              </tr>
+              <tr>
+                <td class="border border-gray-300 px-4 py-2">Razor Ramon</td>
+                <td class="border border-gray-300 px-4 py-2">Razor's Edge, Fallaway Slam</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
     </div>
+  </div>
 </div>
