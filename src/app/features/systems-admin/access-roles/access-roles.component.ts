@@ -168,7 +168,6 @@ export class AccessRolesComponent implements OnInit {
   selectedCount: number = 0;
 
   sortDirection: 'none' | 'asc' | 'desc' = 'none';
-  userName: string = 'Kenrix';
 
   onSortChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
