@@ -155,7 +155,43 @@ import { BehaviorSubject, Observable, Timestamp, timestamp } from 'rxjs';
     }
   }
 
+  async getOvertimeRecords(): Promise<any[]> {
+    try {
+      const { data, error } = await this.supabase
+        .from('Overtime')
+        .select('*')
+        .order('employee_id', { ascending: true });
 
+      if (error) {
+        throw error;
+      }
+      console.log('Fetched data from Supabase:', data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching overtime records from Supabase:', error);
+      throw error;
+    }
+  }
+
+  async getLeaves(): Promise<any[]> {
+    try {
+      const { data, error } = await this.supabase
+        .from('leaves_attendance')
+        .select('*')
+        .order('employee_id', { ascending: true });
+
+      if (error) {
+        throw error;
+      }
+      console.log('Fetched data from Supabase:', data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching leaves from Supabase:', error);
+      throw error;
+    }
+  }
+
+  
 
 
 }

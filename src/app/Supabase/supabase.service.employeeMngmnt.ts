@@ -251,7 +251,7 @@ export class SupabaseService {
     }
     return data;
   }
-  async addEmploymentRecords(employmentRecordData: {
+/*   async addEmploymentRecords(employmentRecordData: {
     position: Text;
     department: Text;
     employment_stat: Text;
@@ -301,7 +301,7 @@ export class SupabaseService {
         console.error('Unexpected error during Employment Records update:', e);
         return { data: null, error: e }; // Return the error object directly
       }
-  }
+  } */
 
   //personnel movement
   async getPersonnelMovement(): Promise<any>{

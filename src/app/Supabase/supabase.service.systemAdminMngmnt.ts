@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { createClient, SupabaseClient, User, Session, PostgrestSingleResponse, PostgrestResponse } from '@supabase/supabase-js';
 import { environment } from '../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
+import nodemailer from 'nodemailer';
 
 @Injectable({
   providedIn: 'root',
@@ -65,7 +66,6 @@ export class SupabaseService {
     return await this.supabase.auth.signOut();
   }
 
-
   async refreshSession(): Promise<void> {
     const { data, error } = await this.supabase.auth.refreshSession();
     if (error) {
@@ -90,21 +90,307 @@ export class SupabaseService {
     this.databaseChangeSubject.next(true);
   }
 
+  private loginAttempts: { [key: string]: number } = {};
+
+  async signInWithLock(email: string, password: string): Promise<boolean> {
+    if (this.loginAttempts[email] >= 3) {
+      console.error('Account locked due to multiple failed login attempts.');
+      return false;
+    }
+
+    const { data, error } = await this.supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      console.error('Sign in error:', error);
+      this.loginAttempts[email] = (this.loginAttempts[email] || 0) + 1;
+      if (this.loginAttempts[email] >= 3) {
+        await this.disableUserAccountByEmail(email);
+      }
+      return false;
+    }
+
+    this.loginAttempts[email] = 0;
+    this.currentUser.next(data.user);
+    this.currentSession.next(data.session);
+    return true;
+  }
+
+  private async disableUserAccountByEmail(email: string) {
+    const { data, error } = await this.supabase
+      .from('users')
+      .select('id')
+      .eq('email', email)
+      .single();
+
+    if (error || !data) {
+      console.error('Error finding user by email:', error);
+      return;
+    }
+
+    await this.disableUserAccount(data.id);
+  }
+
+  async submitTicketForReenable(email: string, message: string) {
+    const { data, error } = await this.supabase
+      .from('tickets')
+      .insert([{ email, message, status: 'Pending' }]);
+
+    if (error) {
+      console.error('Error submitting ticket:', error);
+      throw error;
+    }
+
+    console.log('Ticket submitted:', data);
+    return data;
+  }
+
+
+
 //CRUD Operations for System Admin Management Tables
 
-// parameters
-async getParameters() {
-  const { data, error } = await this.supabase
-    .from('parameters')
-    .select('*');
-  if (error) throw error;
+  //user creation and sending credentials via email to the user
+  async createUserAccount(email: string, role: string) {
+  const generatedPassword = Math.random().toString(36).slice(-8); // Simple password generation
+  const generatedId = `EMP-${Date.now()}`; // Unique ID using timestamp
 
-  // Sort the data by id in descending order (assuming higher id means newer)
-  const sortedData = data.sort((a, b) => b.id - a.id);
+  // Create user in Supabase
+  const { data, error } = await this.supabase.auth.admin.createUser({
+    email,
+    password: generatedPassword,
+    email_confirm: true, // Send email confirmation link
+    user_metadata: { id_number: generatedId, role },
+  });
 
-  console.log('Fetched and sorted data from Supabase:', sortedData);
-  return sortedData;
-}
+  if (error) throw new Error(`Error creating user: ${error.message}`);
+
+  // Send email with credentials
+  await this.sendEmail(
+    email,
+    'Your Account Credentials',
+    `Hello! Here are your account credentials:
+    - Email: ${email}
+    - Password: ${generatedPassword}
+    - ID Number: ${generatedId}
+    Please change your password upon login.`
+  );
+
+  return { data, generatedId, generatedPassword };
+  }
+  async sendEmail(to: string, subject: string, body: string) {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail', // Change this based on your email provider
+      auth: {
+        user: 'your-email@gmail.com',
+        pass: 'your-email-password',
+      },
+    });
+
+    await transporter.sendMail({
+      from: 'your-email@gmail.com',
+      to,
+      subject,
+      text: body,
+    });
+  }
+
+  //password reset
+  async resetUserPassword(email: string) {
+    const { data, error } = await this.supabase.auth.resetPasswordForEmail(email);
+    if (error) throw new Error(`Error resetting password: ${error.message}`);
+    return data;
+  }
+
+  //reenabling of user email after ticket approval
+  async reenableUserAccount(email: string): Promise<void> {
+    const { data, error } = await this.supabase
+      .from('users')
+      .select('id')
+      .eq('email', email)
+      .single();
+
+    if (error || !data) {
+      console.error('Error finding user by email:', error);
+      throw new Error('User not found');
+    }
+
+    const userId = data.id;
+
+    const { error: updateError } = await this.supabase.auth.admin.updateUserById(userId, {
+      user_metadata: { is_disabled: false },
+    });
+
+    if (updateError) {
+      console.error('Error re-enabling user account:', updateError);
+      throw new Error('Failed to re-enable user account');
+    }
+
+    console.log(`User account with email ${email} has been re-enabled.`);
+  }
+
+  //disabling user account for unathorized access
+  async disableUserAccount(employee_id: string) {
+    const { error: revokeError } = await this.supabase.auth.admin.signOut(employee_id);
+  if (revokeError) throw new Error(`Error revoking session: ${revokeError.message}`);
+  // update user metadata to disable access
+  const { data, error } = await this.supabase.auth.admin.updateUserById(employee_id, {
+    user_metadata: { is_disabled: true },
+  });
+  if (error) throw new Error(`Error disabling user account: ${error.message}`);
+  return data;
+  }
+
+  //Roles, Permisisons, and Access Rights(not yet in the supabase)
+  async getRoles(): Promise<any> {
+    const { data, error } = await this.supabase
+      .from('roles')
+      .select('*');
+    if (error) throw error;
+    return data;
+  }
+  //adding new role
+  async addRole(role: { role_name: string; description: string }): Promise<{ data: any; error: any }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('roles')
+        .insert([role])
+        .select();
+
+      if (error) {
+        console.error('Error adding role to Supabase:', error.message || error);
+        throw error;
+      }
+
+      return { data, error };
+    } catch (error) {
+      console.error('An unexpected error occurred while adding role:', error);
+      throw error;
+    }
+  }
+  //updating existing role
+  async editRole(role: any): Promise<{ data: any; error: any }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('roles')
+        .update({ role_name: role.role_name, description: role.description })
+        .eq('id', role.id);
+
+      if (error) {
+        console.error('Error updating role in Supabase:', error);
+        return { data: null, error };
+      }
+
+      return { data, error: null };
+    } catch (e) {
+      console.error('Unexpected error during role update:', e);
+      return { data: null, error: e };
+    }
+  }
+
+  async getPermissions(): Promise<any> {
+    const { data, error } = await this.supabase
+      .from('permissions')
+      .select('*');
+    if (error) throw error;
+    return data;
+  }
+  //adding a new permission
+  async addPermission(permission: { permission_name: string; description: string }): Promise<{ data: any; error: any }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('permissions')
+        .insert([permission])
+        .select();
+
+      if (error) {
+        console.error('Error adding permission to Supabase:', error.message || error);
+        throw error;
+      }
+
+      return { data, error };
+    } catch (error) {
+      console.error('An unexpected error occurred while adding permission:', error);
+      throw error;
+    }
+  }
+  //updating existing permission
+  async editPermission(permission: any): Promise<{ data: any; error: any }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('permissions')
+        .update({ permission_name: permission.permission_name, description: permission.description })
+        .eq('id', permission.id);
+
+      if (error) {
+        console.error('Error updating permission in Supabase:', error);
+        return { data: null, error };
+      }
+
+      return { data, error: null };
+    } catch (e) {
+      console.error('Unexpected error during permission update:', e);
+      return { data: null, error: e };
+    }
+  }
+
+  async getAccessRights(): Promise<any> {
+    const { data, error } = await this.supabase
+      .from('access_rights')
+      .select('*');
+    if (error) throw error;
+    return data;
+  }
+  //adding new access right
+  async addAccessRight(accessRight: { role_id: number; permission_id: number }): Promise<{ data: any; error: any }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('access_rights')
+        .insert([accessRight])
+        .select();
+
+      if (error) {
+        console.error('Error adding access right to Supabase:', error.message || error);
+        throw error;
+      }
+
+      return { data, error };
+    } catch (error) {
+      console.error('An unexpected error occurred while adding access right:', error);
+      throw error;
+    }
+  }
+  //updating existing access right
+  async editAccessRight(accessRight: any): Promise<{ data: any; error: any }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('access_rights')
+        .update({ role_id: accessRight.role_id, permission_id: accessRight.permission_id })
+        .eq('id', accessRight.id);
+
+      if (error) {
+        console.error('Error updating access right in Supabase:', error);
+        return { data: null, error };
+      }
+
+      return { data, error: null };
+    } catch (e) {
+      console.error('Unexpected error during access right update:', e);
+      return { data: null, error: e };
+    }
+  }
+
+
+  // parameters
+  async getParameters() {
+    const { data, error } = await this.supabase
+      .from('parameters')
+      .select('*');
+    if (error) throw error;
+
+    // Sort the data by id in descending order (assuming higher id means newer)
+    const sortedData = data.sort((a, b) => b.id - a.id);
+
+    console.log('Fetched and sorted data from Supabase:', sortedData);
+    return sortedData;
+  }
 
   async createParameter(parameter: any) {
     const { data, error } = await this.supabase
