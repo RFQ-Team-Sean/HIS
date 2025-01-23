@@ -58,23 +58,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     '/admin/audit-trail': 'history',
     '/admin/system-integration': 'integration_instructions',
   
-    // HR routes
-    '/hr/dashboard': 'dashboard',
-    '/hr/personnel-201-file': 'folder_shared',
-    '/hr/personnel-201-file/general-info': 'person',
-    '/hr/personnel-201-file/employment': 'work',
-    '/hr/personnel-201-file/compensation': 'payments',
-    '/hr/personnel-201-file/attendance': 'event_available',
-    '/hr/personnel-201-file/requests': 'assignment',
-    '/hr/personnel-201-file/movement': 'transfer_within_a_station',
-    '/hr/personnel-201-file/loans': 'account_balance',
-    '/hr/personnel-201-file/contributions': 'savings',
-    '/hr/health-wellness': 'health_and_safety',
-    '/hr/health-wellness/activities': 'directions_run',
-    '/hr/health-wellness/medical': 'medical_services',
-    '/hr/health-wellness/sick-leave': 'sick',
-    '/hr/health-wellness/statistics': 'analytics',
-  
     // Common routes
     '/support-ticket': 'support',
     '/dtr': 'schedule',
@@ -150,18 +133,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.sidebarItems = [
           { name: 'Dashboard', route: '/admin/dashboard', icon: 'dashboard' },
           {
-            name: 'User Management',
-            route: '/admin/user-management',
-            icon: 'group',
-            subItems: [
-              { name: 'Create/Edit/Delete Users', route: '/admin/user-management' },
-              { name: 'Role Management', route: '/admin/user-management/roles' },
-              { name: 'Access Rights', route: '/admin/user-management/access-rights' },
-              { name: 'Password Management', route: '/admin/user-management/password' },
-              { name: 'MFA/OTP Configuration', route: '/admin/user-management/mfa-otp' }
-            ]
-          },
-          {
             name: 'System Configuration',
             route: '/admin/system-configuration',
             icon: 'settings',
@@ -170,71 +141,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
               { name: 'Audit Trail Viewing', route: '/admin/system-configuration/audit' }
             ]
           },
-          {
-            name: 'Approval Workflow',
-            route: '/admin/approval-workflow',
-            icon: 'approval',
-            subItems: [
-              { name: 'Approval Process', route: '/admin/approval-workflow/process' },
-              { name: 'Delegation of Authority', route: '/admin/approval-workflow/delegation' },
-              { name: 'OIC Approval', route: '/admin/approval-workflow/oic' }
-            ]
-          }
-        ];
-        break;
-  
-      case 'hr':
-        this.sidebarItems = [
-          { name: 'Dashboard', route: '/hr/dashboard', icon: 'dashboard' },
-          {
-            name: 'Personnel 201 File',
-            route: '/hr/personnel-201-file',
-            icon: this.getIconForRoute('/hr/personnel-201-file'),
-            subItems: [
-              { 
-                name: 'General Information', 
-                route: '/hr/personnel-201-file/general-info',
-                icon: 'person',
-                subItems: [
-                  { name: 'Personal Details', route: '/hr/personnel-201-file/general-info/personal-data-sheet/view' },
-                  { name: 'Contact Information', route: '/hr/personnel-201-file/general-info/contact' },
-                  { name: 'Family Background', route: '/hr/personnel-201-file/general-info/family' }
-                ]
-              },
-              { 
-                name: 'Employment Records', 
-                route: '/hr/personnel-201-file/employment-records',
-                icon: 'work',
-                subItems: [
-                  { name: 'Merits and Violations', route: '/hr/personnel-201-file/employment-records/merits&violations' },
-                ]
-              },
-              { name: 'Compensation & Benefits', route: '/hr/personnel-201-file/compensation' },
-              { name: 'Leaves & Attendance', route: '/hr/personnel-201-file/leaves-attendance-records',
-                icon: 'event_note',
-                subItems:[
-                  { name: 'Daily Time Logs', route: '/hr/personnel-201-file/leaves-attendance-records/daily-time-logs' },
-                  { name: 'Schedule Adjustment Requests', route: '/hr/personnel-201-file/leaves-attendance-records/schedule-adjustment-requests' },
-                  { name: 'Employee Leave Balance', route: '/hr/personnel-201-file/leaves-attendance-records/employee-leave-balance' },
-                ]
-              },
-              { name: 'Requests Management', icon: 'assignment', route: '/hr/personnel-201-file/requests' },
-              { name: 'Personnel Movement', route: '/hr/personnel-201-file/movement' },
-              { name: 'Loan Information', route: '/hr/personnel-201-file/loan-information' },
-              { name: 'Additional Contributions', route: '/hr/personnel-201-file/contributions' }
-            ]
-          },
-          {
-            name: 'Health & Wellness',
-            route: '/hr/health-wellness',
-            icon: 'health_and_safety',
-            subItems: [
-              { name: 'Activities', route: '/hr/health-wellness/activities' },
-              { name: 'Medical Services', route: '/hr/health-wellness/medical' },
-              { name: 'Sick Leave History', route: '/hr/health-wellness/sick-leave' },
-              { name: 'Health Statistics', route: '/hr/health-wellness/statistics' }
-            ]
-          }
         ];
         break;
   
