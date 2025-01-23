@@ -50,7 +50,7 @@ export const routes: Routes = [
       { path: 'user-management', component: UserManagementComponent },
       { path: 'role-management', component: RoleManagementComponent },
       { path: 'access-roles', component: AccessRolesComponent },
-      // { path: 'system-configuration', component: SystemConfigurationComponent },
+      { path: 'systems-config', component: SystemsConfigComponent },
       { path: 'approval-workflow', component: WorkflowApprovalComponent },
       { path: 'workflow-approval-user', component: WorkflowApprovalUserComponent },
       // { path: 'audit-trail', component: AuditTrailComponent },

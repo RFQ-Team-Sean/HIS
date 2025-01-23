@@ -50,8 +50,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     '/admin/user-management/password': 'password',
     '/admin/user-management/mfa-otp': 'key',
     '/admin/system-configuration': 'settings',
-    '/admin/system-configuration/parameters': 'tune',
-    '/admin/system-configuration/audit': 'fact_check',
+    '/admin/systems-config': 'tune',
+    '/admin/systems-configuration/audit': 'fact_check',
     '/admin/approval-workflow': 'approval',
     '/admin/approval-workflow/process': 'workflow-approval',
     '/admin/approval-workflow/delegation': 'switch_account',
@@ -179,11 +179,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
           },
           {
             name: 'System Configuration',
-            route: '/admin/system-configuration',
+            route: '/admin/systems-config',
             icon: 'settings',
             subItems: [
-              { name: 'Parameter Management', route: '/admin/systems-config/' },
-              { name: 'Audit Trail Viewing', route: '/admin/system-configuration/audit' }
+              { name: 'Parameter Management', route: '/admin/systems-config' },
+              { name: 'Audit Trail Viewing', route: '/admin/system-config/audit' }
             ]
           },
           {
