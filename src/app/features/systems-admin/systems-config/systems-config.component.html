@@ -27,8 +27,10 @@
                         <!-- New Employee button, disabled when isEditing is true -->
                         <button class="text-white bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300
                               font-medium rounded text-sm px-4 py-2 text-center dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                              type="button">+ New Config
+                              type="button"
+                              (click)="openDrawer()">+ New Config
                         </button>
+                        <app-sidedrawer-config [isOpen]="isDrawerOpen" (close)="closeDrawer()"></app-sidedrawer-config>
                     </div>
                 </div>
                 <section class="bg-white p-4 h-4/5">
@@ -51,20 +53,6 @@
                                     </td>              
                                     <td class="py-3 px-6 text-left truncate">JOHN DOE</td>
                                     <td class="py-3 px-6 text-left truncate">sampleemail.com</td>
-                                    <td class="py-3 px-1 w-1/12 text-left">
-                                        <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">Hidden</span>
-                                    </td>
-                                    <td class="py-3 px-2 w-1/12 text-left">Manager<br>Full Time</td>
-                                    <td class="py-3 px-2 w-1/12 text-left">
-                                        <span class="py-1 px-3 rounded-full text-xs">Active</span>
-                                    </td>
-                                </tr>
-                                <tr class="border-b border-gray-200 hover:bg-gray-50">
-                                    <td class="py-3 px-4 w-2/12 text-left whitespace-nowrap">
-                                        <div class="flex items-center"><img alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-gray-200"></div>
-                                    </td>              
-                                    <td class="py-3 px-6 text-left truncate">YU DI PHO TAH</td>
-                                    <td class="py-3 px-6 text-left truncate">parotmo.com</td>
                                     <td class="py-3 px-1 w-1/12 text-left">
                                         <span class="bg-gray-200 text-gray-600 py-1 px-3 rounded-full text-xs">Hidden</span>
                                     </td>

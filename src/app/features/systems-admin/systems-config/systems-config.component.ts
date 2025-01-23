@@ -1,29 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from 'src/app/shared/sidebar/sidebar.component';
+import { SidedrawerConfigComponent } from './sidedrawer-config/sidedrawer-config.component';
 
 @Component({
   selector: 'app-systems-config',
   standalone: true,
-  imports: [SidebarComponent, CommonModule],
+  imports: [SidebarComponent, CommonModule, SidedrawerConfigComponent],
   templateUrl: './systems-config.component.html',
   styleUrls: ['./systems-config.component.css']
 })
 export class SystemsConfigComponent {
-  isModalOpen: boolean = false;
-  modalTitle: string = '';
+  @Input() isOpen = close;
+  @Output() close = new EventEmitter<void>();
 
   // Side Drawer State
-  isDrawerOpen: boolean = false;
-  activeTab: string  ='organization';
+  isDrawerOpen = false;
 
-  openModal(title: string) {
-    this.modalTitle = title;
-    this.isModalOpen = true;
+  openDrawer() {
+    this.isDrawerOpen = true;
   }
-  
-  closeModal() {
-    this.isModalOpen = false;
+
+  closeDrawer() {
+    this.isDrawerOpen = false;
+    this.close.emit();
   }
 
 }
