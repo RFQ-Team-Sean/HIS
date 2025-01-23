@@ -200,10 +200,18 @@ export class RoleManagementComponent implements OnInit {
   }
 
   @HostListener('document:click', ['$event'])
+  // Listen for document clicks to handle dropdown and modal visibility
     onDocumentClick(event: MouseEvent): void {
       const target = event.target as HTMLElement;
+
+      // Close the dropdown if the click is outside the dropdown menu and button
       if (!target.closest('#dropdown-menu') && !target.closest('#dropdown-button') && this.isDropdownOpen) {
         this.toggleDropdown();
+      }
+
+      // Close the add role modal if the click is outside the button and modal
+      else if (this.showRolePopup && !target.closest('#add-role-modal') && !target.closest('#add-role-button')) {
+        this.cancelRolePopup();
       }
     }
 
