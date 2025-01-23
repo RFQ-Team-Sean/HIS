@@ -1,9 +1,9 @@
 <!-- Flexible container that holds a sidebar navigation component and user-management area -->
-<main class="flex h-dvh">
+<main class="flex h-screen bg-white">
     <div class="flex-grow">
       <!-- Main component -->
       <div class="min-h-screen">
-        <main class="p-6">
+        <main class="p-5 pb-6">
           <div class="mb-6">
             <span class="block mb-2 text-3xl font-bold text-neutral-900">Access Rights</span>
             <span class="block mb-2 pb-5 text-slate-500 text-sm">Configure access rights to exisiting roles</span>
@@ -11,9 +11,9 @@
 
           <!-- Main Content -->
           <section id="user-list">
-              <div class="rounded-xl shadow-lg bg-white p-4">
+              <div class="rounded-xl bg-white p-4 h-[600px]">
                 <!-- HEADER DIV -->
-                <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-4">
+                <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-1">
                   <!-- SEARCH BAR -->
                   <div class="relative w-[20%]">
                     <input
@@ -49,7 +49,7 @@
                 </div>
 
               <!-- FLEX DIV FOR THE TWO SUB DIVS -->
-              <div class="flex gap max-h-[28rem] rounded-xl">
+              <div class="flex gap h-[32rem] rounded-xl">
                 <!-- DIV FOR ROLES -->
                 <div class="flex-1 h-full rounded-l-xl border-r bg-white border-gray-300">
                   <div class="m-10">
@@ -60,7 +60,7 @@
                         <span class="material-icons">add</span>
                       </button>
                     </div>
-                    <div class="custom-scrollbar overflow-y-auto overflow-x-hidden" style="height: calc(450px - 8rem);">
+                    <div class="custom-scrollbar overflow-y-auto overflow-x-hidden" style="height: calc(450px - 2rem);">
                       <table class="table-auto w-[100%] mt-4">
                         <tbody>
                           <ng-container *ngIf="searchroletab.length > 0; else noMatch">
@@ -121,7 +121,7 @@
                       <span class="text-lg text-blue-600" style="width: 24px; display: inline-block;" *ngIf="!isManageMode">&nbsp;</span>
                     </p>
                   </div>
-                    <div class="overflow-y-auto overflow-x-hidden custom-scrollbar"  style="height: calc(450px - 7.8rem)">
+                    <div class="overflow-x-hidden"  style="height: calc(450px - 2rem)">
                       <div class="grid grid-cols-[75%_repeat(3,_1fr)] gap-y-2">
                         <div class="col-span-1 text-center grid"></div>
                         <div class="col-span-1 text-center font-semibold">None</div>

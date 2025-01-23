@@ -69,7 +69,7 @@ export class UserManagementComponent implements OnInit {
   paginatedUsers: User[] = [];
   searchTerm: string = '';
   currentPage: number = 1;
-  itemsPerPage: number = 10;
+  itemsPerPage: number = 7;
   totalPages: number = 1;
   activeTab: string = 'users';
   showManagePopup = false;
@@ -149,6 +149,10 @@ export class UserManagementComponent implements OnInit {
   addNewRole() {
     this.showCheckboxes = !this.showCheckboxes;
   }
+
+  // for limiting number of rows display in a table
+  data: User[] = [  ];
+  visibleRows = 10;
 
 
   showRolePopup: boolean = false;
@@ -475,8 +479,6 @@ cancelEdit() {
   showEmpErrorMessage: boolean = false;
 
 
-  
-  
   
   async uploadPhoto(): Promise<string | null> {
     if (!this.photoFile) {
@@ -917,6 +919,7 @@ cancelEdit() {
     this.loadEmployees();
     this.loadEmployeeNames();
     this.loadRoles();
+    this.updatePagination();
   } 
 
   async loadRoles() {
@@ -960,8 +963,21 @@ cancelEdit() {
   
       if (error) {
         console.error('Error fetching employees:', error.message);
-        throw error;
+        return;
       }
+
+      this.data = data.map(employee => ({
+        profile:employee.photo_url || 'default-photo-url',
+        name: `${employee.first_name} ${employee.surname}`,
+        email: employee.email,
+        password: '', // Sensitive data, usually masked
+        department: employee.department,
+        position: employee.position,
+        type: employee.types,
+        status: employee.status || 'Active',
+        access: employee.access !== undefined ? employee.access : true,
+        selected: false
+      }));
   
       if (!data || data.length === 0) {
         console.warn('No employee data received');
@@ -1132,9 +1148,13 @@ clearSelections() {
 
 updatePagination() {
   // Update pagination information based on filtered user list
-  this.totalPages = Math.ceil(this.filteredUsers.length / this.itemsPerPage); // Calculate total pages
-  this.currentPage = 1; // Reset current page to 1
-  this.paginate(); // Paginate to display users on the first page
+  const totalUsers = this.filteredUsers.length;
+  this.totalPages = Math.ceil(totalUsers / this.itemsPerPage); // Calculate total pages
+  const start = (this.currentPage - 1) * this.itemsPerPage;
+  const end = start + this.itemsPerPage;
+  this.paginatedUsers = this.filteredUsers.slice(start, end); // Paginate to display users on the first page
+  console.log('Page:', this.currentPage, 'Start:', start, 'End:', end);
+  console.log('Paginated users:', this.paginatedUsers);
 }
 
 paginate() {
@@ -1148,7 +1168,7 @@ prevPage() {
   // Navigate to the previous page if current page is greater than 1
   if (this.currentPage > 1) {
     this.currentPage--; // Decrease current page number
-    this.paginate(); // Update paginated users
+    this.updatePagination(); // Update paginated users
   }
 }
 
@@ -1156,7 +1176,7 @@ nextPage() {
   // Navigate to the next page if current page is less than total pages
   if (this.currentPage < this.totalPages) {
     this.currentPage++; // Increase current page number
-    this.paginate(); // Update paginated users
+    this.updatePagination(); // Update paginated users
   }
 }
 

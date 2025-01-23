@@ -2,7 +2,7 @@
 <div class="flex">
     <div class="flex-grow"> 
       <!-- Main componenet -->
-      <div class="min-h-screen">
+      <div class="min-h-screen bg-white">
         <main class="p-6">
           <div class="mb-6">
             <p class="mb-2 text-3xl font-bold text-neutral-900">User Management<br></p>
@@ -130,7 +130,7 @@
             </div>
           </div>
           <!--Upper Padding-->
-          <div class="rounded-xl shadow-lg bg-white">
+          <div class="rounded-xl bg-white">
             <!-- Row with search input and buttons -->
             <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-4">
               <div class="relative w-[20%]">
@@ -169,23 +169,23 @@
                 </div>
             </div>
                 <!-- Users active tab -->
-              <div *ngIf="filteredUsers.length > 0" class="overflow-x-hidden overflow-y-auto max-h-[28rem] custom-scrollbar">
+              <div *ngIf="filteredUsers.length > 0" class="overflow-x-hidden">
                 <table class="table-fixed w-full">
                   <thead>
-                    <tr class="bg-gray-100 text-gray-700 leading-normal sticky z-10">
+                    <tr class="text-gray-700 leading-normal sticky z-10 border-b border-gray-200">
                       <th *ngIf="isEditing" class="font-thin py-3 px-6 text-center">Select</th>
-                      <th class="z-1 top-0 sticky bg-gray-100 py-3 px-4 w-2/12 text-left font-medium text-gray-500">PROFILE</th>
-                      <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">NAME</th>
-                      <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">EMAIL</th> 
-                      <th class="z-10 top-0 sticky bg-gray-100 py-3 px-2 w-1/12 text-left font-medium text-gray-500">PASSWORD</th>
-                      <th class="z-10 top-0 sticky bg-gray-100 py-3 px-2 w-1/12 text-left font-medium text-gray-500">ROLE</th>
-                      <th class="z-10 top-0 sticky bg-gray-100 py-3 px-2 w-1/12 text-left font-medium text-gray-500">STATUS</th>
-                      <th class="z-10 top-0 sticky bg-gray-100 py-3 px-2 w-1/12 text-center font-medium text-gray-500">ACCESS</th>
+                      <th class="z-1 top-0 sticky py-3 px-4 w-2/12 text-left font-medium text-gray-500">PROFILE</th>
+                      <th class="z-10 top-0 sticky py-3 px-6 text-left font-medium text-gray-500">NAME</th>
+                      <th class="z-10 top-0 sticky py-3 px-6 text-left font-medium text-gray-500">EMAIL</th> 
+                      <th class="z-10 top-0 sticky py-3 px-2 w-1/12 text-left font-medium text-gray-500">PASSWORD</th>
+                      <th class="z-10 top-0 sticky py-3 px-2 w-1/12 text-left font-medium text-gray-500">ROLE</th>
+                      <th class="z-10 top-0 sticky py-3 px-2 w-1/12 text-left font-medium text-gray-500">STATUS</th>
+                      <th class="z-10 top-0 sticky py-3 px-2 w-1/12 text-center font-medium text-gray-500">ACCESS</th>
                       <th *ngIf="isEditing" class="z-10 top-0 sticky bg-gray-100 y-3 px-6 text-center text-lg">EDIT</th>
                     </tr>
                   </thead>                
-                  <tbody class="text-gray-500 text-sm font-light">
-                    <tr *ngFor="let user of paginatedUsers; let i = index" class="border-b border-gray-200 hover:bg-gray-50">
+                  <tbody class="text-gray-500 text-sm font-light"> 
+                    <tr *ngFor="let user of paginatedUsers" class="border-b border-gray-200 hover:bg-gray-50">
                       <td *ngIf="isEditing" class="py-3 px-6 text-center -z-10">
                         <input type="checkbox" [checked]="user.selected" (change)="toggleUserSelection(user)">
                       </td>
