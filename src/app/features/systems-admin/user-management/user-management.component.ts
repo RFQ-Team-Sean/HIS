@@ -33,6 +33,8 @@ interface Employee {
   department: string;
   type: string;
   photoUrl?: string; // Add a new property for photo URL
+  selected?: boolean; // Used for ID selection
+  idGenerated?: boolean; // Track ID generation status
 }
 
 interface Ticket {
@@ -60,6 +62,29 @@ interface AuditLogEntry {
   standalone: true,
   imports: [CommonModule, FormsModule, SidebarComponent],
   templateUrl: './user-management.component.html',
+  template:
+  `
+    <button class="btn-primary" (click)="openIdTemplateDialog()">Generate ID Template</button>
+
+    <div *ngFor="let employee of employeeList" class="employee-entry">
+      <label>
+        <input type="checkbox" [(ngModel)]="employee.selected" />
+        {{ employee.firstName }} {{ employee.surname }} - {{ employee.position }}
+      </label>
+    </div>
+
+    <button class="btn-primary" (click)="printSelectedIds()">Print Selected IDs</button>
+
+    <app-id-template-dialog 
+      *ngIf="showIdTemplateDialog"
+      [employeeList]="employeeList" 
+      (close)="showIdTemplateDialog = false">
+    </app-id-template-dialog>
+  `,
+  styles: [
+    `.btn-primary { margin-top: 10px; }`,
+    `.employee-entry { margin: 5px 0; }`
+  ],
   styleUrls: ['./user-management.component.css']
 })
 export class UserManagementComponent implements OnInit {
@@ -954,6 +979,7 @@ cancelEdit() {
         console.error('Error fetching employees:', error);
       });
     }
+
 
   //edit the photo here
   async loadEmployees() {

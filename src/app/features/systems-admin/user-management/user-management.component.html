@@ -11,10 +11,11 @@
 
           <!-- Users active tab -->
           <div class="flex flex-col">
-        <section id="user-list" class="flex flex-col h-full"> 
+          <section id="user-list" class="flex flex-col h-full"> 
           <!-- Adding New Employee -->
           <div *ngIf="showModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center"(click)="toggleModal()">
             <div class="relative px-4 w-full max-w-4xl" (click)="$event.stopPropagation()">
+              <!-- New Employee -->
               <div class="relative bg-white rounded shadow">
                 <div class="flex items-center justify-between px-4 md:p-5 rounded-t dark:border-gray-600">
                   <p class="text-xl font-semibold text-black text-center"> {{ isEditing ? 'Update Employee' : 'Create New Employee' }}</p>
@@ -127,6 +128,7 @@
                       </form>
                 </div>
               </div>
+              <!-- New Employee -->
             </div>
           </div>
           <!--Upper Padding-->
@@ -137,16 +139,16 @@
                 <input type="text" [(ngModel)]="searchTerm" placeholder="Search Employees..." (input)="searchTable()" class="w-full h-full p-2 pr-8 border rounded-full border-gray-300"/>
                     <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
               </div>          
-                <div class="flex items-center space-x-4">
-                  <!--Filter Feature-->
-                  <div class="relative">
-                    <select (change)="onSortOptionChange($event)" class="border px-4 py-2 rounded appearance-none pr-10">
-                      <option value="none">Default</option>
-                      <option value="asc">Sort A-Z</option>
-                      <option value="desc">Sort Z-A</option>
-                    </select>
-                    <i class="fa fa-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                  </div>
+              <div class="flex items-center space-x-4">
+                <!--Filter Feature-->
+                <div class="relative">
+                  <select (change)="onSortOptionChange($event)" class="border px-4 py-2 rounded appearance-none pr-10">
+                    <option value="none">Default</option>
+                    <option value="asc">Sort A-Z</option>
+                    <option value="desc">Sort Z-A</option>
+                  </select>
+                  <i class="fa fa-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
                     
                   <!-- Delete button only displayed when in editing mode -->
                   <button *ngIf="isEditing" class="bg-red-500 text-white px-4 pr-8 py-2 rounded" (click)="deleteUsers()">Delete</button>
@@ -163,6 +165,9 @@
                         font-medium rounded text-sm px-4 py-2 text-center dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         type="button">+ New Employee
                   </button>
+                  <!-- Print ID Button Function -->
+
+                  <!-- Pagination Function -->
                   <button class=" text-black p-1 bg-gray-100 rounded-md" (click)="prevPage()" [disabled]="currentPage === 1"><</button>
                   <span class="text-gray-600 text-center">{{ currentPage }} of {{ totalPages }}</span>
                   <button class=" text-black p-1 bg-gray-100 rounded-md" (click)="nextPage()" [disabled]="currentPage === totalPages">></button>
