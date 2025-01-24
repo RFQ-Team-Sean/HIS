@@ -47,7 +47,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     '/admin/user-management/users': 'person_add',
     '/admin/user-management/roles': 'admin_panel_settings',
     '/admin/user-management/access-rights': 'security',
-    '/admin/user-management/password': 'password',
+    '/admin/user-management/password-management': 'password',
     '/admin/user-management/mfa-otp': 'key',
     '/admin/system-configuration': 'settings',
     '/admin/system-configuration/parameters': 'tune',
@@ -173,7 +173,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
               { name: 'Create/Edit/Delete Users', route: '/admin/user-management' },
               { name: 'Role Management', route: '/admin/role-management' },
               { name: 'Access Rights', route: '/admin/access-roles' },
-              { name: 'Password Management', route: '/admin/user-management/password' },
+              { name: 'Password Management', route: '/admin/password-management' },
               { name: 'MFA/OTP Configuration', route: '/admin/user-management/mfa-otp' }
             ]
           },
