@@ -1,4 +1,4 @@
-<aside class="flex h-dvh select-none" id="sidebar">
+<aside class="flex h-dvh select-none" id="sidebar" (click)="onSidebarClick($event)">
   <div class="bg-white shadow-xl fixed top-0 left-0 h-full overflow-y-auto flex flex-col items-center z-50 transition-transform ease-in-out"
   [ngClass]="isExpanded ? 'w-64' : 'w-16' ">
     <!-- Sidebar header -->
@@ -85,7 +85,7 @@
       </button>
     </div>
 
-    <div class="border-t border-gray-200 w-full h-12">
+    
       <button (click)="signOut($event)"
          class="flex items-center py-3 px-4 text-red-600 hover:text-red-800 hover:bg-red-50 transition-all duration-300 ease-in-out cursor-pointer w-full"
          [ngClass]="{'justify-center': !isExpanded}">
@@ -97,13 +97,5 @@
         </span>
       </button>
     </div>
-
-    <div class="border-t border-gray-200 w-full h-auto flex items-center justify-center">
-      <button (click)="toggleSidebar()" class="hover:bg-blue-50 z-[0] transition-all duration-300 flex items-center justify-center w-full p-3">
-        <span class="material-icons transition-transform ease-linear align-middle" [ngClass]="{'rotate-180': !isExpanded}">
-          {{'chevron_left'}}
-        </span>
-      </button>
-    </div>
-  </div>
+  
 </aside>
