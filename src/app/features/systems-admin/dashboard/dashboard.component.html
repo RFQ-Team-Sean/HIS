@@ -56,38 +56,36 @@
       </div>
     
       <!-- Right pink container -->
-      <div class="shadow-lg bg-white w-[25%] h-[100%] ml-4 rounded-lg p-4 border border-gray-200">
+      <div class="max-w-sm bg-gray-900 text-gray-100 rounded-lg shadow-md p-4">
         <!-- Navigation -->
-         <div class="bg-blue-50 p-4 rounded">
-        <div class="flex items-center justify-between mb-4">
-          <button (click)="changeMonth(-1)" class="text-black-500 font-bold hover:text-blue-700 transition duration-150 ease-in-out">
-            &lt;
-          </button>
-          <span class="text-lg font-semibold">{{ currentMonth + 1 }}/{{ currentYear }}</span>
-          <button (click)="changeMonth(1)" class="text-black-500 font-bold hover:text-blue-700 transition duration-150 ease-in-out">
-            &gt;
-          </button>
-        </div>
+        <div class="items-center justify-between mb-4">
+          <div class="flex items-center justify-between mb-4">
+            <button (click)="changeMonth(-1)" class="text-lg font-semibold hover:text-blue-400 transition duration-150 ease-in-out">
+              &lt;
+            </button>
+            <span class="text-center text-lg font-bold">{{ currentMonth + 1 }}/{{ currentYear }}</span>
+            <button (click)="changeMonth(1)" class="text-lg font-semibold hover:text-blue-400 transition duration-150 ease-in-out">
+              &gt;
+            </button>
+          </div>
       
-        <!-- Days of the week -->
-        <div class="grid grid-cols-7 text-center text-sm font-medium mb-2">
-          <div class="p-2">Sun</div>
-          <div class="p-2">Mon</div>
-          <div class="p-2">Tue</div>
-          <div class="p-2">Wed</div>
-          <div class="p-2">Thu</div>
-          <div class="p-2">Fri</div>
-          <div class="p-2">Sat</div>
-        </div>
+          <!-- Days of the week -->
+          <div class="grid grid-cols-7 text-center text-xs uppercase text-gray-500 border-b border-gray-700 pb-2">
+            <span *ngFor="let day of days" class="font-semibold">{{ day }}</span>
+          </div>
       
-        <!-- Calendar days -->
-          <div class="grid grid-cols-7 gap-1 text-center text-sm">
+          <!-- Calendar days -->
+          <div class="grid grid-cols-7 gap-1 text-center text-sm mt-2">
             <!-- Days of previous month -->
-            <div *ngFor="let day of daysInPrevMonth" class="p-2 opacity-50"></div>
+            <div *ngFor="let day of daysInPrevMonth" class="opacity-30"></div>
               <!-- Days of current month -->
-              <div *ngFor="let day of daysInMonth" [ngClass]="{'bg-blue-200': isToday(day, currentMonth, currentYear)}" class="p-2 rounded-lg hover:bg-blue-100 transition duration-150 ease-in-out"> {{ day }}</div>
+              <div *ngFor="let day of daysInMonth" [ngClass]="{
+                'bg-blue-600 text-white rounded-full': isToday(day),
+                'text-gray-500': isPast(day)
+              }"
+              class="p-2 hover:bg-blue-800 cursor-pointer transition duration-150 ease-in-out"> {{ day }}</div>
               <!-- Days of next month -->
-              <div *ngFor="let day of daysInNextMonth" class="p-2 opacity-50"></div>
+              <div *ngFor="let day of daysInNextMonth" class="opacity-30"></div>
             </div>
           </div>
           <p class="text-xl font-bold pt-4">Monthly Schedules</p>

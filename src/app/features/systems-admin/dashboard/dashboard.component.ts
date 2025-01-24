@@ -17,26 +17,40 @@ export class ADashboardComponent implements OnInit {
   totalEmployees: string = '0'; // Add this line to store total employees as a string
   hasTimedIn: boolean = false; // Property to track if user has timed in
 
-  viewDate: Date = new Date();
-  currentDate: Date = new Date();
-  currentMonth: number = this.currentDate.getMonth();
-  currentYear: number = this.currentDate.getFullYear();
-  daysInMonth: number[] = [];
-  daysInPrevMonth: number[] = [];
-  daysInNextMonth: number[] = [];
-  firstDayOfMonth: number = 0;
+  // For Calendar Navigation
+  viewDate: Date = new Date(); // Stores the current date
+  currentDate: Date = new Date(); // Tracks today's date
+  currentMonth: number = this.currentDate.getMonth(); // Tracks current month
+  currentYear: number = this.currentDate.getFullYear(); // Tracks current year
+  daysInMonth: number[] = []; // Stores days for the current month
+  daysInPrevMonth: number[] = []; // Stores days from the previous month (to fill calendar view)
+  daysInNextMonth: number[] = []; // Stores days from the next month (to fill calendar view)
+  firstDayOfMonth: number = 0; // Index of the first day of the current month (0 = Sunday)
+
+  // For Notification or Error Messages
   message = '';
   isError = false;
-  holidays: any[] = [];
+  holidays: any[] = []; // **NEW CODE**: Array to store holidays for the current month
+
+  // **NEW CODE**: A computed property that combines days from all months to generate the full 42-day calendar view.
+  get days(): number[] {
+    // Combines previous, current, and next month days into one array
+    return [...this.daysInPrevMonth, ...this.daysInMonth, ...this.daysInNextMonth];
+  }
 
   constructor(private router: Router, private supabaseService: SupabaseService) {}
 
   async ngOnInit() {
-    await this.fetchUserEmail();
-    await this.fetchDashboardData();
-    await this.checkTimeInStatus();
-    await this.fetchHolidays(); // Make sure this line is present
-    this.generateCalendar();
+    try {
+      await this.fetchUserEmail();
+      await this.fetchDashboardData();
+      await this.checkTimeInStatus();
+      await this.fetchHolidays(); // Make sure this line is present
+      this.generateCalendar();
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      this.showMessage('Failed to initialize data', true);
+    }
   }
 
   generateCalendar() {
@@ -74,18 +88,30 @@ export class ADashboardComponent implements OnInit {
   changeMonth(offset: number) {
     this.currentMonth += offset;
     if (this.currentMonth > 11) {
+      // If currentMonth exceeds December (index 11), increment the year
       this.currentMonth = 0;
       this.currentYear++;
     } else if (this.currentMonth < 0) {
+      // If currentMonth is below January (index 0), decrement the year
       this.currentMonth = 11;
       this.currentYear--;
     }
+    // Regenerate calendar days based on the updated month
     this.generateCalendar();
   }
 
-  isToday(day: number, month: number, year: number): boolean {
+  // **Change**: Checks if the given day, month, and year correspond to today's date.
+  isToday(day: number, month: number = this.currentMonth, year: number = this.currentYear): boolean {
     const today = new Date();
     return today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
+  }
+
+  // **Change**: New method to check if a given day is in the past relative to today's date.
+  isPast(day: number): boolean {
+    const today = new Date(); // Get today's date
+    const dateToCheck = new Date(this.currentYear, this.currentMonth, day); // Convert `day` into a Date object
+    // Check if dateToCheck is in the past and not today
+    return dateToCheck < today && !this.isToday(day, this.currentMonth, this.currentYear);
   }
 
   async fetchDashboardData() {
