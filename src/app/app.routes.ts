@@ -5,6 +5,8 @@ import { ADashboardComponent } from './features/systems-admin/dashboard/dashboar
 import { LoginLayoutComponent } from './features/auth/login-layout/login-layout.component';
 import { LayoutComponent } from './shared/layout/layout.component';
 import { UserManagementComponent } from './features/systems-admin/user-management/user-management.component';
+import { RoleManagementComponent } from './features/systems-admin/role-management/role-management.component';
+import { AccessRolesComponent } from './features/systems-admin/access-roles/access-roles.component';
 import { WorkflowApprovalComponent } from './features/systems-admin/approval-workflow/workflow-approval/workflow-approval.component';
 import { WorkflowApprovalUserComponent } from './features/systems-admin/approval-workflow/workflow-approval-user/workflow-approval-user.component';
 import { ViewPDSComponent } from './features/hr-admin/personnels-201-file/general-information/personal-data-sheet/view/view.component';
@@ -25,6 +27,7 @@ import { MeritsAndViolationsComponent } from './features/hr-admin/personnels-201
 import { DailyTimeLogsComponent } from './features/hr-admin/personnels-201-file/leaves-attendance-records/dtr/dtr.component';
 import { ScheduleAdjustmentRequestsComponent } from './features/hr-admin/personnels-201-file/leaves-attendance-records/schedule-adjustment-requests/schedule-adjustment-requests.component';
 import { EmployeeLeaveBalanceComponent } from './features/hr-admin/personnels-201-file/leaves-attendance-records/employee-leave-balance/employee-leave-balance.component';
+import { PasswordManagementComponent } from './features/systems-admin/password-management/password-management.component';
 
 // Feature Components
 // import { UserManagementComponent } from './features/systems-administration/user-management/user-management.component';
@@ -126,9 +129,12 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: ADashboardComponent },
       { path: 'user-management', component: UserManagementComponent },
+      { path: 'role-management', component: RoleManagementComponent },
+      { path: 'access-roles', component: AccessRolesComponent },
       // { path: 'system-configuration', component: SystemConfigurationComponent },
       { path: 'approval-workflow', component: WorkflowApprovalComponent },
       { path: 'workflow-approval-user', component: WorkflowApprovalUserComponent },
+      { path: 'password-management', component: PasswordManagementComponent },
       // { path: 'audit-trail', component: AuditTrailComponent },
       // { path: 'system-integration', component: SystemIntegrationComponent }
     ]
@@ -150,7 +156,7 @@ export const routes: Routes = [
       },
       { path: 'personnel-201-file/loan-information', component: LoanInformationComponent },
       { path: 'personnel-201-file/requests', component: RequestsComponent },
-      { 
+      {
         path: 'personnel-201-file/employment-records',
         // component: LayoutComponent,
         children: [
@@ -158,7 +164,7 @@ export const routes: Routes = [
           { path: 'merits&violations', component: MeritsAndViolationsComponent },
         ]
       },
-      { 
+      {
         path: 'personnel-201-file/general-info/personal-data-sheet/view',
         component: ViewPDSComponent,
         children: [

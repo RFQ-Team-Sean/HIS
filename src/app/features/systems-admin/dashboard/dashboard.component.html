@@ -14,57 +14,49 @@
           <img *ngIf="hasTimedIn" src="https://i.ibb.co/f41vqWh/6488733.png" alt="Descriptive Alt Text" class="w-52 h-52 object-cover absolute bottom-0 right-28" />
         </div>
         
-             
-    
+        <!-- Dashboard Metric Nodes -->
         <div class="flex w-full justify-between gap-4">
-          <div class="flex-1 flex flex-col justify-center shadow-lg bg-white h-32 p-5 rounded-lg relative">
-            <div class="flex flex-col justify-center">
+          <!-- Total Employees -->
+          <div class="flex-1 flex flex-col justify-center shadow-lg bg-white h-32 rounded-lg relative">
+            <div class="flex flex-col p-5 justify-center">
               <p class="font-bold text-xl text-gray-500">Total Employees</p>
               <p class="font-bold text-2xl text-black">{{ totalEmployees }}</p>
             </div>
-            <img src='https://i.ibb.co/2KnnCQX/Group-38.png' class="opacity-60 h-12 w-12 absolute right-5 top-1/2 transform -translate-y-1/2">
-          </div>        
-          <div class="flex-1 flex flex-col justify-center shadow-lg bg-white h-32 p-5 rounded-lg relative">
-            <div class="flex flex-col justify-center">
-              <p class="font-bold text-xl text-gray-500">Total Tickets</p>
-              <p class="font-bold text-2xl text-black">3</p>
+          </div> 
+
+          <!-- Active Users -->
+          <div class="flex-1 flex flex-col justify-center shadow-lg bg-white h-32 rounded-lg relative">
+            <div class="flex flex-col p-5 justify-center">
+              <p class="font-bold text-xl text-gray-500">Active Users</p>
+              <p class="font-bold text-2xl text-black">3</p> <!-- PLACEHOLDER DATA -->
             </div>
-            <img src='https://i.ibb.co/0cYXGy6/Group-39.png' class="opacity-80 h-12 w-12 absolute right-5 top-1/2 transform -translate-y-1/2">
           </div>
-          
+          <!-- Locked Accounts -->
           <div class="flex-1 shadow-lg bg-white h-32 rounded-lg relative">
             <div class="flex flex-col justify-center p-5 h-full">
-              <p class="font-bold text-xl text-gray-500">Total Roles</p>
-              <p class="font-bold text-2xl text-black">30</p>
+              <p class="font-bold text-xl text-gray-500">Locked Accounts</p>
+              <p class="font-bold text-2xl text-black">30</p> <!-- PLACEHOLDER DATA -->
             </div>
-            <img src='https://i.ibb.co/v1j0W5m/Group-40.png' class="opacity-70 h-12 w-12 absolute right-5 top-1/2 transform -translate-y-1/2">
           </div>
-          
+          <!-- Total Departments -->
           <div class="flex-1 shadow-lg bg-white h-32 rounded-lg relative">
             <div class="flex flex-col justify-center p-5 h-full">
-              <p class="font-bold text-xl text-gray-500">Clocked In</p>
-              <p class="font-bold text-2xl text-black">28</p>
+              <p class="font-bold text-xl text-gray-500">Total Departments</p>
+              <p class="font-bold text-2xl text-black">28</p>  <!-- PLACEHOLDER DATA -->
             </div>
-            <img src='https://i.ibb.co/nDDgvKM/Group-42.png' class="opacity-80 h-12 w-12 absolute right-5 top-1/2 transform -translate-y-1/2">
           </div>
           
         </div>
+        <!-- Requests Table -->
         <div class="flex w-full justify-between gap-4">
-        <div class="bg-white shadow-lg h-56 w-[53%] rounded-lg p-5 flex items-center justify-between relative">
-        
-        </div>
-        <div class="bg-white shadow-lg h-56 w-[53%] rounded-lg p-5 flex items-center justify-between relative">
-        
-        </div>
-        <div class="bg-white shadow-lg h-56 w-[53%] rounded-lg p-5 flex items-center justify-between relative">
-        
-        </div>
-        
+          <div class="bg-white shadow-lg h-80 w-[100%] rounded-lg p-5 flex items-center justify-between relative"> 
+                  
+          </div>
         </div>
       </div>
     
       <!-- Right pink container -->
-      <div class="shadow-lg bg-white w-[25%] h-[86%] ml-4 rounded-lg p-4 border border-gray-200">
+      <div class="shadow-lg bg-white w-[25%] h-[100%] ml-4 rounded-lg p-4 border border-gray-200">
         <!-- Navigation -->
          <div class="bg-blue-50 p-4 rounded">
         <div class="flex items-center justify-between mb-4">
@@ -89,33 +81,24 @@
         </div>
       
         <!-- Calendar days -->
-        <div class="grid grid-cols-7 gap-1 text-center text-sm">
-          <!-- Days of previous month -->
-          <div *ngFor="let day of daysInPrevMonth" class="p-2 opacity-50"></div>
-      
-          <!-- Days of current month -->
-          <div *ngFor="let day of daysInMonth"
-               [ngClass]="{'bg-blue-200': isToday(day, currentMonth, currentYear)}"
-               class="p-2 rounded-lg hover:bg-blue-100 transition duration-150 ease-in-out">
-            {{ day }}
+          <div class="grid grid-cols-7 gap-1 text-center text-sm">
+            <!-- Days of previous month -->
+            <div *ngFor="let day of daysInPrevMonth" class="p-2 opacity-50"></div>
+              <!-- Days of current month -->
+              <div *ngFor="let day of daysInMonth" [ngClass]="{'bg-blue-200': isToday(day, currentMonth, currentYear)}" class="p-2 rounded-lg hover:bg-blue-100 transition duration-150 ease-in-out"> {{ day }}</div>
+              <!-- Days of next month -->
+              <div *ngFor="let day of daysInNextMonth" class="p-2 opacity-50"></div>
+            </div>
           </div>
-      
-          <!-- Days of next month -->
-          <div *ngFor="let day of daysInNextMonth" class="p-2 opacity-50"></div>
-        </div>
+          <p class="text-xl font-bold pt-4">Monthly Schedules</p>
+          <div class="h-44 overflow-y-auto borde rounded-md custom-scrollbar">
+            <div *ngFor="let holiday of holidays" class="flex items-center justify-between">
+              <p class="text-lg">{{ holiday.parameter_name }}</p>
+              <p class="text-sm text-gray-400 ml-2">{{ holiday.parameter_date | date:'MM/dd/yy' }}</p>
+            </div>
+            <p *ngIf="holidays.length === 0" class="text-gray-500">No schedules this month</p>
+          </div>
       </div>
-      <p class="text-xl font-bold pt-4">Holidays This Month</p>
-      <div class="h-44 overflow-y-auto borde rounded-md custom-scrollbar">
-        <div *ngFor="let holiday of holidays" class="flex items-center justify-between">
-          <p class="text-lg">{{ holiday.parameter_name }}</p>
-          <p class="text-sm text-gray-400 ml-2">{{ holiday.parameter_date | date:'MM/dd/yy' }}</p>
-        </div>
-        <p *ngIf="holidays.length === 0" class="text-gray-500">No holidays this month</p>
-      </div>
-      
-      </div>
-      
-      
     </div>
     
     
