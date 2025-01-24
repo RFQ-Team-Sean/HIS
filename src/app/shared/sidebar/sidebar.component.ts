@@ -257,6 +257,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
       // Add other cases similarly...
     }
   }
+
+  bottomSidebarItems: SidebarItem[] = [
+    { name: 'Support Ticket', route: '/support-ticket', icon: 'support_agent' },
+    { name: 'Sign Out', route: '/support-ticket', icon: 'logout' },
+    { name: 'Collapse', route: '', icon: 'chevron_right' },
+
+  ]
+
   async signOut(event: Event): Promise<void> {
     event.preventDefault();
     try {
