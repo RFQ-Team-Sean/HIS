@@ -172,9 +172,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
             subItems: [
               { name: 'Create/Edit/Delete Users', route: '/admin/user-management' },
               { name: 'Role Management', route: '/admin/role-management' },
-              { name: 'Access Rights', route: '/admin/access-roles' },
-              { name: 'Password Management', route: '/admin/user-management/password' },
-              { name: 'MFA/OTP Configuration', route: '/admin/user-management/mfa-otp' }
+              { name: 'Access Rights', route: '/admin/access-roles' }
             ]
           },
           {
@@ -183,7 +181,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
             icon: 'settings',
             subItems: [
               { name: 'Parameter Management', route: '/admin/systems-config' },
-              { name: 'Audit Trail Viewing', route: '/admin/system-config/audit' }
+              { name: 'Audit Trail', route: '/admin/audit-trail' }
             ]
           },
           {
@@ -240,17 +238,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
               { name: 'Additional Contributions', route: '/hr/personnel-201-file/contributions' }
             ]
           },
-          {
-            name: 'Health & Wellness',
-            route: '/hr/health-wellness',
-            icon: 'health_and_safety',
-            subItems: [
-              { name: 'Activities', route: '/hr/health-wellness/activities' },
-              { name: 'Medical Services', route: '/hr/health-wellness/medical' },
-              { name: 'Sick Leave History', route: '/hr/health-wellness/sick-leave' },
-              { name: 'Health Statistics', route: '/hr/health-wellness/statistics' }
-            ]
-          }
         ];
         break;
 

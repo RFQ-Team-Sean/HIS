@@ -30,6 +30,7 @@ import { EmployeeLeaveBalanceComponent } from './features/hr-admin/personnels-20
 
 // Feature Components
 import { SystemsConfigComponent } from './features/systems-admin/systems-config/systems-config.component';
+import { AuditTrailComponent } from './features/systems-admin/audit-trail/audit-trail.component';
 
 export const routes: Routes = [
   {
@@ -53,7 +54,7 @@ export const routes: Routes = [
       { path: 'systems-config', component: SystemsConfigComponent },
       { path: 'approval-workflow', component: WorkflowApprovalComponent },
       { path: 'workflow-approval-user', component: WorkflowApprovalUserComponent },
-      // { path: 'audit-trail', component: AuditTrailComponent },
+      { path: 'audit-trail', component: AuditTrailComponent },
       // { path: 'system-integration', component: SystemIntegrationComponent }
     ]
   },
