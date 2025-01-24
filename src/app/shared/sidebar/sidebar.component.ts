@@ -151,6 +151,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
   }
 
+   // Toggle sidebar on clicks inside
+   @HostListener('click', ['$event'])
+   onSidebarClick(event: MouseEvent): void {
+     this.isExpanded = !this.isExpanded;
+     event.stopPropagation(); // Prevent event from propagating to document listener
+   }
+   
   navigateTo(route: string): void {
     this.router.navigate([route]);
   }
