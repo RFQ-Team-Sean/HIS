@@ -64,8 +64,7 @@ export class SupabaseService {
   async signOut() {
     return await this.supabase.auth.signOut();
   }
-
-
+  
   async refreshSession(): Promise<void> {
     const { data, error } = await this.supabase.auth.refreshSession();
     if (error) {

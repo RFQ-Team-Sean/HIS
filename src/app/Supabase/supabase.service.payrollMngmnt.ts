@@ -256,7 +256,6 @@ async insertMeritOrViolation(record: {
       }
   }
 
-
   
   //leave requests
   async getLeaveRequests() {

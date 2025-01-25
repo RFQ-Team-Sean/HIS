@@ -155,6 +155,7 @@ import { BehaviorSubject, Observable, Timestamp, timestamp } from 'rxjs';
     }
   }
 
+    //overtime
   async getOvertimeRecords(): Promise<any[]> {
     try {
       const { data, error } = await this.supabase
@@ -172,7 +173,7 @@ import { BehaviorSubject, Observable, Timestamp, timestamp } from 'rxjs';
       throw error;
     }
   }
-
+    //leaves
   async getLeaves(): Promise<any[]> {
     try {
       const { data, error } = await this.supabase

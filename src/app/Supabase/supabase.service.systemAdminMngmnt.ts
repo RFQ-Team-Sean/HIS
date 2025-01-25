@@ -143,8 +143,6 @@ export class SupabaseService {
     return data;
   }
 
-
-
 //CRUD Operations for System Admin Management Tables
 
   //user creation and sending credentials via email to the user
@@ -377,7 +375,6 @@ export class SupabaseService {
     }
   }
 
-
   // parameters
   async getParameters() {
     const { data, error } = await this.supabase
@@ -391,7 +388,6 @@ export class SupabaseService {
     console.log('Fetched and sorted data from Supabase:', sortedData);
     return sortedData;
   }
-
   async createParameter(parameter: any) {
     const { data, error } = await this.supabase
       .from('parameters')
@@ -399,7 +395,6 @@ export class SupabaseService {
     if (error) throw error;
     return data;
   }
-
   async deleteParameter(parameterName: string): Promise<void> {
     const { error } = await this.supabase
       .from('parameters')
@@ -410,7 +405,6 @@ export class SupabaseService {
       throw error;
     }
   }
-
   async updateParameter(parameter: any) {
     const { data, error } = await this.supabase
       .from('parameters') // Replace 'parameters' with your actual table name
@@ -493,4 +487,90 @@ export class SupabaseService {
     console.log('Test holiday added:', data);
     return data;
   }
+
+  //for sending reminders and notifications
+  async sendReminderEmails() {
+    try {
+      const { data: users, error: fetchError } = await this.supabase
+        .from('employee_information')
+        .select('employee_id')
+        .eq('needs_reminder', true);
+  
+      if (fetchError) {
+        console.error('Error fetching users:', fetchError);
+        throw fetchError;
+      }
+  
+      //send website notifications
+      for (const user of users) {
+        await this.sendWebsiteNotification(user.employee_id, 'This is a reminder notification.');
+      }
+  
+      console.log('Reminder notifications sent to users:', users.map(user => user.employee_id));
+      return users;
+    } catch (error) {
+      console.error('Error sending reminder notifications:', error);
+      throw error;
+    }
+  }
+  private async sendWebsiteNotification(userId: string, message: string) {
+    try {
+      const { data, error } = await this.supabase
+        .from('notifications')
+        .insert([{ employee_id: userId, message }]);
+  
+      if (error) {
+        console.error('Error sending notification:', error);
+        throw error;
+      }
+  
+      console.log(`Sending notification to user ${userId} with message "${message}"`);
+    } catch (error) {
+      console.error('Error sending website notification:', error);
+      throw error;
+    }
+  }
+
+  //archiving of employee data
+  async archiveEmployeeData(employeeId: string) {
+    const { data, error } = await this.supabase
+      .rpc('archive_employee_data', { employee_id: employeeId });
+
+    if (error) {
+      console.error('Error archiving employee data:', error);
+      throw error;
+    }
+
+    console.log('Employee data archived:', data);
+    return data;
+  }
+
+  //adding tables via the system
+  async configureSystem(config: { table: string; columns: { name: string; type: string }[] }) {
+    try {
+      for (const column of config.columns) {
+        const { data, error } = await this.supabase
+          .rpc('add_column_to_table', { 
+            table_name: 
+            config.table, 
+            column_name: 
+            column.name, 
+            column_type: 
+            column.type });
+
+        if (error) {
+          console.error(`Error adding column ${column.name} to table ${config.table}:`, error);
+          throw error;
+        }
+
+        console.log(`Column ${column.name} added to table ${config.table}:`, data);
+      }
+    } catch (error) {
+      console.error('Error configuring system:', error);
+      throw error;
+    }
+  }
+
+  //adding dropdowns, buttons etc.
+  
 }
