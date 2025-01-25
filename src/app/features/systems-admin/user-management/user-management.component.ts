@@ -87,6 +87,7 @@ interface AuditLogEntry {
   ],
   styleUrls: ['./user-management.component.css']
 })
+
 export class UserManagementComponent implements OnInit {
   // Functions for users tab
   users: User[] = [];

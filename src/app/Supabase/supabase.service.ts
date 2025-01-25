@@ -1755,7 +1755,18 @@ async getParameters() {
     }
   }
 
+// Employee ID Number Generation Function
+  async getEmployeeSequence() {
+    return this.supabase
+      .from('employee_sequences')
+      .select('last_sequence')
+      .single();
+  }
 
-
+  async updateEmployeeSequence(newSequence: number) {
+    return this.supabase
+      .from('employee_sequences')
+      .upsert({ last_sequence: newSequence });
+  }
 
 }

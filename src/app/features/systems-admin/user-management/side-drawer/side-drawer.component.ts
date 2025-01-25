@@ -1,10 +1,12 @@
 import { Component, Input, Output, EventEmitter} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { SupabaseService } from 'src/app/Supabase/supabase.service';
 
 @Component({
   selector: 'app-side-drawer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, SupabaseService],
   templateUrl: './side-drawer.component.html',
   styleUrl: './side-drawer.component.css'
 })
