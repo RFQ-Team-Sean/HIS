@@ -33,7 +33,7 @@
                         <span class="ms-2">{{ currentSorting() || 'Sort' }} </span>
                         <span class="material-icons transition-all ease-linear" [ngClass]="{ 'rotate-180' : isDropdownOpen }">arrow_drop_down</span>
                       </button>
-                      <div id="dropdown-menu" class="grid grid-cols-1 gap-1 absolute right-0 mt-2 w-auto bg-white border rounded-lg shadow-lg transition-all p-1 overflow-hidden"
+                      <div id="dropdown-menu" class="grid grid-cols-1 gap-1 absolute right-0 mt-2 w-auto bg-white border rounded-lg shadow-lg transition-all ease-in-out p-1 overflow-hidden"
                       [ngClass]="isDropdownOpen ? 'h-fit' : 'h-0 border-0 shadow-none' ">
                         <button value="none" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 relative whitespace-nowrap w-full rounded-lg" (click)="onSortChange($event); toggleDropdown()">Default</button>
                         <button value="asc" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 relative whitespace-nowrap w-full rounded-lg" (click)="onSortChange($event); toggleDropdown()">Ascending (A-Z)</button>

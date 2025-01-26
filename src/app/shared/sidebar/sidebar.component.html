@@ -13,7 +13,7 @@
       <ul class="w-full" *ngIf="sidebarItems.length > 0; else noItemsTemplate">
         <li *ngFor="let item of sidebarItems" class="my-1">
           <!-- Main menu item -->
-          <button
+          <button [title]="item.name"
             (click)="item.subItems ? toggleSubMenu(item) : navigateTo(item.route)"
             class="flex items-center py-3 px-4 hover:bg-blue-50 hover:text-black cursor-pointer rounded-xl transition-all ease-linear"
             [ngClass]="isExpanded ? 'justify-start w-full gap-4' : 'w-full cursor-auto'"
@@ -34,14 +34,14 @@
 
           <!-- First level sub-menu items -->
           <ul *ngIf="item.subItems && item.isExpanded && isExpanded"
-              class="ml-4 border-l border-gray-200 w-auto">
+              class="flex flex-col gap-1 ml-4 border-l border-gray-200 w-auto">
             <li *ngFor="let subItem of item.subItems" class="w-auto">
               <!-- Sub-menu item -->
               <button
                 (click)="subItem.subItems ? toggleSubSubMenu(subItem) : navigateTo(subItem.route)"
                 class="flex items-center w-full py-2 px-4 text-sm rounded-lg hover:bg-blue-50 hover:text-black transition-all ease-linear">
                 <span class="material-icons text-sm mr-2">{{subItem.icon || 'subdirectory_arrow_right'}}</span>
-                <span>{{subItem.name}}</span>
+                <span class="whitespace-nowrap overflow-hidden">{{subItem.name}}</span>
                 <!-- Arrow icon for items with sub-subitems -->
                 <span *ngIf="subItem.subItems" class="material-icons ml-auto text-xs"
                       [ngClass]="{'rotate-180': subItem.isExpanded}">
@@ -73,7 +73,7 @@
     <!-- Bottom Items -->
      <div class="flex flex-col items-center w-full">
       <button class="flex justify-start items-center gap-4 p-4 w-full transition-all ease-linear hover:bg-blue-50 hover:text-black border-t"
-              *ngFor="let item of bottomSidebarItems" [ngClass]="{'hover:text-red-600': item.name === 'Sign Out'}"
+              *ngFor="let item of bottomSidebarItems" [ngClass]="{'hover:text-red-600': item.name === 'Sign Out'}" [title]="item.name !== 'Collapse' ? item.name : ''"
               (click)="item.name == 'Collapse' ? toggleSidebar() : null">
         <span class="material-icons text-xl ms-1 transition-all ease-linear" [ngClass]="{'rotate-180' : isExpanded && item.name === 'Collapse'}">{{item.icon}}</span>
         <span class="inline-block whitespace-nowrap overflow-hidden" [ngClass]="isExpanded ? 'w-auto' : 'w-0 hidden' ">{{item.name}}</span>
