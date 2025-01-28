@@ -251,7 +251,7 @@ export class SupabaseService {
     }
     return data;
   }
-/*   async addEmploymentRecords(employmentRecordData: {
+  async addEmploymentRecords(employmentRecordData: {
     position: Text;
     department: Text;
     employment_stat: Text;
@@ -301,7 +301,7 @@ export class SupabaseService {
         console.error('Unexpected error during Employment Records update:', e);
         return { data: null, error: e }; // Return the error object directly
       }
-  } */
+  } 
 
   //personnel movement
   async getPersonnelMovement(): Promise<any>{
@@ -310,15 +310,34 @@ export class SupabaseService {
       .select('*')
     return data;
   }
- 
-  //employment records
-  async getEmploymentRecords(): Promise<any>{
-    const {data, error} = await this.supabase
-      .from('employment_records')
-      .select('*')
-    return data;
-  }
+  async updatePersonnelMovement(personnelMovementData: {
+    prev_position: Text;
+    new_position: Text;
+    prev_department: Text;
+    new_department: Text;
+    effective_date: Date;
+    transfer_type: Text;
+    remarks: Text;
+    created_at: Date;
+  }): Promise<{ data: any; error: any }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('personnel_movement')
+        .insert([personnelMovementData])
+        .select();
 
+      if (error) {
+        console.error('Error adding Personnel Movement to Supabase:', error.message || error);
+        throw error; // Re-throw for further handling in the component
+      }
+      
+      return { data, error };
+    } catch (error) {
+      console.error('An unexpected error occurred while adding Personnel Movement:', error);
+      throw error; // Re-throw for further handling in the component
+    }
+  }
+ 
   //employee related reports
   async getReports(): Promise<any>{
     const {data, error} = await this.supabase

@@ -200,8 +200,8 @@ export class SupabaseService {
   //reenabling of user email after ticket approval
   async reenableUserAccount(email: string): Promise<void> {
     const { data, error } = await this.supabase
-      .from('users')
-      .select('id')
+      .from('employee_information')
+      .select('employee_id')
       .eq('email', email)
       .single();
 
@@ -210,9 +210,9 @@ export class SupabaseService {
       throw new Error('User not found');
     }
 
-    const userId = data.id;
+    const employee_id = data.employee_id;
 
-    const { error: updateError } = await this.supabase.auth.admin.updateUserById(userId, {
+    const { error: updateError } = await this.supabase.auth.admin.updateUserById(employee_id, {
       user_metadata: { is_disabled: false },
     });
 
@@ -375,7 +375,7 @@ export class SupabaseService {
     }
   }
 
-  // parameters
+  //parameters
   async getParameters() {
     const { data, error } = await this.supabase
       .from('parameters')
@@ -432,7 +432,6 @@ export class SupabaseService {
       .insert(reply)
       .select();
   }
-
   async updateTicket(ticket: any) {
     return await this.supabase
       .from('ticket')
@@ -443,49 +442,6 @@ export class SupabaseService {
       })
       .eq('id', ticket.id)
       .select();
-  }
-
-  //holidays
-  async getHolidays() {
-    const now = new Date();
-    const firstDayOfYear = new Date(now.getFullYear(), 0, 1).toISOString().split('T')[0];
-    const lastDayOfYear = new Date(now.getFullYear(), 11, 31).toISOString().split('T')[0];
-
-    console.log('Fetching holidays from', firstDayOfYear, 'to', lastDayOfYear);
-
-    const { data, error } = await this.supabase
-      .from('parameters')
-      .select('*')
-      .eq('parameter_type', 'Holiday')  // Ensure correct case
-      .gte('parameter_date', firstDayOfYear)
-      .lte('parameter_date', lastDayOfYear)
-      .order('parameter_date', { ascending: true });
-
-    if (error) {
-      console.error('Error fetching holidays:', error);
-      throw error;
-    }
-
-    console.log('Fetched holidays:', data);
-    return data;
-  }
-
-  async addTestHoliday() {
-    const testName = 'Test Holiday';
-    const testDate = new Date().toISOString().split('T')[0]; // Today's date
-    const { data, error } = await this.supabase
-      .from('parameters')
-      .insert([
-        { parameter_name: testName, parameter_type: 'Holiday', parameter_date: testDate }
-      ]);
-
-    if (error) {
-      console.error('Error adding test holiday:', error);
-      throw error;
-    }
-
-    console.log('Test holiday added:', data);
-    return data;
   }
 
   //for sending reminders and notifications
@@ -572,5 +528,40 @@ export class SupabaseService {
   }
 
   //adding dropdowns, buttons etc.
+  async addDropdownOption(table: string, option: { name: string; value: string }) {
+    try {
+      const { data, error } = await this.supabase
+        .from(table)
+        .insert([option]);
   
+      if (error) {
+        console.error(`Error adding dropdown option to table ${table}:`, error);
+        throw error;
+      }
+  
+      console.log(`Dropdown option added to table ${table}:`, data);
+      return data;
+    } catch (error) {
+      console.error('Error adding dropdown option:', error);
+      throw error;
+    }
+  }
+  async addButtonConfig(table: string, config: { name: string; action: string }) {
+    try {
+      const { data, error } = await this.supabase
+        .from(table)
+        .insert([config]);
+  
+      if (error) {
+        console.error(`Error adding button config to table ${table}:`, error);
+        throw error;
+      }
+  
+      console.log(`Button config added to table ${table}:`, data);
+      return data;
+    } catch (error) {
+      console.error('Error adding button config:', error);
+      throw error;
+    }
+  }
 }
