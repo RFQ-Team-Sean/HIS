@@ -90,5 +90,110 @@ export class SupabaseService {
   }
 
 //CRUD Operations for Exit Separateion Management Tables
+  //exit interview form
+  async getExitInterviewForm(): Promise<PostgrestSingleResponse<any>> {
+    return await this.supabase
+    .from('exit_interview_form')
+    .select('*');
+  }
+  async addExitInterviewForm(ExitInterviewData: {
+    resignation_date: string,
+    reason_for_leaving: string,
+    feedback_workenvi: string,
+    feedback_management: string,
+    suggestions: string,
+    overall_exp_rating: string,
+    interviewer_name: string,
+    interview_date: Date,
+  }): Promise<{ data: any; error: any }> {
+    try{
+      const { data, error } = await this.supabase
+      .from('exit_interview_form')
+      .insert([ExitInterviewData]);
+    if (error) {
+      console.error('Error inserting exit interview data to Supabase:', error.message || error);
+      throw error; // Re-throw for further handling in the component
+    }
+    
+    return { data, error };
+  } catch (error) {
+    console.error('An unexpected error occurred while inserting exit interview data to Supabase:', error);
+    throw error; // Re-throw for further handling in the component
+  }
+  }
+  async generateExitInterviewForm(data: any): Promise<PostgrestSingleResponse<any>> {
+    return await this.supabase
+    .from('exit_interview_form')
+    .insert(data);
+  }
+
+  //clearance form
+  async getClearanceForm(): Promise<{ data: any; error: any }> {
+    return await this.supabase
+    .from('clearance_form')
+    .select('*');
+  }
+  async addClearanceForm(ClearanceData: {
+    clearance_date: Date,
+    status: string,
+    remarks: string,
+  }): Promise<{ data: any; error: any }> {
+    try{
+      const { data, error } = await this.supabase
+      .from('clearance_form')
+      .insert([ClearanceData]);
+    if (error) {
+      console.error('Error inserting clearance data to Supabase:', error.message || error);
+      throw error; // Re-throw for further handling in the component
+    }
+    
+    return { data, error };
+  } catch (error) {
+    console.error('An unexpected error occurred while inserting clearance data to Supabase:', error);
+    throw error; // Re-throw for further handling in the component
+  }
+  }
+  async generateClearanceForm(data: any): Promise<PostgrestSingleResponse<any>> {
+    return await this.supabase
+    .from('clearance_form')
+    .insert(data);
+  }
+
+  //terminal leave form
+  async getTerminalLeaveForm(): Promise<{ data: any; error: any }> {
+    return await this.supabase
+    .from('terminal_leave_form')
+    .select('*');
+  }
+  async addTerminalLeaveForm(TerminalLeaveData: {
+    leave_start_date: Date,
+    leave_end: Date,
+    total_days: number,
+    reason_for_leave: string,
+    approval_status: string,
+    approved_by: string,
+    approval_date: Date,
+    status: string,
+  }): Promise<{ data: any; error: any }> {
+    try{
+      const { data, error } = await this.supabase
+      .from('terminal_leave_form')
+      .insert([TerminalLeaveData]);
+    if (error) {
+      console.error('Error inserting terminal leave data to Supabase:', error.message || error);
+      throw error; // Re-throw for further handling in the component
+    }
+    
+    return { data, error };
+  } catch (error) {
+    console.error('An unexpected error occurred while inserting terminal leave data to Supabase:', error);
+    throw error; // Re-throw for further handling in the component
+  }
+  }
+  async generateTerminalLeaveForm(data: any): Promise<PostgrestSingleResponse<any>> {
+    return await this.supabase
+    .from('terminal_leave_form')
+    .insert(data);
+  }
 
 }

@@ -342,7 +342,7 @@ export class SupabaseService {
   async getReports(): Promise<any>{
     const {data, error} = await this.supabase
       .from('employee_related_reports')
-      .select('*')
+      .select('employee_id')
     return data;
   }
 

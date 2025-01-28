@@ -89,8 +89,8 @@ import { BehaviorSubject, Observable, Timestamp, timestamp } from 'rxjs';
       this.databaseChangeSubject.next(true);
     }
 
-  //CRUD Operarion for Timekeeping Tables
-    //dtr
+//CRUD Operarion for Timekeeping Tables
+  //dtr
   async getAttendances(): Promise<any[]> {
     try {
       const { data, error } = await this.supabase
@@ -108,7 +108,7 @@ import { BehaviorSubject, Observable, Timestamp, timestamp } from 'rxjs';
       throw error;
     }
   }
-    //for clock in
+  //for clock in
   async insertEmployeeClockIn(employmeeclockIn: {
     date: Date;
     clock_in: Time;
@@ -131,7 +131,7 @@ import { BehaviorSubject, Observable, Timestamp, timestamp } from 'rxjs';
       throw error; // Re-throw for further handling in the component
     }
   }
-    //for clock out
+  //for clock out
   async insertEmployeeClockOut(employmeeclockOut: {
     date: Date;
     clock_out: Time;
@@ -155,7 +155,7 @@ import { BehaviorSubject, Observable, Timestamp, timestamp } from 'rxjs';
     }
   }
 
-    //overtime
+  //overtime
   async getOvertimeRecords(): Promise<any[]> {
     try {
       const { data, error } = await this.supabase
@@ -173,7 +173,8 @@ import { BehaviorSubject, Observable, Timestamp, timestamp } from 'rxjs';
       throw error;
     }
   }
-      //leave requests
+  
+  //leave requests
   async getLeaveRequests() {
     const { data, error } = await this.supabase.from('leave_requests').select('* , profile(email)');
     if (error) {
@@ -194,7 +195,6 @@ import { BehaviorSubject, Observable, Timestamp, timestamp } from 'rxjs';
       }
     return data;
   }
-
   async updateLeaveBalance(requestId: number, newBalance: number) {
     const { data, error } = await this.supabase
         .from('leave_requests')
@@ -207,26 +207,47 @@ import { BehaviorSubject, Observable, Timestamp, timestamp } from 'rxjs';
     }
     return { data };
   }
-  async getScheduleAdjustmentRequests() {
-    const { data, error } = await this.supabase.from('schedule_adjustment_requests').select('* , profile(email)');
-    if (error) {
-      console.error('Error fetching leave requests:', error);
-      return [];
-    }
-    return data;
-  }
-  async updateScheduleAdjustmentRequestStatus(requestId: number, newStatus: 'Pending' | 'Approved' | 'Rejected') {
-    const { data, error } = await this.supabase
-         .from('schedule_adjustment_requests')
-         .update({ status: newStatus })
-         .eq('id', requestId);
+
+  //work schedules
+  async getWorkSchedules(): Promise<any[]> {
+    try {
+      const { data, error } = await this.supabase
+        .from('work_schedule')
+        .select('*')
+        .order('employee_id', { ascending: true });
 
       if (error) {
-        console.error('Error updating leave request status:', error);
-        return null;
+        throw error;
       }
-    return data;
+      console.log('Fetched data from Supabase:', data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching work schedules from Supabase:', error);
+      throw error;
+    }
   }
+  async updateWorkSchedule(WorkScheduleData: {
+    work_schedule: string;
+    work_days: string;
+    work_hours: string;
+  }): Promise<{ data: any; error: any }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('work_schedule')
+        .update(WorkScheduleData)
+        .eq('employee_id', WorkScheduleData);
+
+      if (error) {
+        console.error('Error updating work schedule in Supabase:', error);
+        return { data: null, error }; // Return the error as is
+      }
+      return { data, error };
+    } catch (error) {
+      console.error('An unexpected error occurred while updating work schedule:', error);
+      return { data: null, error }; // Return the error as is
+    }
+  }
+  
 
 
   

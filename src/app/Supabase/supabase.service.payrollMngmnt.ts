@@ -256,5 +256,20 @@ async insertMeritOrViolation(record: {
       }
   }
 
+  //payroll report
+  async getPayrollReport() {
+    const { data, error } = await this.supabase
+    .from('payroll_report')
+    .select('*');
+    
+    return { data, error };
+  }
+  async generatePayrollReport(data: any) {
+    const { data: insertedData, error } = await this.supabase
+      .from('payroll_report')
+      .insert(data);
+    return { data: insertedData, error };
+  }
+
   
 }
