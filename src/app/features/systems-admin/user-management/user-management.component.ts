@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from 'src/app/Supabase/supabase.service';
 import { SidebarComponent } from 'src/app/shared/sidebar/sidebar.component';
+import { SideDrawerComponent } from './side-drawer/side-drawer.component';
 
 // functions called for html
 
@@ -60,31 +61,8 @@ interface AuditLogEntry {
 @Component({
   selector: 'app-user-management',
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarComponent],
+  imports: [CommonModule, FormsModule, SidebarComponent, SideDrawerComponent],
   templateUrl: './user-management.component.html',
-  template:
-  `
-    <button class="btn-primary" (click)="openIdTemplateDialog()">Generate ID Template</button>
-
-    <div *ngFor="let employee of employeeList" class="employee-entry">
-      <label>
-        <input type="checkbox" [(ngModel)]="employee.selected" />
-        {{ employee.firstName }} {{ employee.surname }} - {{ employee.position }}
-      </label>
-    </div>
-
-    <button class="btn-primary" (click)="printSelectedIds()">Print Selected IDs</button>
-
-    <app-id-template-dialog 
-      *ngIf="showIdTemplateDialog"
-      [employeeList]="employeeList" 
-      (close)="showIdTemplateDialog = false">
-    </app-id-template-dialog>
-  `,
-  styles: [
-    `.btn-primary { margin-top: 10px; }`,
-    `.employee-entry { margin: 5px 0; }`
-  ],
   styleUrls: ['./user-management.component.css']
 })
 
@@ -103,6 +81,7 @@ export class UserManagementComponent implements OnInit {
   showEditPopup = false;
   employees: any[] = [];
   roles: any[] = [];
+  selectedEmployee: any = null; //Store the selected employee for editing
 
   showAccessRightsPopup = false;
   showAddDepartmentPopup = false;
@@ -171,6 +150,15 @@ export class UserManagementComponent implements OnInit {
   assignedEmployees: string[] = ['Kobe Bryant', 'Alice Guo', 'Carlo Sotto', 'Harry Roque'];
   showCheckboxes = false;
   logAction: any;
+  
+
+  // Functions for Side Drawer
+  onSideDrawerClose() {
+    this.showModal = false;
+    this.selectedEmployee = null;
+    this.loadEmployees()
+  }
+  
 
   addNewRole() {
     this.showCheckboxes = !this.showCheckboxes;
@@ -354,6 +342,7 @@ cancelEdit() {
     this.showModal = !this.showModal;
     if (this.showModal) {
       this.generateRandomPassword();
+      this.selectedEmployee = null;
     } else {
       this.resetForm();
     }
@@ -1117,7 +1106,7 @@ cancelEdit() {
   }
 
   // ticketStatus(ticket: Ticket){
-  //   ticket.status = !ticket;
+  //   ticket.status = !ticket;f
   //   ticket.status = ticket.status? 'Open' : 'Closed' : 'In-progress';
   // }
 
@@ -1219,7 +1208,7 @@ nextPage() {
     }
   }
 
-  editUser(user: User) {
+  editUser(user: any) {
     this.employee = {
       email: user.email,
       password: user.password, // Change this line to use the user's password
