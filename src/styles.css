@@ -11,11 +11,24 @@
 @tailwind utilities; */
 
 *{
-  font-family: 'SF Pro Display', sans-serif;
+  /* font-family: 'SF Pro Display', sans-serif; */
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  height: auto;
 }
 
 p {
   margin: 0 !important;
+}
+
+html {
+  height: 100dvh;
+  max-height: 100dvh;
+  width: 100dvw;
+  max-width: 100dvw;
+  overflow-y: hidden;
 }
 
 body {
@@ -27,6 +40,10 @@ body {
     font-family: 'SF Pro Display', sans-serif;
     overflow: hidden;
     position: relative;
+    height: 100%;
+    max-height: 100%;
+    width: 100%;
+    max-width: 100%;
   }
 
   .custom-scrollbar::-webkit-scrollbar {

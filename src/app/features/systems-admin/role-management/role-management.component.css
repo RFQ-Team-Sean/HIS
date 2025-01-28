@@ -8,3 +8,7 @@
   align-items: center;
   font-size: 1.25rem;
 }
+
+#dropdown-menu > * {
+  grid-row: span 1;
+}

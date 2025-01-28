@@ -1,11 +1,11 @@
-<div class="relative flex w-screen h-full overflow-hidden">
+<div class="flex w-full h-full overflow-y-clip custom-scrollbar">
   <!-- Sidebar -->
-  <app-sidebar></app-sidebar>
+  <app-sidebar class="z-[110] w-16"></app-sidebar>
 
   <!-- Main Content -->
-  <div class="pl-14 relative flex flex-col flex-1 overflow-auto bg-gray-50">
-    <app-header></app-header>
-    <div class="flex-1 w-full pb-6">
+  <div class="relative flex flex-col flex-1 bg-gray-50 w-full h-full">
+    <app-header class="sticky top-0 z-[100] w-full"></app-header>
+    <div class="flex-1 w-full h-full min-h-0 max-h-full overflow-y-auto custom-scrollbar">
       <router-outlet></router-outlet>
     </div>
   </div>
