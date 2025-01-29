@@ -1,6 +1,5 @@
-<div class="flex flex-col h-screen">
-
-    <div class="flex p-10">
+<div class="flex flex-col h-full w-full">
+    <div class="flex">
       <div class="flex flex-col flex-grow gap-4 w-[80%]">
         <div class="animated-gradient-bg shadow-lg w-full h-56 rounded-lg p-5 flex items-center justify-between relative">
           <div class="flex-1">
@@ -13,7 +12,7 @@
           <img *ngIf="!hasTimedIn" src="https://i.ibb.co/dm89vhZ/6469146.png" alt="Descriptive Alt Text" class="w-52 h-52 object-cover absolute bottom-0 right-28" />
           <img *ngIf="hasTimedIn" src="https://i.ibb.co/f41vqWh/6488733.png" alt="Descriptive Alt Text" class="w-52 h-52 object-cover absolute bottom-0 right-28" />
         </div>
-        
+
         <!-- Dashboard Metric Nodes -->
         <div class="flex w-full justify-between gap-4">
           <!-- Total Employees -->
@@ -22,7 +21,7 @@
               <p class="font-bold text-xl text-gray-500">Total Employees</p>
               <p class="font-bold text-2xl text-black">{{ totalEmployees }}</p>
             </div>
-          </div> 
+          </div>
 
           <!-- Active Users -->
           <div class="flex-1 flex flex-col justify-center shadow-lg bg-white h-32 rounded-lg relative">
@@ -45,16 +44,16 @@
               <p class="font-bold text-2xl text-black">28</p>  <!-- PLACEHOLDER DATA -->
             </div>
           </div>
-          
+
         </div>
         <!-- Requests Table -->
         <div class="flex w-full justify-between gap-4">
-          <div class="bg-white shadow-lg h-80 w-[100%] rounded-lg p-5 flex items-center justify-between relative"> 
-                  
+          <div class="bg-white shadow-lg h-80 w-[100%] rounded-lg p-5 flex items-center justify-between relative">
+
           </div>
         </div>
       </div>
-    
+
       <!-- Right pink container -->
       <div class="shadow-lg bg-white w-[25%] h-[100%] ml-4 rounded-lg p-4 border border-gray-200">
         <!-- Navigation -->
@@ -68,7 +67,7 @@
             &gt;
           </button>
         </div>
-      
+
         <!-- Days of the week -->
         <div class="grid grid-cols-7 text-center text-sm font-medium mb-2">
           <div class="p-2">Sun</div>
@@ -79,7 +78,7 @@
           <div class="p-2">Fri</div>
           <div class="p-2">Sat</div>
         </div>
-      
+
         <!-- Calendar days -->
           <div class="grid grid-cols-7 gap-1 text-center text-sm">
             <!-- Days of previous month -->
@@ -100,12 +99,11 @@
           </div>
       </div>
     </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+

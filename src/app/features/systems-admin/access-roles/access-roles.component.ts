@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from 'src/app/Supabase/supabase.service';
@@ -150,6 +150,26 @@ export class AccessRolesComponent implements OnInit {
     this.showCheckboxes = !this.showCheckboxes;
   }
 
+  isDropdownOpen : boolean = false;
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  @HostListener('document:click', ['$event'])
+    // Listen for document clicks to handle dropdown and modal visibility
+      onDocumentClick(event: MouseEvent): void {
+        const target = event.target as HTMLElement;
+
+        // Close the dropdown if the click is outside the dropdown menu and button
+        if (!target.closest('#dropdown-menu') && !target.closest('#dropdown-button') && this.isDropdownOpen) {
+          this.toggleDropdown();
+        }
+
+        // Close the add role modal if the click is outside the button and modal
+        else if (this.showRolePopup && !target.closest('#add-role-modal') && !target.closest('#add-role-button')) {
+          this.cancelRolePopup();
+        }
+      }
 
   showRolePopup: boolean = false;
   newManageRole: string = '';
@@ -168,6 +188,16 @@ export class AccessRolesComponent implements OnInit {
   selectedCount: number = 0;
 
   sortDirection: 'none' | 'asc' | 'desc' = 'none';
+  currentSorting(): string {
+    switch (this.sortDirection) {
+      case 'asc':
+        return 'Ascending';
+      case 'desc':
+        return 'Descending';;
+      default:
+        return 'Default';
+    }
+  }
 
   onSortChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;

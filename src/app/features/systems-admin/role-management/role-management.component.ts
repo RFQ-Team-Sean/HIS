@@ -18,7 +18,7 @@ interface User {
   department: string;
   position: string;
   type: string;
-  status: string;
+  status: string | 'Undefined';
   access: boolean;
   selected?: boolean;
   dateAdded?: Date;
@@ -587,7 +587,7 @@ cancelEdit() {
     this.loadRoles();
   }
 
-    async loadAssignedUsers(role: { role_id: number; role_name: string }): Promise<void> {
+    async loadAssignedUsers(role: { role_id: number; role_name: string; }): Promise<void> {
       this.assignedRole = role;
       console.log('Loading assigned users for role:', this.assignedRole);
 
