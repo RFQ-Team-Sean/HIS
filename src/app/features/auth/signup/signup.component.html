@@ -1,0 +1,43 @@
+<!-- signup component-->
+<div class="w-full px-0 flex flex-col justify-between h-full items-center py-10 top-0">
+    <div class="flex flex-col w-full gap-2">
+<p class="font-martel-bold text-2xl text-blue-500">
+    {{header}}
+</p>
+<!-- SIGN UP FORM -->
+<form class="flex flex-col gap-0">
+    <app-form-inputs
+        label="Name"
+        id="name"
+        type="text"
+        name="name"
+        placeholder="Input your full name"
+    ></app-form-inputs>
+    <app-form-inputs
+        label="Email"
+        id="email"
+        type="email"
+        name="email"
+        placeholder="yourmail@gmail.com"
+    ></app-form-inputs>
+    <app-form-inputs
+        label="Password"
+        id="password"
+        type="password"
+        name="password"
+        placeholder="Input your password"
+    ></app-form-inputs>
+    <button type="submit" class="flex justify-center items-center w-full bg-blue-500 hover:bg-blue-400 text-white py-3 rounded-md font-montserrat-bold text-sm">
+        Create Account
+    </button>
+</form>
+<!-- REDIRECT TO SIGNIN -->
+    @if(slide) {
+        <p class="text-black text-xs font-montserrat text-center">Already have an account?
+            <button (click)="onToggleSlide()" class="text-blue-500 font-montserrat-semibold w-32 rounded-lg text-primary-text-tw text-left">
+                Create Account
+            </button>
+            </p>
+        }
+</div>
+</div>

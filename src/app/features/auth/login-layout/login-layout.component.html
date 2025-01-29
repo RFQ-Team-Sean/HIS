@@ -1,68 +1,39 @@
+<!-- login-layout component -->
 <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
 <div class="gradient-background">
   <div class="cursor-gradient" (mousemove)="onMouseMove($event)">
-    <div class="relative flex flex-col items-center justify-center min-h-screen">
-
-      <!-- Text and logo at the top -->
-      <div class="absolute top-7 text-center w-full">
-        <div class="flex items-center justify-center">
-          <img src="assets/LOGO-main.png" alt="Logo" class="h-8 w-8 mr-2 drop-shadow-lg">
-          <span class="text-white inline-flex items-center drop-shadow-lg">Quanby IT Solutions Inc.</span>
-        </div>
-      </div>
-
-      <!-- Container for the login box -->
-      <div class="flex bg-white h-4/6 shadow-lg rounded-lg overflow-hidden w-[70%]">
-
-        <!-- Left side for SVG illustration (hidden on small screens) -->
-        <div class="md:flex basis-[65%] justify-center align-center flex-col bg-[#E9ECF1]">
-          <!-- SVG image centered within its container -->
-          <img src="assets/laptopgirl.svg" alt="laptopgirl" class="object-contain h-[60%] mx-10">
-
-          <!-- Paragraph below the SVG image -->
-          <p class="text-center p-5 text-gray-600 text-balance -mb-5">Kindly input your account credentials to access<br> the <strong>Human Resource Information System.</strong></p>
-        </div>
-
-        <!-- Right side for the login form -->
-        <div class="flex basis-[35%] justify-center align-center flex-col ml-9 mr-9 bg-white">
-          <!-- Welcome text -->
-          <p class="text-3xl font-black text-black text-center">Welcome Back!</p>
-
-          <!-- Error message alert -->
-          <div *ngIf="errorMessage" class="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-            {{ errorMessage }}
+    <div class="w-dvw h-dvh flex justify-center items-center border-none">
+      <div class="w-[70%] h-[80%] relative rounded-[2rem] overflow-hidden">
+          <!-- Base Container (Rounded Outer) -->
+          <div class="w-full h-full bg-white flex flex-col justify-end items-center relative"></div>
+  
+          <!-- Sliding Left Panel (No Rounded Corners Inside) -->
+          <div class="w-1/2 h-full bg-gray-100 absolute top-0 right-0 duration-300 flex flex-col 
+              justify-center items-center px-10 transition-all" 
+              [class.translate-x-px]="!slide" [class.-translate-x-full]="slide">
+              
+              <img src="assets/quanby-brandbook-1.png" class="h-auto mb-5" alt="Quanby Brand Logo">
+              <p class="font-bold text-xl text-gray-800 text-center">Human Resources<br>Information System</p>
           </div>
-
-          <!-- Login form -->
-          <form (ngSubmit)="onSubmit()">
-            <!-- Email input field -->
-            <div class="mt-4">
-              <label for="email" class="block text-gray-600 p-1">Email</label>
-              <input type="email" id="email" [(ngModel)]="email" name="email" class="w-full h-10 px-4 py-2 mt-1 border-none bg-[#E9ECF1] rounded-md focus:bg-custom-gradient outline-none" required>
-            </div>
-
-            <!-- Password input field -->
-            <div class="mt-4">
-              <label for="password" class="block text-gray-600 p-1">Password</label>
-              <input type="password" id="password" [(ngModel)]="password" name="password" class="w-full h-10 px-4 py-2 mt-1 border-none bg-[#E9ECF1] rounded-md focus:bg-custom-gradient outline-none" required>
-            </div>
-
-            <!-- Submit button -->
-            <div class="flex items-center justify-center mt-5">
-              <button type="submit" [disabled]="isLoading" class="w-full h-10 px-4 py-2 mt-2 border-none rounded-md text-white bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300">
-                <span *ngIf="!isLoading" class="font-medium">Log In</span>
-                <span *ngIf="isLoading">Logging in...</span>
-              </button>
-            </div>
-            <div class="mt-4 flex">
-              <button type="button" class="border-none rounded-md underline text-blue-700" (click)="submitTicket()">
-                Submit a Ticket
-              </button>
-              <ng-container #popupHostContainer></ng-container>
-            </div>
-          </form>
-        </div>
+  
+          <!-- Sliding Right Panel (No Rounded Corners Inside) -->
+          <div class="w-1/2 h-full bg-white absolute top-0 duration-300 flex flex-col
+              justify-center px-16 border-none transition-all"
+              [class.-translate-x-px]="!slide" [class.translate-x-full]="slide">
+  
+              <div class="w-full h-full relative">
+                  @if (!slide) {
+                      <app-signin [slide]="slide" (toggleSlide)="slideInOut()"></app-signin>
+                  } @else {
+                      <app-signup [slide]="slide" (toggleSlide)="slideInOut()"></app-signup>
+                  }
+              </div>
+  
+          </div>
       </div>
+  </div>
+  </div>
+  </div>
 
       <!-- Bottom section for contact info -->
       <div class="absolute bottom-5 text-center w-full">
@@ -98,6 +69,3 @@
           </button>
         </div>
       </div>
-    </div>
-  </div>
-</div> 

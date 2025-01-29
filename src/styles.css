@@ -14,9 +14,7 @@
   font-family: 'SF Pro Display', sans-serif;
 }
 
-p {
-  margin: 0 !important;
-}
+
 
 body {
     background-color: #f7f8ff; /* Light gray background color */
@@ -41,10 +39,21 @@ body {
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background: rgb(183, 183, 183);
-    border-radius: 50px;
+    
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
     background: transparent;
   }
 
+  app-form-inputs {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  
+  app-form-inputs, .input-wrapper {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}

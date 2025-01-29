@@ -1,0 +1,12 @@
+app-form-inputs {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  
+  app-form-inputs, .input-wrapper {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
