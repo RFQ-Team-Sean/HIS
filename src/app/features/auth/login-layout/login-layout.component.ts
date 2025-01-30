@@ -5,6 +5,8 @@ import { Router, RouterLink } from '@angular/router';
 import { LoginAttemptService } from 'src/app/services/login-attempt.service';
 import { SubmitTicketComponent } from 'src/app/shared/submit-ticket/submit-ticket.component';
 import { SidebarService } from 'src/app/services/sidebar.service';
+import { SignupComponent } from "../signup/signup.component";
+import { SigninComponent } from "../signin/signin.component";
 
 interface ModuleRoute {
   path: string;
@@ -15,11 +17,16 @@ interface ModuleRoute {
 @Component({
   selector: 'app-login-layout',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, SignupComponent, SigninComponent, FormsModule],
   templateUrl: './login-layout.component.html',
   styleUrls: ['./login-layout.component.css']
 })
 export class LoginLayoutComponent {
+    slide = false;
+  slideInOut() {
+    this.slide = !this.slide;
+  }
+
   private router = inject(Router);
   private loginAttemptService = inject(LoginAttemptService);
   private sidebarService = inject(SidebarService); // Inject SidebarService
@@ -50,21 +57,8 @@ export class LoginLayoutComponent {
       label: 'Employee',
       role: 'employee',
     },
-    {
-      path: 'payroll',
-      label: 'Payroll',
-      role: 'payroll',
-    },
-    {
-      path: 'time-attendance',
-      label: 'Time & Attendance',
-      role: 'time-attendance',
-    },
-    {
-      path: 'recruitment',
-      label: 'Recruitment',
-      role: 'recruitment',
-    },
+    
+
     // ... add other modules similarly
   ];
 
@@ -76,6 +70,7 @@ export class LoginLayoutComponent {
     { email: 'time-attendance@example.com', password: 'time123', role: 'time-attendance' },
     { email: 'recruitment@example.com', password: 'recruitment123', role: 'recruitment' }
   ];
+
 
   displayCustomPopup(): void {
     this.popupHostContainerRef.clear();
