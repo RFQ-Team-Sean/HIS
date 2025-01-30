@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from 'src/app/Supabase/supabase.service';
@@ -151,14 +151,22 @@ export class UserManagementComponent implements OnInit {
   showCheckboxes = false;
   logAction: any;
   
+  @Input() isOpen = false;
+  @Output() close = new EventEmitter<void>();
+  isDrawerOpen = false;
 
-  // Functions for Side Drawer
-  onSideDrawerClose() {
-    this.showModal = false;
-    this.selectedEmployee = null;
-    this.loadEmployees()
+  openDrawer() {
+    this.generateRandomPassword(); // Generate a random password here before the side drawer opens
+    this.selectedEmployee = {...this.employee}; //Update the selectedEmployee with the generated password
+    this.isDrawerOpen = true; //opens the drawer
+    //this.showModal = true;
   }
-  
+
+  closeDrawer() {
+    this.isDrawerOpen = false;
+    this.showModal = false;
+    this.close.emit();
+  }
 
   addNewRole() {
     this.showCheckboxes = !this.showCheckboxes;
@@ -339,13 +347,11 @@ cancelEdit() {
   constructor(private supabaseService: SupabaseService) {}
 
   toggleModal() {
-    this.showModal = !this.showModal;
     if (this.showModal) {
-      this.generateRandomPassword();
-      this.selectedEmployee = null;
-    } else {
-      this.resetForm();
-    }
+      //this.generateRandomPassword();
+      this.selectedEmployee = {...this.employee};
+      this.showModal = true;
+    } 
   }
 
   generateRandomPassword(length: number = 8) {
@@ -1267,7 +1273,8 @@ nextPage() {
   }
 
 closeModal() {
-  this.isModalVisible = false;
+  this.showModal = false;
+  this.resetForm();
 }
 
 // Functions for Sorting alphabetically, ascending and descending order
