@@ -9,6 +9,6 @@
   font-size: 1.25rem;
 }
 
-#dropdown-menu > * {
-  grid-row: span 1;
+div#dropdown-menu {
+  transition-behavior: allow-discrete;
 }

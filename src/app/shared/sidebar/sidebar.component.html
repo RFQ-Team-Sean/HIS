@@ -33,20 +33,20 @@
           </button>
 
           <!-- First level sub-menu items -->
-          <ul *ngIf="item.subItems && item.isExpanded && isExpanded"
-              class="flex flex-col gap-1 ml-4 border-l border-gray-200 w-auto">
+            <ul [ngClass]="{'h-0 overflow-clip': !(item.subItems && item.isExpanded && isExpanded), 'h-[calc(auto,_size)]': item.subItems && item.isExpanded && isExpanded}"
+              class="flex flex-col gap-1 ml-4 border-l border-gray-200 w-auto transition-all ease-linear">
             <li *ngFor="let subItem of item.subItems" class="w-auto">
               <!-- Sub-menu item -->
               <button
-                (click)="subItem.subItems ? toggleSubSubMenu(subItem) : navigateTo(subItem.route)"
-                class="flex items-center w-full py-2 px-4 text-sm rounded-lg hover:bg-blue-50 hover:text-black transition-all ease-linear">
-                <span class="material-icons text-sm mr-2">{{subItem.icon || 'subdirectory_arrow_right'}}</span>
-                <span class="whitespace-nowrap overflow-hidden">{{subItem.name}}</span>
-                <!-- Arrow icon for items with sub-subitems -->
-                <span *ngIf="subItem.subItems" class="material-icons ml-auto text-xs"
-                      [ngClass]="{'rotate-180': subItem.isExpanded}">
-                  expand_more
-                </span>
+              (click)="subItem.subItems ? toggleSubSubMenu(subItem) : navigateTo(subItem.route)"
+              class="flex items-center w-full py-2 px-4 text-sm rounded-lg hover:bg-blue-50 hover:text-black transition-all ease-linear">
+              <span class="material-icons text-sm mr-2">{{subItem.icon || 'subdirectory_arrow_right'}}</span>
+              <span class="whitespace-nowrap overflow-hidden">{{subItem.name}}</span>
+              <!-- Arrow icon for items with sub-subitems -->
+              <span *ngIf="subItem.subItems" class="material-icons ml-auto text-xs"
+                  [ngClass]="{'rotate-180': subItem.isExpanded}">
+                expand_more
+              </span>
               </button>
 
               <!-- Second level sub-menu items -->

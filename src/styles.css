@@ -46,22 +46,33 @@ body {
     max-width: 100%;
   }
 
-  .overflow-y-auto::-webkit-scrollbar {
+  .overflow-y-auto::-webkit-scrollbar,
+  .overflow-x-auto::-webkit-scrollbar,
+  .overflow-auto::-webkit-scrollbar,
+  .custom-scrollbar::-webkit-scrollbar {
     width: 5px;
     height: 10px;
   }
 
-  .overflow-y-auto {
+  .overflow-y-auto,
+  .overflow-x-auto,
+  .overflow-auto,
+  .custom-scrollbar {
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: 5x;  /* Firefox */
+    scrollbar-width: 5px;  /* Firefox */
   }
 
-  .overflow-y-auto::-webkit-scrollbar-thumb {
+  .overflow-y-auto::-webkit-scrollbar-thumb,
+  .overflow-x-auto::-webkit-scrollbar-thumb,
+  .overflow-auto::-webkit-scrollbar-thumb,
+  .custom-scrollbar::-webkit-scrollbar-thumb {
     background: rgb(183, 183, 183);
     border-radius: 50px;
   }
 
-  .overflow-y-auto::-webkit-scrollbar-track {
+  .overflow-y-auto::-webkit-scrollbar-track,
+  .overflow-x-auto::-webkit-scrollbar-track,
+  .overflow-auto::-webkit-scrollbar-track,
+  .custom-scrollbar::-webkit-scrollbar-track {
     background: transparent;
   }
-

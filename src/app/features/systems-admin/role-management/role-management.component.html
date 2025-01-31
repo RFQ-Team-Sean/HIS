@@ -1,8 +1,8 @@
-<main class="flex flex-col h-full w-full gap-6">
+<main class="flex flex-col h-full w-full gap-4">
   <!-- TOP SECTION -->
   <section class="bg-[rgba(83,_79,_235,_1)] w-full rounded-xl px-4 py-6 text-white">
     <span class="block font-semibold text-2xl">Role Management</span>
-    <span class="block font-extralight">HRIS > User Management > Access Rights </span>
+    <span class="block font-extralight">HRIS > User Management > Role Management </span>
   </section>
   <!-- UTILITY SECTION -->
   <section class="flex gap-4 w-full rounded-lg">
@@ -25,16 +25,16 @@
         <span class="ms-2">{{ currentSorting() || 'Sort' }} </span>
         <span class="material-icons transition-all ease-linear" [ngClass]="{ 'rotate-180' : isDropdownOpen }">arrow_drop_down</span>
       </button>
-      <div id="dropdown-menu" class="grid grid-cols-1 gap-1 absolute right-0 mt-2 w-auto bg-white border rounded-xl shadow-lg transition-all ease-in-out p-1 overflow-hidden"
-        [ngClass]="isDropdownOpen ? 'grid' : 'hidden'">
-        <button value="none" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="onSortChange($event); toggleDropdown()">Default</button>
-        <button value="asc" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="onSortChange($event); toggleDropdown()">Ascending (A-Z)</button>
-        <button value="desc" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="onSortChange($event); toggleDropdown()">Descending (Z-A)</button>
+      <div id="dropdown-menu" class="flex flex-col gap-1 absolute right-0 mt-2 w-full min-h-0 bg-white border rounded-xl shadow-lg transition-all ease-in-out p-1 overflow-clip"
+        [ngClass]="isDropdownOpen ? 'h-[calc-size(auto,_size)] flex' : 'h-0 p-0 border-none rounded-none bg-none'">
+        <button value="none" [disabled]="!isDropdownOpen" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="onSortChange($event); toggleDropdown()">Default</button>
+        <button value="asc" [disabled]="!isDropdownOpen" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="onSortChange($event); toggleDropdown()">Ascending (A-Z)</button>
+        <button value="desc" [disabled]="!isDropdownOpen" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="onSortChange($event); toggleDropdown()">Descending (Z-A)</button>
       </div>
     </div>
     <!-- MANAGE BUTTON -->
     <button class="flex justify-between items-center gap-2 text-white rounded-xl px-4 py-2 whitespace-nowrap text-center transition duration-300"
-      [ngClass]="{'bg-blue-500 hover:bg-blue-600': !isManageMode, 'bg-green-500 hover:bg-green-600': isManageMode}" (click)="toggleManageMode()">
+      [ngClass]="isManageMode ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-500 hover:bg-blue-600'" (click)="toggleManageMode()">
       {{ isManageMode ? 'Save Changes' : 'Manage Roles' }}
       <span class="material-icons">{{ isManageMode ? 'save' : 'manage_accounts' }}</span>
     </button>
@@ -51,16 +51,17 @@
           <span class="material-icons">add</span>
         </button>
       </div>
-      <div class="flex flex-col gap-2 w-full max-h-full mt-0 overflow-y-auto custom-scrollbar">
+      <div class="flex flex-col gap-1 w-full max-h-full mt-0 overflow-y-auto">
         <ng-container *ngIf="searchroletab.length > 0; else noMatch">
-          <div class="flex gap-8 items-center pl-0 hover:bg-gray-100 h-9 text-gray-600 text-sm font-light rounded-xl cursor-pointer"
+          <div class="group flex flex-1 gap-4 items-center pl-0 hover:bg-gray-100 min-h-12 text-gray-600 text-sm font-normal rounded-xl cursor-pointer overflow-clip"
           *ngFor="let role of searchroletab" [ngClass]="{'bg-gray-100': selectedRole.role_id === role.role_id}" (click)="onRoleClick(role); selectRoleForEditing(role)">
+          <div class="bg-transparent group-hover:bg-blue-600 min-w-[4px] h-full"></div>
             <div class="flex-1 overflow-clip">
               <ng-container *ngIf="editingRoleId === role.role_id; else displayRoleName">
-              <input [(ngModel)]="role.role_name" class="border rounded outline-none" />
+              <input [(ngModel)]="role.role_name" class="border rounded outline-none p-1" />
               </ng-container>
               <ng-template #displayRoleName>
-                <span class="inline-flex h-full w-full ps-4 py-2 ms-[4px] hover:border-s-4 hover:border-[rgba(83,_79,_235,_1)]">
+                <span class="inline-flex h-full w-full ps-4 py-2">
                   {{ role.role_name }}
                 </span>
               </ng-template>
@@ -96,26 +97,27 @@
         </ng-template>
       </div>
     </div>
-    <!-- SELECTED ROLE AREA -->
+
+    <!-- ASSIGNED USERS AREA -->
     <div *ngIf="assignedRole" class="flex flex-col gap-4 flex-1 border h-full rounded-xl bg-white px-10 py-6">
       <div class="flex justify-between items-center">
         <p class=" text-2xl font-semibold text-black">{{ assignedRole.role_name }}</p>
         <!-- ASSIGN BUTTON -->
         <button class="flex justify-between items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-2xl hover:bg-blue-600" (click)="openAssignPopup()" *ngIf="!isManageMode">
           <span class="ms-0">Assign</span>
-          <span class="material-icons" style="font-size: 1rem;">assignment_add</span>
+          <span class="material-icons text-[1rem]">assignment_add</span>
         </button>
       </div>
       <div class="h-full min-h-0 overflow-y-auto overflow-x-hidden custom-scrollbar border">
 
-      <table class="table-fixed w-full h-full min-h-full rounded-xl text-black border-2 border-red-600 border-separate border-spacing-x-0 border-spacing-y-2 px-2">
+      <table class="table-fixed w-full h-full min-h-full rounded-xl text-black border-none border-separate border-spacing-x-0 border-spacing-y-2 px-2">
         <thead class="rounded-xl table-header-group w-full">
           <tr class="bg-[rgba(245,_245,_245,_1)] rounded-xl h-12 border-spacing-2">
-            <td class="text-center">Profile</td>
-            <td>Name</td>
-            <td>Status</td>
-            <td>Access</td>
-            <td></td>
+            <th class="text-center rounded-l-xl">Profile</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Access</th>
+            <th class="rounded-r-xl"></th>
           </tr>
         </thead>
         <tbody>

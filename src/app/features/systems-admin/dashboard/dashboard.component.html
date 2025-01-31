@@ -1,109 +1,165 @@
-<div class="flex flex-col h-full w-full">
-    <div class="flex">
-      <div class="flex flex-col flex-grow gap-4 w-[80%]">
-        <div class="animated-gradient-bg shadow-lg w-full h-56 rounded-lg p-5 flex items-center justify-between relative">
-          <div class="flex-1">
-            <p class="text-white text-3xl">Welcome, <span class="font-bold">Lean Jedfrey</span>!</p>
-            <p *ngIf="!hasTimedIn" class="text-lg text-white w-[55%] break-words mt-2">We’re excited to see you here today. Before you dive into your tasks, we’d like to remind you to <span class="font-bold">log your time</span> if you haven’t done so already.</p>
-            <p *ngIf="hasTimedIn" class="text-lg text-white w-[50%] break-words mt-2">You’ve successfully clocked in and are all set for a productive workday. We’re excited to have you with us today!</p>
-            <button *ngIf="!hasTimedIn" (click)="timeIn()" class="bg-white px-6 py-2 rounded text-blue-500 text-lg font-bold mt-4">Time In</button>
-            <button *ngIf="hasTimedIn" (click)="timeOut()" class="bg-white px-6 py-2 rounded text-red-500 text-lg font-bold mt-4">Time Out</button>
-          </div>
-          <img *ngIf="!hasTimedIn" src="https://i.ibb.co/dm89vhZ/6469146.png" alt="Descriptive Alt Text" class="w-52 h-52 object-cover absolute bottom-0 right-28" />
-          <img *ngIf="hasTimedIn" src="https://i.ibb.co/f41vqWh/6488733.png" alt="Descriptive Alt Text" class="w-52 h-52 object-cover absolute bottom-0 right-28" />
+<main class="flex h-full w-full">
+  <div class="flex flex-col flex-grow gap-4 w-[80%]">
+    <!-- TOP SECTION -->
+    <section class="bg-[rgba(83,_79,_235,_1)] w-full h-min rounded-xl px-6 py-6 flex justify-between gap-2 text-white">
+      <div class="flex flex-col">
+        <span class="block">{{ getCurrentDateTime() }}</span>
+        <span class="text-white text-2xl">Human Resources Information System</span>
+        <span class="block font-extralight">HRIS > Dashboard </span>
+      </div>
+      <div>
+        <button *ngIf="!hasTimedIn" (click)="timeIn()" class="bg-white px-6 py-2 h-min rounded text-blue-500 text-lg font-bold mt-4">Time In</button>
+        <button *ngIf="hasTimedIn" (click)="timeOut()" class="bg-white px-6 py-2 h-min rounded text-red-500 text-lg font-bold mt-4">Time Out</button>
+      </div>
+      <!-- <img *ngIf="!hasTimedIn" src="https://i.ibb.co/dm89vhZ/6469146.png" alt="Descriptive Alt Text" class="w-52 h-52 object-cover absolute bottom-0 right-28" />
+      <img *ngIf="hasTimedIn" src="https://i.ibb.co/f41vqWh/6488733.png" alt="Descriptive Alt Text" class="w-52 h-52 object-cover absolute bottom-0 right-28" /> -->
+    </section>
+
+    <!-- Dashboard Metric Nodes -->
+    <section class="flex w-full h-min justify-evenly gap-4">
+      <!-- Total Employees -->
+      <div class="flex-1 flex flex-col gap-2 justify-center bg-white h-min rounded-xl relative border p-4">
+        <div class="flex justify-between items-center">
+          <span class="material-icons aspect-square inline-block border rounded-lg p-2 text-[rgba(83,_79,_235,_1)]">business_center</span>
+          <p class="font-semibold text-3xl text-black">{{ totalEmployees }}</p>
         </div>
-
-        <!-- Dashboard Metric Nodes -->
-        <div class="flex w-full justify-between gap-4">
-          <!-- Total Employees -->
-          <div class="flex-1 flex flex-col justify-center shadow-lg bg-white h-32 rounded-lg relative">
-            <div class="flex flex-col p-5 justify-center">
-              <p class="font-bold text-xl text-gray-500">Total Employees</p>
-              <p class="font-bold text-2xl text-black">{{ totalEmployees }}</p>
-            </div>
-          </div>
-
-          <!-- Active Users -->
-          <div class="flex-1 flex flex-col justify-center shadow-lg bg-white h-32 rounded-lg relative">
-            <div class="flex flex-col p-5 justify-center">
-              <p class="font-bold text-xl text-gray-500">Active Users</p>
-              <p class="font-bold text-2xl text-black">3</p> <!-- PLACEHOLDER DATA -->
-            </div>
-          </div>
-          <!-- Locked Accounts -->
-          <div class="flex-1 shadow-lg bg-white h-32 rounded-lg relative">
-            <div class="flex flex-col justify-center p-5 h-full">
-              <p class="font-bold text-xl text-gray-500">Locked Accounts</p>
-              <p class="font-bold text-2xl text-black">30</p> <!-- PLACEHOLDER DATA -->
-            </div>
-          </div>
-          <!-- Total Departments -->
-          <div class="flex-1 shadow-lg bg-white h-32 rounded-lg relative">
-            <div class="flex flex-col justify-center p-5 h-full">
-              <p class="font-bold text-xl text-gray-500">Total Departments</p>
-              <p class="font-bold text-2xl text-black">28</p>  <!-- PLACEHOLDER DATA -->
-            </div>
-          </div>
-
-        </div>
-        <!-- Requests Table -->
-        <div class="flex w-full justify-between gap-4">
-          <div class="bg-white shadow-lg h-80 w-[100%] rounded-lg p-5 flex items-center justify-between relative">
-
-          </div>
-        </div>
+        <p class="font-light text-base text-gray-500">Total Employees</p>
       </div>
 
-      <!-- Right pink container -->
-      <div class="shadow-lg bg-white w-[25%] h-[100%] ml-4 rounded-lg p-4 border border-gray-200">
-        <!-- Navigation -->
-         <div class="bg-blue-50 p-4 rounded">
-        <div class="flex items-center justify-between mb-4">
-          <button (click)="changeMonth(-1)" class="text-black-500 font-bold hover:text-blue-700 transition duration-150 ease-in-out">
-            &lt;
-          </button>
-          <span class="text-lg font-semibold">{{ currentMonth + 1 }}/{{ currentYear }}</span>
-          <button (click)="changeMonth(1)" class="text-black-500 font-bold hover:text-blue-700 transition duration-150 ease-in-out">
-            &gt;
-          </button>
+      <!-- Active Users -->
+      <div class="flex-1 flex flex-col gap-2 justify-center bg-white h-min rounded-xl relative border p-4">
+        <div class="flex justify-between items-center">
+          <span class="material-icons aspect-square inline-block border rounded-lg p-2 text-[rgba(83,_79,_235,_1)]">event_seat</span>
+          <p class="font-semibold text-3xl text-black">3</p> <!-- PLACEHOLDER DATA -->
         </div>
+        <p class="font-light text-base text-gray-500">Active Users</p>
+      </div>
 
-        <!-- Days of the week -->
-        <div class="grid grid-cols-7 text-center text-sm font-medium mb-2">
-          <div class="p-2">Sun</div>
-          <div class="p-2">Mon</div>
-          <div class="p-2">Tue</div>
-          <div class="p-2">Wed</div>
-          <div class="p-2">Thu</div>
-          <div class="p-2">Fri</div>
-          <div class="p-2">Sat</div>
+      <!-- Locked Accounts -->
+      <div class="flex-1 flex flex-col gap-2 justify-center bg-white h-min rounded-xl relative border p-4">
+        <div class="flex justify-between items-center">
+          <span class="material-icons aspect-square inline-block border rounded-lg p-2 text-[rgba(83,_79,_235,_1)]">report</span>
+          <p class="font-semibold text-3xl text-black">30</p> <!-- PLACEHOLDER DATA -->
         </div>
+        <p class="font-light text-base text-gray-500">Locked Accounts</p>
+      </div>
 
-        <!-- Calendar days -->
-          <div class="grid grid-cols-7 gap-1 text-center text-sm">
-            <!-- Days of previous month -->
-            <div *ngFor="let day of daysInPrevMonth" class="p-2 opacity-50"></div>
-              <!-- Days of current month -->
-              <div *ngFor="let day of daysInMonth" [ngClass]="{'bg-blue-200': isToday(day, currentMonth, currentYear)}" class="p-2 rounded-lg hover:bg-blue-100 transition duration-150 ease-in-out"> {{ day }}</div>
-              <!-- Days of next month -->
-              <div *ngFor="let day of daysInNextMonth" class="p-2 opacity-50"></div>
-            </div>
-          </div>
-          <p class="text-xl font-bold pt-4">Monthly Schedules</p>
-          <div class="h-44 overflow-y-auto borde rounded-md custom-scrollbar">
-            <div *ngFor="let holiday of holidays" class="flex items-center justify-between">
-              <p class="text-lg">{{ holiday.parameter_name }}</p>
-              <p class="text-sm text-gray-400 ml-2">{{ holiday.parameter_date | date:'MM/dd/yy' }}</p>
-            </div>
-            <p *ngIf="holidays.length === 0" class="text-gray-500">No schedules this month</p>
-          </div>
+      <!-- Total Departments -->
+      <div class="flex-1 flex flex-col gap-2 justify-center bg-white h-min rounded-xl relative border p-4">
+        <div class="flex justify-between items-center">
+          <span class="material-icons aspect-square inline-block border rounded-lg p-2 text-[rgba(83,_79,_235,_1)]">domain</span>
+          <p class="font-semibold text-3xl text-black">28</p> <!-- PLACEHOLDER DATA -->
+        </div>
+        <p class="font-light text-base text-gray-500">Total Departments</p>
+      </div>
+    </section>
+    <section class="flex gap-4 w-full rounded-lg">
+      <!-- SEARCH BAR -->
+      <div class="relative w-[20%]">
+        <input type="text" placeholder="Search Roles..." class="w-full h-full py-2 px-4 border rounded-xl border-gray-300" />
+        <span class="material-icons absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">search</span>
+      </div>
+      <!-- FILTER BUTTON -->
+      <button class="flex justify-between items-center gap-2 bg-white border py-2 px-4 rounded-xl hover:bg-gray-100">
+        Filter
+        <span class="material-icons">filter_list</span>
+      </button>
+      <!-- DIVIDER -->
+      <div class="flex-1"></div>
+      <!-- SORTING DROPDOWN -->
+      <div class="relative w-max">
+        <button id="dropdown-button" class="inline-flex bg-white hover:bg-gray-100 rounded-xl border px-4 py-2 whitespace-nowrap items-center justify-between gap-4 w-36"
+        (click)="toggleDropdown()">
+          <span class="ms-2">{{ currentSorting() || 'Sort' }} </span>
+          <span class="material-icons transition-all ease-linear" [ngClass]="{ 'rotate-180' : isDropdownOpen }">arrow_drop_down</span>
+        </button>
+        <div id="dropdown-menu" class="flex flex-col gap-1 absolute right-0 mt-2 w-full min-h-0 bg-white border rounded-xl shadow-lg transition-all ease-in-out p-1 overflow-clip z-10"
+          [ngClass]="isDropdownOpen ? 'h-[calc-size(auto,_size)] flex' : 'h-0 p-0 border-none rounded-none bg-none'">
+          <button value="none" [disabled]="!isDropdownOpen" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="toggleDropdown()">Default</button>
+          <button value="asc" [disabled]="!isDropdownOpen" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="toggleDropdown()">Ascending (A-Z)</button>
+          <button value="desc" [disabled]="!isDropdownOpen" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="toggleDropdown()">Descending (Z-A)</button>
+        </div>
+      </div>
+    </section>
+    <!-- Requests Table -->
+    <section class="flex w-full h-full justify-between gap-4">
+      <div class="bg-white h-full w-[100%] rounded-lg p-5 flex items-start justify-between relative border">
+        <table class="w-full text-left">
+          <thead>
+            <tr>
+              <th class="border-b-2 p-2">Date</th>
+              <th class="border-b-2 p-2">Employee Name</th>
+              <th class="border-b-2 p-2">Employment Type</th>
+              <th class="border-b-2 p-2">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border-b p-2">01/01/2023</td>
+              <td class="border-b p-2">John Doe</td>
+              <td class="border-b p-2">Full-Time</td>
+              <td class="border-b p-2">Approved</td>
+            </tr>
+            <tr>
+              <td class="border-b p-2">02/01/2023</td>
+              <td class="border-b p-2">Jane Smith</td>
+              <td class="border-b p-2">Part-Time</td>
+              <td class="border-b p-2">Pending</td>
+            </tr>
+            <tr>
+              <td class="border-b p-2">03/01/2023</td>
+              <td class="border-b p-2">Alice Johnson</td>
+              <td class="border-b p-2">Contract</td>
+              <td class="border-b p-2">Rejected</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- Right pink container -->
+  <section class="bg-white w-[25%] h-[100%] ml-4 rounded-lg p-4 border border-gray-200">
+    <!-- Navigation -->
+    <div class="bg-blue-50 p-4 rounded">
+      <div class="flex items-center justify-between mb-4">
+        <button (click)="changeMonth(-1)" class="text-black-500 font-bold hover:text-blue-700 transition duration-150 ease-in-out">
+          &lt;
+        </button>
+        <span class="text-lg font-semibold">{{ currentMonth + 1 }}/{{ currentYear }}</span>
+        <button (click)="changeMonth(1)" class="text-black-500 font-bold hover:text-blue-700 transition duration-150 ease-in-out">
+          &gt;
+        </button>
+      </div>
+
+      <!-- Days of the week -->
+      <div class="grid grid-cols-7 text-center text-sm font-medium mb-2">
+        <div class="p-2">Sun</div>
+        <div class="p-2">Mon</div>
+        <div class="p-2">Tue</div>
+        <div class="p-2">Wed</div>
+        <div class="p-2">Thu</div>
+        <div class="p-2">Fri</div>
+        <div class="p-2">Sat</div>
+      </div>
+
+      <!-- Calendar days -->
+      <div class="grid grid-cols-7 gap-1 text-center text-sm">
+        <!-- Days of previous month -->
+        <div *ngFor="let day of daysInPrevMonth" class="p-2 opacity-50"></div>
+        <!-- Days of current month -->
+        <div *ngFor="let day of daysInMonth" [ngClass]="{'bg-blue-200': isToday(day, currentMonth, currentYear)}" class="p-2 rounded-lg hover:bg-blue-100 transition duration-150 ease-in-out"> {{ day }}</div>
+        <!-- Days of next month -->
+        <div *ngFor="let day of daysInNextMonth" class="p-2 opacity-50"></div>
       </div>
     </div>
-
-
-
-
-
-
-
-
+    <p class="text-xl font-bold pt-4">Monthly Schedules</p>
+    <div class="h-44 overflow-y-auto borde rounded-md custom-scrollbar">
+      <div *ngFor="let holiday of holidays" class="flex items-center justify-between">
+        <p class="text-lg">{{ holiday.parameter_name }}</p>
+        <p class="text-sm text-gray-400 ml-2">{{ holiday.parameter_date | date:'MM/dd/yy' }}</p>
+      </div>
+      <p *ngIf="holidays.length === 0" class="text-gray-500">No schedules this month</p>
+    </div>
+  </section>
+</main>

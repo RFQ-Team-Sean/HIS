@@ -442,10 +442,10 @@ export class SupabaseService {
       console.error('Error fetching assigned users:', error.message);
       return [];
     }
-  return data.map(user => ({
-    user_id: user.user_id,
-    ...user.profile
-  }));
+    return data.map(user => ({
+      user_id: user.user_id,
+      ...user.profile
+    }));
   }
 
   async getRoleById(roleId: number): Promise<PostgrestSingleResponse<any>> {
@@ -1492,7 +1492,7 @@ async getParameters() {
     merits: string,
     date_of_record_v: string | null,
     date_of_record_m: string | null,
-    user_id: number 
+    user_id: number
   }) {
     const { data, error } = await this.supabase
       .from('merits_and_violations')
@@ -1501,10 +1501,10 @@ async getParameters() {
         merits: record.merits,
         date_of_record_v: record.date_of_record_v,
         date_of_record_m: record.date_of_record_m,
-        user_id: record.user_id 
+        user_id: record.user_id
       }]);
 
-    return { data, error }; 
+    return { data, error };
   }
 
   async getProfiles() {
@@ -1512,7 +1512,7 @@ async getParameters() {
       .from('profile')
       .select('*');
 
-    return { data, error }; 
+    return { data, error };
   }
 
   async getRecords() {
@@ -1523,7 +1523,7 @@ async getParameters() {
     return { data, error };
   }
 
-  //loan info 
+  //loan info
     //for fetching loan data
     async getLoanInfo() {
       const { data, error } = await this.supabase
@@ -1536,10 +1536,10 @@ async getParameters() {
         totalPaid,
         status,
         lastPayment`);
-        
+
         return { data, error};
     }
-  
+
       //for adding new loan
     async addLoan(loanData: {
       loan_name: string;
@@ -1554,23 +1554,23 @@ async getParameters() {
           .from('loan_information')
           .insert([loanData])
           .select();
-  
+
         if (error) {
           console.error('Error adding loan to Supabase:', error.message || error);
           throw error; // Re-throw for further handling in the component
         }
-        
+
         return { data, error };
       } catch (error) {
         console.error('An unexpected error occurred while adding the loan:', error);
         throw error; // Re-throw for further handling in the component
       }
     }
-  
+
       //for editing loan
     async editLoan(loanData: any) {
       console.log('Updating loan with data:', loanData);
-  
+
       //checking if loan id is correct
       if (loanData.loan_id === loanData.loan_id ){
         console.log('ID match')
@@ -1578,7 +1578,7 @@ async getParameters() {
       else{
         console.log("ID mismatch")
       }
-  
+
       try {
         const { data, error } = await this.supabase
           .from('loan_information')
@@ -1589,26 +1589,26 @@ async getParameters() {
             status: loanData.status,
           })
           .eq('loan_id', loanData.loan_id);
-    
+
           if (error) {
             console.error('Error updating loan in Supabase:', error);
             return { data: null, error }; // Return the error as is
           }
-      
+
           return { data, error: null }; // Return the successful response with data
         } catch (e) {
           console.error('Unexpected error during loan update:', e);
           return { data: null, error: e }; // Return the error object directly
         }
       }
-  
+
           //for deleting loan
     async deleteLoan(loanId: number) {
        const { data, error } = await this.supabase
           .from('loan_information') // Ensure this is your actual table name
           .delete()
           .eq('loan_id', loanId); // Deleting based on loan_id
-          
+
            if (error) {
           // Log the error to the console
             console.error(`Error deleting loan with loan_id ${loanId}:`, error);
@@ -1616,10 +1616,10 @@ async getParameters() {
              else {
             console.log(`Successfully deleted loan with loan_id ${loanId}:`, data);
             }
-          
+
           return { data, error }; // Return the response data and any potential error
        }
-  
+
         //for deleting loans by batch
     async deleteLoansBatch(loanIds: number []): Promise<{data: any; error: any}>{
         try{
@@ -1669,7 +1669,7 @@ async getParameters() {
         .from('profile')
         .update({ leave_balance: newBalance })
         .eq('user_id', requestId);
-    
+
     if (error) {
         console.error('Error updating leave balance:', error);
         return { error };
@@ -1701,15 +1701,15 @@ async getParameters() {
   }
 
   async getFileUrl(filePath: string, bucketName: string): Promise<string | null> {
-    
+
       const response = await this.supabase.storage.from(bucketName).getPublicUrl(filePath);
-      
+
       if (!response.data) {
-          console.error('Error retrieving file URL:', response);  
+          console.error('Error retrieving file URL:', response);
           return null;
       }
       return response.data.publicUrl;
-      
+
   }
 
   async getProfilesForRequests() {
@@ -1738,7 +1738,7 @@ async getParameters() {
         }
 
         // Delete the request entry from the table
-        const { data, error } = await this.supabase 
+        const { data, error } = await this.supabase
             .from('schedule_adjustment_requests')
             .delete()
             .eq('id', requestId);

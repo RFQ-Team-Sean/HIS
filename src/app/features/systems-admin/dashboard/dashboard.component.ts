@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { SupabaseService } from 'src/app/Supabase/supabase.service';
@@ -37,7 +37,54 @@ export class ADashboardComponent implements OnInit {
     await this.checkTimeInStatus();
     await this.fetchHolidays(); // Make sure this line is present
     this.generateCalendar();
+    this.updateCurrentDateTime(); // Start updating the current date and time
   }
+
+  currentDateTime: string = this.getCurrentDateTime();
+
+
+  getCurrentDateTime(): string {
+    const now = new Date();
+    const date = now.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+    const time = now.toLocaleTimeString();
+    return `${date} | ${time}`;
+  }
+
+  sortDirection: 'none' | 'asc' | 'desc' = 'none';
+  currentSorting(): string {
+    switch (this.sortDirection) {
+      case 'asc':
+        return 'Ascending';
+      case 'desc':
+        return 'Descending';;
+      default:
+        return 'Default';
+    }
+  }
+
+  isDropdownOpen : boolean = false;
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  @HostListener('document:click', ['$event'])
+    // Listen for document clicks to handle dropdown and modal visibility
+      onDocumentClick(event: MouseEvent): void {
+        const target = event.target as HTMLElement;
+
+        // Close the dropdown if the click is outside the dropdown menu and button
+        if (!target.closest('#dropdown-menu') && !target.closest('#dropdown-button') && this.isDropdownOpen) {
+          this.toggleDropdown();
+        }
+      }
+
+  updateCurrentDateTime() {
+    setInterval(() => {
+      this.currentDateTime = this.getCurrentDateTime();
+    }, 1000);
+  }
+
+  metrics: { label: string, value: number }[] = [];
 
   generateCalendar() {
     this.daysInMonth = [];
@@ -53,7 +100,7 @@ export class ADashboardComponent implements OnInit {
 
     // Get the number of days in the previous month
     const daysInPrevMonth = new Date(this.currentYear, this.currentMonth, 0).getDate();
-    
+
     // Fill in the days of the previous month
     for (let i = daysInPrevMonth - this.firstDayOfMonth + 1; i <= daysInPrevMonth; i++) {
       this.daysInPrevMonth.push(i);
@@ -226,7 +273,7 @@ export class ADashboardComponent implements OnInit {
       console.error('Error loading parameters:', error);
       this.showMessage('Failed to load parameters', true);
     }
-  }  
+  }
 
   showMessage(msg: string, isError: boolean = false) {
     this.message = msg;
@@ -241,19 +288,20 @@ export class ADashboardComponent implements OnInit {
     try {
       const allHolidays = await this.supabaseService.getHolidays();
       console.log('All fetched holidays:', allHolidays);
-  
+
       const currentMonth = new Date().getMonth();
       this.holidays = allHolidays.filter(holiday => {
         const holidayDate = new Date(holiday.parameter_date);
         return holidayDate.getMonth() === currentMonth;
       });
-  
+
       console.log('Holidays for current month:', this.holidays);
     } catch (error) {
       console.error('Error fetching holidays:', error);
     }
-  }  
-  
+  }
+
 // REQUESTS
 
 }
+
