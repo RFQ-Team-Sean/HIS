@@ -27,6 +27,7 @@ interface Employee {
   department: string;
   type: string;
   photoUrl?: string; // Add a new property for photo URL
+  employee_id?: string; // Add employee ID
 }
 
 interface AuditLogEntry {
@@ -67,6 +68,7 @@ export class SideDrawerComponent {
     position: '',
     department: '',
     type: '',
+    employee_id: '',
   };
 
   isEditing = false; // Flag to check if the form is in edit mode
@@ -80,6 +82,7 @@ export class SideDrawerComponent {
   roles: any[] = []; // List of roles
   showPasswordGeneratedMessage: boolean = false; // Flag to show password generated message
   
+  idPreview: string = 'Select Department to Preview ID'; //Defaut Preview Message
 
   openDrawer() {
     this.isDrawerOpen = true;
@@ -101,8 +104,54 @@ export class SideDrawerComponent {
       this.resetForm();
     }
   }
+  
+//Script for Employee ID to automatically generate Sequence number
+  async getNextSequenceNumber(department: string): Promise<number> {
+    try {
+      // Fetch the count of employees in the same department for the current year
+      const { data, error } = await this.supabaseService
+        .getClient()
+        .from('profile')
+        .select('*', { count: 'exact', head: true })
+        .eq('department', department)
+        .gte('created_at', new Date(new Date().getFullYear(), 0, 1).toISOString()) // Employees created this year
+        .lt('created_at', new Date(new Date().getFullYear() + 1, 0, 1).toISOString());
+  
+      if (error) {
+        console.error('Error fetching employee count:', error);
+        return 1; // Default to 1 if there's an error
+      }
+  
+      // Increment the count by 1 for the next employee
+      return (data?.length || 0) + 1;
+    } catch (error) {
+      console.error('Unexpected error fetching sequence number:', error);
+      return 1; // Default to 1 if there's an error
+    }
+  }
+  //Method to update the ID Preview
+  async updateIdPreview() {
+    if (!this.employee.department) {
+      this.idPreview = 'Select Department to Preview ID';
+      return;
+    }
+    const deptCode = this.employee.department.slice(0, 3).toUpperCase();
+    const yearPart = new Date().getFullYear().toString().slice(-2);
+
+    //Fetch the next sequence number
+    const seqNum = await this.getNextSequenceNumber(this.employee.department);
+
+    //Format: DEP-YY-001
+    this.idPreview = `${deptCode}-${yearPart}-${seqNum.toString().padStart(4, '0')}`;
+  }
+
+  //Method when the department changes
+  onDepartmentChange() {
+    this.updateIdPreview();
+  }
 
   constructor(private supabaseService: SupabaseService) {}
+
   // Add Audit Log Creation Logic
   private async createAuditLogWithRetry(userId: string, data: any, retries = 3): Promise<void> {
     for (let i = 0; i < retries; i++) {
@@ -126,16 +175,17 @@ export class SideDrawerComponent {
     }
   }
 
-  // Add Employee Creation Logic
-  toggleModal() {
-    this.showModal = !this.showModal;
-    if (this.showModal) {
+  // UNUSED FUNCTION, 
+  //toggleModal() {
+    //this.showModal = !this.showModal;
+    //if (this.showModal) {
       //this.generateRandomPassword();
       //this.selectedEmployee = null;
-    } else {
-      this.resetForm();
-    }
-  }
+    //} else {
+     // this.resetForm();
+    //}
+ // }
+
   //Password Generation Logic
   generateRandomPassword(length: number = 8) {
     const lowercase = 'abcdefghijklmnopqrstuvwxyz';
@@ -174,7 +224,7 @@ export class SideDrawerComponent {
     this.showPassword = !this.showPassword;
   }
   
-  //Form Submission Logic
+  //Form Submission Logic, THIS IS WHERE THE CREATE, EDIT, UPDATE FOR EMPLOYEE DATA TAKES PLACE, DOES NOT UPDATE AT THE MOMENT AFTER ADDING EMPLOYEE ID NUMBER GENERATOR FUNCTION
   async onSubmit() {
     console.log('Submitting employee data:', this.employee);
     // Validate email
@@ -183,9 +233,16 @@ export class SideDrawerComponent {
       alert('Please enter a valid email address.');
       return;
     }
+    // Department input is required before generating Employee ID
+    if (!this.employee.department){
+      alert('Department is required to generate Employee ID');
+      return;
+    }
     try {
       // Upload photo if a file is selected
       const photoUrl = await this.uploadPhoto();
+      // Employee Error Handling
+      const { data, error } = await this.supabaseService.createEmployee(this.employee);
       // Prepare employee data
       const employeeData = {
         first_name: this.employee.firstname,
@@ -245,6 +302,7 @@ export class SideDrawerComponent {
     }
   
     //Logic for new employee creation
+    //
     try {
       const photoUrl = await this.uploadPhoto();
   
@@ -303,7 +361,6 @@ export class SideDrawerComponent {
   
       this.users.push(newUser);
       this.filteredUsers = [...this.users];
-      this.toggleModal();
       this.resetForm();
       alert('Employee created successfully.');
   
@@ -313,7 +370,7 @@ export class SideDrawerComponent {
     }
   }
 
-  //Add Photo Upload Logic
+  //Add Photo Upload Logic, DOES NOT WORK TOO
   async uploadPhoto(): Promise<string | null> {
     if (!this.photoFile) {
       console.log('No photo file selected');
@@ -354,7 +411,8 @@ export class SideDrawerComponent {
       surname: '',
       position: '',
       department: '',
-      type: ''
+      type: '',
+      employee_id: ''
     };
     this.photoPreviewUrl = 'https://via.placeholder.com/200x200';
     this.photoFile = null;
@@ -362,7 +420,7 @@ export class SideDrawerComponent {
     this.showFileSizeAlert = false;
   }
 
-  //Photo Chanage Handler
+  //Photo Change Handler
   onPhotoChange(event: any) {
     const file = event.target.files[0];
     const maxSizeInBytes = 50 * 1024 * 1024; // 50MB

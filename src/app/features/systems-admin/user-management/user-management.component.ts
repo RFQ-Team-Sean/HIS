@@ -35,7 +35,8 @@ interface Employee {
   type: string;
   photoUrl?: string; // Add a new property for photo URL
   selected?: boolean; // Used for ID selection
-  idGenerated?: boolean; // Track ID generation status
+  idGenerated?: boolean; // Track ID generation status -- unused code
+  employee_id: string; // Add employee_id
 }
 
 interface Ticket {
@@ -144,7 +145,8 @@ export class UserManagementComponent implements OnInit {
     surname: '',
     position: '',
     department: '',
-    type: ''
+    type: '',
+    employee_id: '',
   };
 
   assignedEmployees: string[] = ['Kobe Bryant', 'Alice Guo', 'Carlo Sotto', 'Harry Roque'];
@@ -165,6 +167,7 @@ export class UserManagementComponent implements OnInit {
   closeDrawer() {
     this.isDrawerOpen = false;
     this.showModal = false;
+    this.loadEmployees(); //Refreshes the list after closing 
     this.close.emit();
   }
 
@@ -817,7 +820,8 @@ cancelEdit() {
       surname: '',
       position: '',
       department: '',
-      type: ''
+      type: '',
+      employee_id: ''
     };
     this.photoPreviewUrl = 'https://via.placeholder.com/200x200';
   }
@@ -1223,7 +1227,8 @@ nextPage() {
       surname: user.name.split(' ')[user.name.split(' ').length - 1],
       position: user.position,
       department: user.department,
-      type: user.type
+      type: user.type,
+      employee_id: user.employee_id
     };
     this.photoPreviewUrl = user.profile;
     this.showModal = true;
