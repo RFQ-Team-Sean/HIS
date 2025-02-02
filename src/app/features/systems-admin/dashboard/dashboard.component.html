@@ -55,8 +55,8 @@
     </section>
     <section class="flex gap-4 w-full rounded-lg">
       <!-- SEARCH BAR -->
-      <div class="relative w-[20%]">
-        <input type="text" placeholder="Search Roles..." class="w-full h-full py-2 px-4 border rounded-xl border-gray-300" />
+      <div class="relative w-full basis-[30%]">
+        <input type="text" placeholder="Search name, role, department..." class="w-full h-full py-2 px-4 border border-gray-200 rounded-xl text-sm pr-4 whitespace-nowrap" />
         <span class="material-icons absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">search</span>
       </div>
       <!-- FILTER BUTTON -->
@@ -74,7 +74,7 @@
           <span class="material-icons transition-all ease-linear" [ngClass]="{ 'rotate-180' : isDropdownOpen }">arrow_drop_down</span>
         </button>
         <div id="dropdown-menu" class="flex flex-col gap-1 absolute right-0 mt-2 w-full min-h-0 bg-white border rounded-xl shadow-lg transition-all ease-in-out p-1 overflow-clip z-10"
-          [ngClass]="isDropdownOpen ? 'h-[calc-size(auto,_size)] flex' : 'h-0 p-0 border-none rounded-none bg-none'">
+          [ngClass]="isDropdownOpen ? 'h-[calc-size(auto,_size)] flex' : 'h-0 invisible'">
           <button value="none" [disabled]="!isDropdownOpen" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="toggleDropdown()">Default</button>
           <button value="asc" [disabled]="!isDropdownOpen" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="toggleDropdown()">Ascending (A-Z)</button>
           <button value="desc" [disabled]="!isDropdownOpen" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="toggleDropdown()">Descending (Z-A)</button>

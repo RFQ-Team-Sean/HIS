@@ -26,7 +26,7 @@
         <span class="material-icons transition-all ease-linear" [ngClass]="{ 'rotate-180' : isDropdownOpen }">arrow_drop_down</span>
       </button>
       <div id="dropdown-menu" class="flex flex-col gap-1 absolute right-0 mt-2 w-full min-h-0 bg-white border rounded-xl shadow-lg transition-all ease-in-out p-1 overflow-clip"
-        [ngClass]="isDropdownOpen ? 'h-[calc-size(auto,_size)] flex' : 'h-0 p-0 border-none rounded-none bg-none'">
+        [ngClass]="isDropdownOpen ? 'h-[calc-size(auto,_size)]' : 'h-0 invisible'">
         <button value="none" [disabled]="!isDropdownOpen" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="onSortChange($event); toggleDropdown()">Default</button>
         <button value="asc" [disabled]="!isDropdownOpen" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="onSortChange($event); toggleDropdown()">Ascending (A-Z)</button>
         <button value="desc" [disabled]="!isDropdownOpen" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="onSortChange($event); toggleDropdown()">Descending (Z-A)</button>
@@ -53,7 +53,7 @@
       </div>
       <div class="flex flex-col gap-1 w-full max-h-full mt-0 overflow-y-auto">
         <ng-container *ngIf="searchroletab.length > 0; else noMatch">
-          <div class="group flex flex-1 gap-4 items-center pl-0 hover:bg-gray-100 min-h-12 text-gray-600 text-sm font-normal rounded-xl cursor-pointer overflow-clip"
+          <div class="group flex flex-1 gap-4 items-center pr-4 hover:bg-gray-100 min-h-12 text-gray-600 text-sm font-normal rounded-md cursor-pointer overflow-clip"
           *ngFor="let role of searchroletab" [ngClass]="{'bg-gray-100': selectedRole.role_id === role.role_id}" (click)="onRoleClick(role); selectRoleForEditing(role)">
           <div class="bg-transparent group-hover:bg-blue-600 min-w-[4px] h-full"></div>
             <div class="flex-1 overflow-clip">
