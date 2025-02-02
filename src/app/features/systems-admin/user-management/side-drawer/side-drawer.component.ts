@@ -4,6 +4,42 @@ import { FormsModule } from '@angular/forms';
 import { SupabaseService } from 'src/app/Supabase/supabase.service';
 import { first } from 'rxjs';
 
+interface User {
+  profile: string;
+  name: string;
+  email: string;
+  password: string;
+  department: string;
+  position: string;
+  type: string;
+  status: string;
+  access: boolean;
+  selected?: boolean;
+  dateAdded?: Date;
+}
+
+interface Employee {
+  email: string;
+  firstName: string;
+  middleName: string;
+  surname: string;
+  position: string;
+  department: string;
+  type: string;
+  photoUrl?: string; // Add a new property for photo URL
+}
+
+interface AuditLogEntry {
+  user_id: string;
+  action: string;
+  affected_page: string;
+  parameter: string;
+  old_parameter: string;
+  new_parameter: string;
+  ip_address: string;
+  date: string;
+}
+
 @Component({
   selector: 'app-side-drawer',
   standalone: true,
@@ -16,6 +52,10 @@ export class SideDrawerComponent {
   @Input() employeeData: any;
   @Output() close = new EventEmitter<void>();
   isDrawerOpen = false; // Flag to check if the drawer is open
+
+  users: User[] = [];
+  filteredUsers: User[] = [];
+  paginatedUsers: User[] = [];
   
   // Employee Form Fields
   employee = {
@@ -39,9 +79,11 @@ export class SideDrawerComponent {
   selectedEmployee: any=null; // Selected employee data
   roles: any[] = []; // List of roles
   showPasswordGeneratedMessage: boolean = false; // Flag to show password generated message
+  
 
   openDrawer() {
     this.isDrawerOpen = true;
+    this.showModal = true;
   }
 
   closeDrawer() {
@@ -51,9 +93,9 @@ export class SideDrawerComponent {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['EmployeeData'] && this.employeeData) {
-      //Populate the form with employee data
-      this.employee = {...this.employeeData};
+    if (changes['employeeData'] && this.employeeData) {
+      // Populate the form with employee data
+      this.employee = { ...this.employeeData };
       this.isEditing = true;
     } else {
       this.resetForm();
@@ -61,14 +103,35 @@ export class SideDrawerComponent {
   }
 
   constructor(private supabaseService: SupabaseService) {}
+  // Add Audit Log Creation Logic
+  private async createAuditLogWithRetry(userId: string, data: any, retries = 3): Promise<void> {
+    for (let i = 0; i < retries; i++) {
+      try {
+        await this.supabaseService.createAuditLog({
+          user_id: userId,
+          affected_page: 'User Management',
+          action: 'Create Employee',
+          old_parameter: null,
+          new_parameter: JSON.stringify(data)
+        });
+        console.log('Audit log created successfully');
+        return;
+      } catch (error) {
+        console.error(`Attempt ${i + 1} failed to create audit log:`, error);
+        if (i === retries - 1) {
+          throw error; // Throw the error after all retries have failed
+        }
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second before retrying
+      }
+    }
+  }
 
-  // Add Form Submission Logic
-
+  // Add Employee Creation Logic
   toggleModal() {
     this.showModal = !this.showModal;
     if (this.showModal) {
-      this.generateRandomPassword();
-      this.selectedEmployee = null;
+      //this.generateRandomPassword();
+      //this.selectedEmployee = null;
     } else {
       this.resetForm();
     }
@@ -99,6 +162,8 @@ export class SideDrawerComponent {
     password = password.split('').sort(() => Math.random() - 0.5).join('');
 
     this.employee.password = password;
+
+    console.log('Password Generated:', this.employee.password); // For debugging 
     
     // Provide visual feedback
     this.showPasswordGeneratedMessage = true;
@@ -112,18 +177,15 @@ export class SideDrawerComponent {
   //Form Submission Logic
   async onSubmit() {
     console.log('Submitting employee data:', this.employee);
-  
     // Validate email
     if (!this.isValidEmail(this.employee.email)) {
       console.error('Invalid email format');
       alert('Please enter a valid email address.');
       return;
     }
-  
     try {
       // Upload photo if a file is selected
       const photoUrl = await this.uploadPhoto();
-  
       // Prepare employee data
       const employeeData = {
         first_name: this.employee.firstname,
@@ -137,7 +199,6 @@ export class SideDrawerComponent {
         access: true,
         photo_url: photoUrl || this.photoPreviewUrl
       };
-  
       // Create or update employee
       let response;
       if (this.isEditing) {
@@ -147,22 +208,107 @@ export class SideDrawerComponent {
         console.log('Creating employee:', employeeData);
         response = await this.supabaseService.createEmployee(employeeData);
       }
-  
       if (response.error) {
         console.error('Error:', response.error);
         alert(`Error ${this.isEditing ? 'updating' : 'creating'} employee. Please try again.`);
         return;
-      }
-  
+      }  
       console.log('Employee saved successfully:', response.data);
-      alert(`Employee ${this.isEditing ? 'updated' : 'created'} successfully.`);
-  
+      alert(`Employee ${this.isEditing ? 'updated' : 'created'} successfully.`);  
       // Close the drawer and reset the form
       this.closeDrawer();
-      this.resetForm();
-  
+      this.resetForm();  
     } catch (error) {
       console.error('Error in onSubmit:', error);
+      alert('An unexpected error occurred. Please try again.');
+    }
+  }
+
+  //Employee Creation Logic
+  async createEmployee(employee: any) {
+    console.log('Received employee data:', employee);
+  
+    if (!this.isValidEmail(employee.email)) {
+      console.error('Invalid email format');
+      alert('Please enter a valid email address.');
+      return;
+    }
+  
+    // Check for required fields
+    const requiredFields = ['firstname', 'surname', 'department', 'position', 'type'];
+    for (const field of requiredFields) {
+      if (!employee[field]) {
+        console.error(`Missing required field: ${field}`);
+        alert(`Please fill in the ${field} field.`);
+        return;
+      }
+    }
+  
+    //Logic for new employee creation
+    try {
+      const photoUrl = await this.uploadPhoto();
+  
+      const newEmployee = {
+        profile: photoUrl || this.photoPreviewUrl,
+        email: employee.email,
+        first_name: employee.firstname.trim(),
+        mid_name: employee.midname ? employee.midname.trim() : null,
+        surname: employee.surname.trim(),
+        password: this.generateRandomPassword(12),
+        department: employee.department,
+        position: employee.position,
+        types: employee.type,
+        status: 'Active',
+        access: true
+      };
+  
+      console.log('Sending employee data to Supabase:', newEmployee);
+  
+      const { data, error } = await this.supabaseService.createEmployee(newEmployee);
+  
+      if (error) {
+        console.error('Error from Supabase:', error);
+        alert(`Error creating employee: ${error.message}`);
+        return;
+      }
+  
+      if (!data) {
+        console.error('No data returned from Supabase');
+        alert('Error creating employee: No data returned');
+        return;
+      }
+  
+      console.log('Employee created successfully:', data);
+  
+      // Create audit log
+      try {
+        const userId = await this.supabaseService.getCurrentUserId();
+        await this.createAuditLogWithRetry(userId, data);
+      } catch (auditLogError) {
+        console.error('Error creating audit log:', auditLogError);
+        // Log the error but continue with the process
+      }
+  
+      const newUser: User = {
+        profile: newEmployee.profile,
+        name: `${newEmployee.first_name} ${newEmployee.mid_name ? newEmployee.mid_name + ' ' : ''}${newEmployee.surname}`,
+        email: newEmployee.email,
+        password: '***************',
+        department: newEmployee.department,
+        position: newEmployee.position,
+        type: newEmployee.types,
+        status: newEmployee.status,
+        access: newEmployee.access
+      };
+  
+      this.users.push(newUser);
+      this.filteredUsers = [...this.users];
+      this.toggleModal();
+      this.resetForm();
+      alert('Employee created successfully.');
+  
+    } catch (error) {
+      console.error('Unexpected error creating employee:', error);
       alert('An unexpected error occurred. Please try again.');
     }
   }
@@ -172,20 +318,16 @@ export class SideDrawerComponent {
     if (!this.photoFile) {
       console.log('No photo file selected');
       return null;
-    }
-  
+    }  
     try {
       console.log('Uploading photo:', this.photoFile.name);
       const fileName = `${Date.now()}_${this.photoFile.name}`;
-      const { data, error } = await this.supabaseService.uploadFile('photos', fileName, this.photoFile);
-  
+      const { data, error } = await this.supabaseService.uploadFile('photos', fileName, this.photoFile);  
       if (error) {
         console.error('Supabase upload error:', error);
         throw error;
-      }
-  
-      console.log('Upload response:', data);
-  
+      }  
+      console.log('Upload response:', data);  
       if (data?.path) {
         const fullUrl = `https://vhmftufkipgbxmcimeuq.supabase.co/storage/v1/object/public/photos/${data.path}`;
         console.log('Full photo URL:', fullUrl);
@@ -203,6 +345,7 @@ export class SideDrawerComponent {
 
   //Reset Form Logic
   resetForm() {
+    const currentPassword = this.employee.password; //Store the currently generated password
     this.employee = {
       email: '',
       password: '',
@@ -257,5 +400,7 @@ export class SideDrawerComponent {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   }
+
+  
 
 }
