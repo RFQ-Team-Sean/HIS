@@ -8,12 +8,6 @@ import { SidebarService } from 'src/app/services/sidebar.service';
 import { SignupComponent } from "../signup/signup.component";
 import { SigninComponent } from "../signin/signin.component";
 
-interface ModuleRoute {
-  path: string;
-  label: string;
-  role: string;
-}
-
 @Component({
   selector: 'app-login-layout',
   standalone: true,
@@ -22,14 +16,15 @@ interface ModuleRoute {
   styleUrls: ['./login-layout.component.css']
 })
 export class LoginLayoutComponent {
-    slide = false;
+  slide = false;
+  
   slideInOut() {
     this.slide = !this.slide;
   }
 
   private router = inject(Router);
   private loginAttemptService = inject(LoginAttemptService);
-  private sidebarService = inject(SidebarService); // Inject SidebarService
+  private sidebarService = inject(SidebarService);
 
   @ViewChild('popupHostContainer', { read: ViewContainerRef }) 
   popupHostContainerRef!: ViewContainerRef;
@@ -40,37 +35,6 @@ export class LoginLayoutComponent {
   password = '';
   errorMessage = '';
   isLoading = false;
-
-  protected readonly modules: ModuleRoute[] = [
-    {
-      path: 'admin',
-      label: 'Admin',
-      role: 'admin',
-    },
-    {
-      path: 'hr',
-      label: 'HR',
-      role: 'hr',
-    },
-    {
-      path: 'employee',
-      label: 'Employee',
-      role: 'employee',
-    },
-    
-
-    // ... add other modules similarly
-  ];
-
-  protected readonly mockUsers = [
-    { email: 'admin@example.com', password: 'admin123', role: 'admin' },
-    { email: 'hr@example.com', password: 'hr123', role: 'hr' },
-    { email: 'employee@example.com', password: 'employee123', role: 'employee' },
-    { email: 'payroll@example.com', password: 'payroll123', role: 'payroll' },
-    { email: 'time-attendance@example.com', password: 'time123', role: 'time-attendance' },
-    { email: 'recruitment@example.com', password: 'recruitment123', role: 'recruitment' }
-  ];
-
 
   displayCustomPopup(): void {
     this.popupHostContainerRef.clear();
@@ -119,30 +83,13 @@ export class LoginLayoutComponent {
     this.errorMessage = '';
 
     try {
-      const user = this.mockUsers.find(u => 
-        u.email === this.email && u.password === this.password
-      );
+      console.log('Authentication attempted!');
 
-      if (!user) {
-        this.handleLoginFailure('Invalid email or password. Please try again.');
-        return;
-      }
-
-      console.log('User authenticated!');
       this.errorMessage = '';
       this.loginAttemptService.resetLoginAttempts();
-      localStorage.setItem('userRole', user.role);
 
-      // Set the user role in the SidebarService
-      this.sidebarService.setCurrentModule(user.role); // <-- Add this line
-      console.log('User role set in SidebarService:', user.role);
-
-      const targetModule = this.modules.find(m => m.role === user.role);
-      if (targetModule) {
-        await this.router.navigate([`/${targetModule.path}/dashboard`]);
-      } else {
-        await this.router.navigate([`/${user.role}/dashboard`]);
-      }
+      // Redirect to the dashboard after successful login
+      await this.router.navigate(['/dashboard']);
     } catch (error) {
       console.error('Authentication error:', error);
       this.handleLoginFailure('An error occurred during login. Please try again.');
@@ -150,8 +97,6 @@ export class LoginLayoutComponent {
       this.isLoading = false;
     }
   }
-
-  
 
   private handleLoginFailure(message: string): void {
     this.errorMessage = message;
@@ -165,26 +110,12 @@ export class LoginLayoutComponent {
     return !!localStorage.getItem('userRole');
   }
 
-  getModulesForRole(): ModuleRoute[] {
-    const userRole = localStorage.getItem('userRole');
-    if (!userRole) return [];
-    
-    if (userRole === 'admin') {
-      return this.modules;
-    }
-    
-    return this.modules.filter(module => module.role === userRole);
-  }
-
-  async navigateToModule(path: string): Promise<void> {
+  async navigateToDashboard(): Promise<void> {
     try {
-      // Set the current module before navigation
-      this.sidebarService.setCurrentModule(path);
-      localStorage.setItem('currentModule', path); // Store current module
-      await this.router.navigate([`/${path}/dashboard`]);
+      await this.router.navigate(['/dashboard']);
     } catch (error) {
       console.error('Navigation error:', error);
-      this.errorMessage = 'Error navigating to module. Please try again.';
+      this.errorMessage = 'Error navigating to dashboard. Please try again.';
     }
   }
 
