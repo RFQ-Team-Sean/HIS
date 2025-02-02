@@ -10,16 +10,18 @@ import { FormInputsComponent } from "../../../shared/form-inputs/form-inputs.com
   styleUrl: './signin.component.css'
 })
 export class SigninComponent {
-login() {
-throw new Error('Method not implemented.');
-}
   @Input() slide: boolean = false;
   @Output() toggleSlide = new EventEmitter<void>();
-  header = 'Registration Form';  // Added a default header
-  isLoginClicked: boolean | undefined;
 
-  constructor(private router: Router) {} // Inject Router here
- 
+  email: string = '';
+  password: string = '';
+
+  constructor(private router: Router) {} 
+
+  login() {
+    // Redirect to the admin dashboard
+    this.router.navigate(['/admin/dashboard']);
+  }
 
   onToggleSlide() {
     this.toggleSlide.emit();

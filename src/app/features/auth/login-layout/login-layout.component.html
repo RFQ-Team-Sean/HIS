@@ -58,14 +58,4 @@
         </div>
       </div>
 
-      <!-- Buttons for each module -->
-      <div class="absolute bottom-20 text-center w-full">
-        <div class="flex justify-center space-x-4">
-          <button 
-            *ngFor="let module of modules"
-            class="bg-blue-600 text-white px-4 py-2 rounded-md" 
-            (click)="navigateToModule(module.path)">
-            {{module.label}}
-          </button>
-        </div>
-      </div>
+

@@ -33,15 +33,8 @@ import { SystemsConfigComponent } from './features/systems-admin/systems-config/
 import { AuditTrailComponent } from './features/systems-admin/audit-trail/audit-trail.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    redirectTo: '/login',
-    pathMatch: 'full'
-  },
-  {
-    path: 'login',
-    component: LoginLayoutComponent
-  },
+  {path: '', redirectTo: '/login',pathMatch: 'full'},
+  {path: 'login',component: LoginLayoutComponent},
   {
     path: 'admin',
     component: LayoutComponent,
