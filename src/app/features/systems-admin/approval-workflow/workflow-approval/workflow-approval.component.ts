@@ -35,6 +35,7 @@ export class WorkflowApprovalComponent implements OnInit {
   totalPages: number = 1;
   itemsPerPage: number = 10;
   showPath2: boolean = false;
+  showPath1: boolean = false;
 
   constructor(private router: Router) {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
@@ -134,4 +135,7 @@ export class WorkflowApprovalComponent implements OnInit {
   redirectToPath2() {
     this.showPath2 = true;
   }
+  redirectToPath1() {
+    this.showPath1 = true;
+    }
 } 
