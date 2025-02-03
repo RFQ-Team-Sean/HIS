@@ -42,7 +42,8 @@
   <!-- ROLE MANAGEMENT SECTION -->
   <section class="flex flex-1 gap-6 w-full text-white max-h-full h-full min-h-0">
     <!-- ADD/MANAGE ROLES AREA -->
-    <div class="basis-2/5 h-full max-h-full border rounded-xl bg-white p-10 py-6 flex flex-col gap-4">
+    <div class="basis-2/5 h-full max-h-full border rounded-xl bg-white p-10 flex flex-col gap-6">
+      <!-- ROLE NAME AND ADD ROLE BUTTON -->
       <div class="flex justify-between items-center">
         <p class="text-2xl font-semibold text-black align-middle">Roles</p>
         <button id="add-role-button" class="flex justify-between items-center gap-2 bg-blue-500 text-white px-3 py-2 rounded-xl hover:bg-blue-600"
@@ -51,9 +52,10 @@
           <span class="material-icons">add</span>
         </button>
       </div>
-      <div class="flex flex-col gap-1 w-full max-h-full mt-0 overflow-y-auto">
+      <!-- ROLE LIST -->
+      <div class="flex flex-col gap-0 w-full max-h-full min-h-0 overflow-y-auto border-y border-gray-200 pl-2">
         <ng-container *ngIf="searchroletab.length > 0; else noMatch">
-          <div class="group flex flex-1 gap-4 items-center pr-4 hover:bg-gray-100 min-h-12 text-gray-600 text-sm font-normal rounded-md cursor-pointer overflow-clip"
+          <button class="group flex flex-1 gap-4 items-center pr-4 hover:bg-gray-100 min-h-12 text-gray-600 text-sm font-normal rounded-md w-full overflow-clip border-b"
           *ngFor="let role of searchroletab" [ngClass]="{'bg-gray-100': selectedRole.role_id === role.role_id}" (click)="onRoleClick(role); selectRoleForEditing(role)">
           <div class="bg-transparent group-hover:bg-blue-600 min-w-[4px] h-full"></div>
             <div class="flex-1 overflow-clip">
@@ -73,9 +75,9 @@
               </button>
               </ng-container>
               <ng-template #editIcon>
-              <button (click)="startEdit(role)" class="text-blue-500 hover:text-blue-700" style="padding: 0;">
-                <i class="fa fa-pencil" aria-hidden="true"></i>
-              </button>
+                <button (click)="startEdit(role)" class="text-blue-500 hover:text-blue-700" style="padding: 0;">
+                  <i class="fa fa-pencil" aria-hidden="true"></i>
+                </button>
               </ng-template>
             </div>
             <div *ngIf="isManageMode" class="text-center">
@@ -90,7 +92,7 @@
               </button>
               </ng-template>
             </div>
-          </div>
+          </button>
         </ng-container>
         <ng-template #noMatch>
           <div class="h-9 text-gray-600 text-sm font-light text-center p-4">No matching roles found</div>
@@ -99,7 +101,7 @@
     </div>
 
     <!-- ASSIGNED USERS AREA -->
-    <div *ngIf="assignedRole" class="flex flex-col gap-4 flex-1 border h-full rounded-xl bg-white px-10 py-6">
+    <div *ngIf="assignedRole" class="flex flex-col flex-1 border h-full rounded-xl bg-white p-10 gap-6">
       <div class="flex justify-between items-center">
         <p class=" text-2xl font-semibold text-black">{{ assignedRole.role_name }}</p>
         <!-- ASSIGN BUTTON -->
