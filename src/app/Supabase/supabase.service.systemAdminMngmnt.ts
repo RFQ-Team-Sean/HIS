@@ -456,7 +456,7 @@ export class SupabaseService {
         console.error('Error fetching users:', fetchError);
         throw fetchError;
       }
-  
+
       //send website notifications
       for (const user of users) {
         await this.sendWebsiteNotification(user.employee_id, 'This is a reminder notification.');
