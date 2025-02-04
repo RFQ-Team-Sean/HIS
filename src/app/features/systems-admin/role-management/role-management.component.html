@@ -1,6 +1,6 @@
 <main class="flex flex-col h-full w-full gap-4">
   <!-- TOP SECTION -->
-  <section class="bg-[rgba(83,_79,_235,_1)] w-full rounded-xl px-4 py-6 text-white">
+  <section class="bg-[#534feb] w-full rounded-xl px-4 py-6 text-white">
     <span class="block font-semibold text-2xl">Role Management</span>
     <span class="block font-extralight">HRIS > User Management > Role Management </span>
   </section>
@@ -25,7 +25,7 @@
         <span class="ms-2">{{ currentSorting() || 'Sort' }} </span>
         <span class="material-icons transition-all ease-linear" [ngClass]="{ 'rotate-180' : isDropdownOpen }">arrow_drop_down</span>
       </button>
-      <div id="dropdown-menu" class="flex flex-col gap-1 absolute right-0 mt-2 w-full min-h-0 bg-white border rounded-xl shadow-lg transition-all ease-in-out p-1 overflow-clip"
+      <div id="dropdown-menu" class="flex flex-col gap-1 absolute right-0 mt-2 w-full min-h-0 bg-white border rounded-xl shadow-lg transition-all ease-in-out p-1 overflow-clip z-[100]"
         [ngClass]="isDropdownOpen ? 'h-[calc-size(auto,_size)]' : 'h-0 invisible'">
         <button value="none" [disabled]="!isDropdownOpen" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="onSortChange($event); toggleDropdown()">Default</button>
         <button value="asc" [disabled]="!isDropdownOpen" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full rounded-lg whitespace-nowrap" (click)="onSortChange($event); toggleDropdown()">Ascending (A-Z)</button>
@@ -40,12 +40,12 @@
     </button>
   </section>
   <!-- ROLE MANAGEMENT SECTION -->
-  <section class="flex flex-1 gap-6 w-full text-white max-h-full h-full min-h-0">
+  <section class="flex flex-1 gap-4 w-full text-white max-h-full h-full min-h-0">
     <!-- ADD/MANAGE ROLES AREA -->
-    <div class="basis-2/5 h-full max-h-full border rounded-xl bg-white p-10 flex flex-col gap-6">
+    <div class="basis-2/5 h-full max-h-full border rounded-xl bg-white p-4 flex flex-col gap-4">
       <!-- TITLE AND ADD ROLE BUTTON -->
-      <div class="flex justify-between items-center">
-        <p class="text-2xl font-semibold text-black align-middle">Roles</p>
+      <div class="flex justify-between items-center px-6 h-12">
+        <span class="text-xl font-semibold text-black align-middle">Roles</span>
         <button id="add-role-button" class="flex justify-between items-center gap-2 bg-blue-500 text-white px-3 py-2 rounded-xl hover:bg-blue-600"
                 (click)="openRolePopup()" *ngIf="!isManageMode">
           <span class="ms-2">Add New Role</span>
@@ -53,7 +53,7 @@
         </button>
       </div>
       <!-- ROLE LIST -->
-      <div class="flex flex-col gap-0 w-full max-h-full min-h-0 overflow-y-auto border-y border-gray-200 pl-2">
+      <div class="flex flex-col gap-0 w-full h-full min-h-0 overflow-y-auto border-y border-gray-200 pl-2">
         <ng-container *ngIf="searchroletab.length > 0; else noMatch">
           <button class="group flex flex-1 gap-4 items-center pr-4 hover:bg-gray-100 min-h-12 text-gray-600 text-sm font-normal rounded-md w-full overflow-clip border-b"
           *ngFor="let role of searchroletab" [ngClass]="{'bg-gray-100': selectedRole.role_id === role.role_id}" (click)="onRoleClick(role); selectRoleForEditing(role)">
@@ -70,27 +70,27 @@
             </div>
             <div *ngIf="isManageMode" class="text-center">
               <ng-container *ngIf="editingRoleId === role.role_id; else editIcon">
-              <button (click)="updateRoleName(role)" class="text-green-500 hover:text-green-700" style="padding: 0;">
+                <button (click)="updateRoleName(role)" class="text-green-500 hover:text-green-700 p-0">
                 <i class="fa fa-check" aria-hidden="true"></i>
-              </button>
-              </ng-container>
-              <ng-template #editIcon>
-                <button (click)="startEdit(role)" class="text-blue-500 hover:text-blue-700" style="padding: 0;">
+                </button>
+                </ng-container>
+                <ng-template #editIcon>
+                <button (click)="startEdit(role)" class="text-blue-500 hover:text-blue-700 p-0">
                   <i class="fa fa-pencil" aria-hidden="true"></i>
                 </button>
-              </ng-template>
-            </div>
-            <div *ngIf="isManageMode" class="text-center">
-              <ng-container *ngIf="editingRoleId === role.role_id; else deleteIcon">
-              <button (click)="cancelEdit()" class="text-gray-500 hover:text-gray-700" style="padding: 0;">
-                <i class="fa fa-ban" aria-hidden="true"></i>
-              </button>
-              </ng-container>
-              <ng-template #deleteIcon>
-              <button (click)="deleteRole(role)" class="text-red-500 hover:text-red-700 pr-1" style="padding: 0;">
-                <i class="fa fa-trash" aria-hidden="true"></i>
-              </button>
-              </ng-template>
+                </ng-template>
+              </div>
+              <div *ngIf="isManageMode" class="text-center">
+                <ng-container *ngIf="editingRoleId === role.role_id; else deleteIcon">
+                <button (click)="cancelEdit()" class="text-gray-500 hover:text-gray-700 p-0">
+                  <i class="fa fa-ban" aria-hidden="true"></i>
+                </button>
+                </ng-container>
+                <ng-template #deleteIcon>
+                <button (click)="deleteRole(role)" class="text-red-500 hover:text-red-700 pr-1 p-0">
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+                </ng-template>
             </div>
           </button>
         </ng-container>
@@ -101,79 +101,110 @@
     </div>
 
     <!-- ASSIGNED USERS AREA -->
-    <div *ngIf="assignedRole" class="flex flex-col flex-1 border h-full rounded-xl bg-white p-10 gap-6">
-      <div class="flex justify-between items-center">
-        <p class=" text-2xl font-semibold text-black">{{ assignedRole.role_name }}</p>
+    <div *ngIf="assignedRole" class="flex flex-col flex-1 border-t h-full bg-transparent p-4 pb-0 gap-4">
+      <div class="flex justify-between items-center px-6 h-12">
+        <span class="text-xl font-semibold text-[#534feb]">{{ assignedRole.role_name }}</span>
         <!-- ASSIGN BUTTON -->
-        <button class="flex justify-between items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-2xl hover:bg-blue-600" (click)="openAssignPopup()" *ngIf="!isManageMode">
+        <button id="assign-role-button" class="flex justify-between items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600"
+                (click)="openAssignPopup()" *ngIf="!isManageMode">
           <span class="ms-0">Assign</span>
           <span class="material-icons text-[1rem]">assignment_add</span>
         </button>
       </div>
-      <div class="h-full min-h-0 overflow-y-auto overflow-x-hidden custom-scrollbar border">
-
-      <table class="table-fixed w-full h-full min-h-full rounded-xl text-black border-none border-separate border-spacing-x-0 border-spacing-y-2 px-2">
-        <thead class="rounded-xl table-header-group w-full">
-          <tr class="bg-[rgba(245,_245,_245,_1)] rounded-xl h-12 border-spacing-2">
-            <th class="text-center rounded-l-xl">Profile</th>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Access</th>
-            <th class="rounded-r-xl"></th>
-          </tr>
-        </thead>
-        <tbody>
-        <ng-container *ngIf="assignedUsers.length > 0; else noRoleMatch">
-          <tr class="h-min text-gray-600 text-sm font-light w-full" *ngFor="let user of assignedUsers">
-            <td></td>
-            <td>{{ user.first_name }} {{ user.mid_name }} {{ user.surname }}</td>
-            <td>
-              {{ user.status }}
-            </td>
-            <td>
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="checkbox" value="" class="sr-only peer">
-                <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
-              </label>
-            </td>
-            <td>
-              <button class="text-red-500 hover:text-red-700 pr-1" *ngIf="isManageMode" (click)="openDeleteAssigneePopup(user.user_id, assignedRole.role_id)">
-              <i class="fa fa-trash" aria-hidden="true"></i>
-              </button>
-            </td>
-          </tr>
-        </ng-container>
-        <ng-template #noRoleMatch>
-          <tr class="h-9 text-gray-600 text-sm font-light">
-          <td colspan="3" class="text-center p-4">No assigned employees</td>
-          </tr>
-        </ng-template>
-        </tbody>
-      </table>
+      <!-- ASSIGNED USERS LIST -->
+      <div class="flex flex-col justify-between bg-white border h-full min-h-0 overflow-y-auto overflow-x-clip rounded-xl p-2">
+        <table class="table table-fixed w-full h-min min-h-min rounded-xl text-black px-2">
+          <thead class="rounded-xl table-header-group w-full sticky inset-0">
+            <tr class="bg-[#f5f5f5] rounded-xl h-12 border-spacing-2">
+              <th class="text-center rounded-l-xl">Profile</th>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Access</th>
+              <th class="rounded-r-xl"></th>
+            </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngIf="assignedUsers.length > 0; else noRoleMatch">
+            <tr class="table-row h-16 text-gray-600 text-sm font-light w-full border-b" *ngFor="let user of assignedUsers">
+              <!-- PROFILE PICTURE COLUMN -->
+              <td class="table-cell border-b h-full align-middle text-center"></td>
+              <!-- NAME COLUMN -->
+              <td class="table-cell border-b h-full align-middle text-left">{{ user.first_name }} {{ user.mid_name }} {{ user.surname }}</td>
+              <!-- STATUS COLUMN -->
+              <td class="table-cell border-b h-full align-middle text-center">{{ user.status }}</td>
+              <!-- ACCESS TOGGLE COLUMN -->
+              <td class="table-cell border-b h-full align-middle text-center">
+                <label class="inline-flex items-center cursor-pointer">
+                  <input type="checkbox" value="" class="sr-only peer">
+                  <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer
+                  dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-['']
+                  after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all
+                    dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                </label>
+              </td>
+              <!-- DELETE BUTTON COLUMN -->
+              <td class="table-cell border-b h-full align-middle text-center">
+                <button class="text-red-500 hover:text-red-700 pr-1 inline-block" *ngIf="isManageMode" (click)="openDeleteAssigneePopup(user.user_id, assignedRole.role_id)">
+                <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+          <ng-template #noRoleMatch>
+            <tr class="h-max text-gray-600 text-sm font-light">
+            <td colspan="5" class="h-full text-center p-4"><span class="material-icons">sentiment_dissatisfied</span><br>No assigned employees</td>
+            </tr>
+          </ng-template>
+          </tbody>
+        </table>
+      </div>
+      <!-- PAGINATION BUTTON GROUP -->
+      <div class="flex justify-center items-center gap-2">
+        <span class="text-black flex-1 font-li">Showing <b>1</b> to <b>6</b> of <b>23</b> employees</span>
+        <button class="bg-white border text-gray-600 px-3 py-1 rounded-lg aspect-square h-10 w-10 hover:bg-gray-100">
+          <span class="material-icons ps-2">chevron_left</span>
+        </button>
+        <button class="bg-blue-500 text-white px-3 py-1 rounded-lg aspect-square h-10 w-10 hover:bg-blue-600">1</button>
+        <button class="bg-white border text-gray-600 px-3 py-1 rounded-lg aspect-square h-10 w-10 hover:bg-gray-100">2</button>
+        <button class="bg-white border text-gray-600 px-3 py-1 rounded-lg aspect-square h-10 w-10 hover:bg-gray-100">3</button>
+        <button class="bg-white border text-gray-600 px-3 py-1 rounded-lg aspect-square h-10 w-10 hover:bg-gray-100">4</button>
+        <button class="bg-white border text-gray-600 px-3 py-1 rounded-lg aspect-square h-10 w-10 hover:bg-gray-100">5</button>
+        <button class="bg-white border text-gray-600 px-3 py-1 rounded-lg aspect-square h-10 w-10 hover:bg-gray-100">
+          <span class="material-icons">chevron_right</span>
+        </button>
       </div>
     </div>
   </section>
 </main>
 
 <!-- ADD ROLE POP-UP -->
-<div *ngIf="showRolePopup" class="fixed inset-0 flex justify-end bg-gray-900 bg-opacity-50 z-[9999] transition-opacity">
-  <div id="add-role-modal" class="absolute right-0 top-0 flex flex-col gap-y-4 bg-white p-6 h-full shadow-lg w-[30%]">
-    <div class="flex justify-between">
+<div [ngClass]="showRolePopup ? 'visible bg-opacity-50' : 'invisible bg-opacity-0' " class="fixed inset-0 flex justify-end bg-gray-900 bg-opacity-50 z-[9999] transition-all w-dvw h-dvh">
+  <!-- POPUP CONTAINER -->
+  <div id="add-role-modal" [ngClass]="showRolePopup ? 'translate-x-0' : 'translate-x-full'"
+    class="absolute right-0 top-0 flex flex-col gap-y-4 bg-[#FAFAFA] h-full shadow-lg w-[30%] transition-all">
+    <!-- TOP AREA -->
+    <div class="flex justify-between items-center bg-[#F1F2F4] h-20 px-6">
       <span class="text-2xl font-semibold mb-0">Add Role</span>
-      <button>
+      <!-- CLOSE BUTTON -->
+      <button (click)="cancelRolePopup()" class="focus:outline-none hover:bg-gray-300 rounded-full h-10 aspect-square inline-block align-middle text-center">
         <span class="material-icons">close</span>
       </button>
     </div>
-    <input type="text" id="role" [(ngModel)]="newRole" placeholder="Enter role name" class="border rounded-xl p-2 px-4 w-full bg-gray-100"/>
 
-    <div class="overflow-y-auto overflow-x-hidden custom-scrollbar" style="height: calc(80% - 2rem);">
+    <!-- ROLE NAME INPUT -->
+     <div class="w-full px-4">
+       <input type="text" id="role" [(ngModel)]="newRole" placeholder="Enter role name" class="w-full p-2 border border-gray-300 rounded-xl"/>
+     </div>
+
+    <!-- PERMISSIONS AREA -->
+    <div class="overflow-y-auto overflow-x-hidden min-h-0 bg-white rounded-xl p-4 mx-4 border">
       <div class="grid grid-cols-[60%_repeat(3,_1fr)] gap-y-2">
         <div class="col-span-1 text-center"></div>
         <div class="col-span-1 text-center font-medium">None</div>
         <div class="col-span-1 text-center font-medium">View</div>
         <div class="col-span-1 text-center font-medium">Edit</div>
 
-        <div class="col-span-4 font-black">User Management</div>
+        <div class="col-span-4 font-bold">User Management</div>
         <div class="col-span-1 ms-1">Users</div>
         <div class="col-span-1 text-center">
           <input type="radio" name="popupUsers" [(ngModel)]="popupUsersRights" value="none">
@@ -207,7 +238,7 @@
           <input type="radio" name="popupSupportTickets" [(ngModel)]="popupSupportRights" value="edit">
         </div>
 
-        <div class="col-span-4 font-black">System Management</div>
+        <div class="col-span-4 font-bold">System Management</div>
 
         <div class="col-span-1 ms-1">Parameters</div>
         <div class="col-span-1 text-center">
@@ -220,7 +251,7 @@
           <input type="radio" name="popupParameters" [(ngModel)]="popupParametersRights" value="edit">
         </div>
 
-        <div class="col-span-4 font-black">Daily Time Record</div>
+        <div class="col-span-4 font-bold">Daily Time Record</div>
 
         <div class="col-span-1 ms-1">Daily</div>
         <div class="col-span-1 text-center">
@@ -255,7 +286,7 @@
           <input type="radio" name="popupWeekly" [(ngModel)]="popupWeeklyRights" value="edit">
         </div>
 
-        <div class="col-span-4 font-black">Audit Trail</div>
+        <div class="col-span-4 font-bold">Audit Trail</div>
 
         <div class="col-span-1 ms-1">Entries</div>
         <div class="col-span-1 text-center">
@@ -270,63 +301,73 @@
       </div>
     </div>
 
-    <div class="flex justify-center gap-2 mt-0">
-      <button (click)="addRole()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl w-24">Add</button>
-      <button (click)="cancelRolePopup()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl w-24">Cancel</button>
+    <div class="flex gap-2 justify-center">
+      <button class="bg-[#534feb] hover:bg-blue-800 text-white px-4 py-2 rounded-xl w-20" (click)="addRole()">Add</button>
+      <button class="bg-white hover:bg-blue-100 border-2 border-[#534feb] text-[#534feb] px-4 py-2 rounded-xl w-20" (click)="cancelRolePopup()">Cancel</button>
     </div>
   </div>
 </div>
 
-<!-- ASSIGN POPUP -->
-<div *ngIf="showAssignPopup" class="fixed inset-0 flex justify-end bg-gray-900 bg-opacity-50 z-[9999]">
-  <div class="w-[30%] h-full shadow-xl bg-white flex flex-col">
-    <div class="flex flex-col h-full p-6">
-      <div class="flex justify-start flex-col mb-3">
-        <p class="text-2xl font-black">
-          Assign for <span class="text-blue-600">{{ assignedRole.role_name }}</span>
-        </p>
-        <input type="text" [(ngModel)]="searchTerm" placeholder="Search Employees..." class="w-full p-2 border rounded">
+<!-- ASSIGN ROLE MODAL -->
+<div [ngClass]="showAssignPopup ? 'visible bg-opacity-50' : 'invisible bg-opacity-0' " class="fixed inset-0 flex justify-end bg-gray-900 bg-opacity-50 z-[9999] transition-all w-dvw h-dvh">
+  <!-- POPUP CONTAINER -->
+  <div id="assign-role-modal" [ngClass]="showAssignPopup ? 'translate-x-0' : 'translate-x-full'"
+       class="absolute right-0 top-0 flex flex-col gap-y-4 bg-[#FAFAFA] h-full shadow-lg w-[30%] transition-all">
+    <div class="flex justify-between items-center bg-[#F1F2F4] h-20 px-6">
+      <span class="text-2xl font-semibold">
+        Assign for <span class="text-blue-600">{{ assignedRole.role_name }}</span>
+      </span>
+      <button (click)="closeAssignPopup()" class="focus:outline-none hover:bg-gray-300 rounded-full h-10 aspect-square inline-block align-middle text-center">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+    <!-- SEARCH BAR -->
+     <div class="w-full px-4">
+       <input type="text" [(ngModel)]="searchTerm" placeholder="Search Employees..." class="w-full p-2 border border-gray-300 rounded-xl">
+     </div>
+    <!-- TODO BACKEND: EMPLOYEE LIST TO BE ASSIGNED -->
+    <div class="flex-1 grid grid-cols-1 overflow-y-auto overflow-x-clip min-h-0 rounded-xl p-4 mx-4 bg-white border select-none">
+      <ng-container *ngIf="searchEmpRole.length > 0; else noMatch">
+        <div class="grid grid-cols-[auto_auto_1fr] items-center gap-x-4 border-b h-12 px-4 hover:bg-gray-100 hover:rounded-xl cursor-pointer" *ngFor="let emp of searchEmpRole"
+        (click)="toggleCheckbox($event, emp.user_id)">
+        <input type="checkbox" (change)="onCheckboxChange(emp.user_id, $event)" class="rounded focus:outline-none border border-gray-300 cursor-pointer" #checkbox>
+        <!-- TODO BACKEND: PROFILE PIC GOES HERE -->
+        <span class="material-icons text-gray-500">account_circle</span>
+        <span class="font-light whitespace-nowrap text-ellipsis">{{ emp.firstname }} {{ emp.midname }} {{ emp.surname }}</span>
+        </div>
+      </ng-container>
+      <ng-template #noMatch>
+        <div class="text-center p-4 text-gray-600 text-sm font-light">No matching employees found</div>
+      </ng-template>
+    </div>
+  <!-- BOTTOM BUTTON GROUP -->
+    <div class="flex gap-2 justify-center pb-4 px-8">
+      <button class="bg-[#534feb] hover:bg-blue-800 text-white px-4 py-2 rounded-xl" (click)="assignRole()">Assign</button>
+      <div class="flex justify-center transition-all w-0 overflow-clip" [ngClass]="selectedUserIds.size > 0 ? 'w-[calc-size(auto,_size)] visible' : 'w-0 invisible'">
+        <button class="bg-red-600 text-white flex justify-between items-center gap-2 py-2 px-4 rounded-xl whitespace-nowrap transition-all ease-linear"
+              (click)="deselectAllCheckboxes()" [ngClass]="selectedUserIds.size > 0 ? 'w-[calc-size(auto,_size)] visible' : 'w-0 invisible'">
+          <span>Deselect ({{selectedUserIds.size}})</span>
+          <span class="material-icons text-base">deselect</span>
+        </button>
       </div>
-      <p *ngIf="selectedUserIds.size > 0" class="text-gray-400 text-sm">
-        <button type="button" class="focus:outline-none text-red-700" (click)="deselectAllCheckboxes()">Deselect All</button>
-        {{selectedUserIds.size}} assigned
-      </p>
-      <div class="flex-grow overflow-y-auto overflow-x-hidden custom-scrollbar min-h-[150px]">
-        <table class="table-auto w-full">
-          <tbody>
-            <ng-container *ngIf="searchEmpRole.length > 0; else noMatch">
-              <tr class="h-9 text-gray-600 text-sm font-light" *ngFor="let emp of searchEmpRole">
-                <td>
-                  <input type="checkbox" (change)="onCheckboxChange(emp.user_id, $event)">
-                </td>
-                <td class="w-full">{{ emp.firstname }} {{ emp.midname }} {{ emp.surname }}</td>
-              </tr>
-            </ng-container>
-            <ng-template #noMatch>
-              <tr class="h-9 text-gray-600 text-sm font-light">
-                <td colspan="2" class="text-center p-4">No matching employees found</td>
-              </tr>
-            </ng-template>
-          </tbody>
-        </table>
-      </div>
-      <div class="flex gap-2 justify-start mt-3">
-        <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" (click)="assignRole()">Assign</button>
-        <button class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" (click)="closeAssignPopup()">Cancel</button>
+      <button class="bg-white hover:bg-blue-100 border-2 border-[#534feb] text-[#534feb] px-4 py-2 rounded-xl" (click)="closeAssignPopup()">Cancel</button>
     </div>
   </div>
 </div>
 
-<div *ngIf="showDeleteAssigneePopup" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-  <div class="w-[20%] shadow-xl rounded bg-white flex flex-col">
+<!-- DELETE ASSIGNEE POPUP -->
+<div [ngClass]="showDeleteAssigneePopup ? 'visible bg-opacity-50' : 'invisible bg-opacity-0' " class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[9999] transition-all w-dvw h-dvh">
+  <div id="delete-assignee-modal" [ngClass]="showDeleteAssigneePopup ? 'translate-x-0' : 'translate-x-full'"
+    class="absolute right-0 top-0 flex flex-col gap-y-4 bg-white p-6 h-full shadow-lg w-[20%] transition-all">
     <div class="flex flex-col h-full p-4 md:p-6 justify-between">
       <div class="flex flex-col justify-center items-center mb-2">
         <p class="text-xl md:text-2xl font-black text-center">Delete Assignee</p>
         <p class="text-gray-600 text-center">This action cannot be undone. By deleting the assignee, all associated information will be permanently lost.</p>
       </div>
-      <div class="flex gap-2 justify-center w-full"></div>
+      <div class="flex gap-2 justify-center w-full">
         <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 flex-grow" (click)="confirmDeleteAssignee()">Delete</button>
         <button class="border border-gray-500 text-gray-500 px-4 py-2 rounded hover:bg-gray-100 flex-grow" (click)="closeDeleteAssigneePopup()">Cancel</button>
+      </div>
     </div>
   </div>
 </div>

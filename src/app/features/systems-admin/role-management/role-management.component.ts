@@ -213,6 +213,17 @@ export class RoleManagementComponent implements OnInit {
       else if (this.showRolePopup && !target.closest('#add-role-modal') && !target.closest('#add-role-button')) {
         this.cancelRolePopup();
       }
+
+      // Close the assign role modal if the click is outside the button and modal
+      else if (this.showAssignPopup && !target.closest('#assign-role-modal') && !target.closest('#assign-role-button')) {
+        this.closeAssignPopup();
+      }
+
+      // Close the delete assignee modal if the click is outside the button and modal
+      else if (this.showDeleteAssigneePopup && !target.closest('#delete-assignee-modal') && !target.closest('#delete-assignee-button')) {
+        this.closeDeleteAssigneePopup();
+      }
+
     }
 
   deselectAllCheckboxes(): void {
@@ -604,6 +615,21 @@ cancelEdit() {
       }
     }
 
+    toggleCheckbox(event: Event, userId: number) {
+      // Prevent toggling if the event originated from the checkbox itself
+      if ((event.target as HTMLElement).tagName.toLowerCase() === 'input') {
+        return;
+      }
+
+      // Find the checkbox inside the clicked div
+      const checkbox = (event.currentTarget as HTMLElement).querySelector('input[type="checkbox"]') as HTMLInputElement;
+
+      if (checkbox) {
+        checkbox.checked = !checkbox.checked;
+        this.onCheckboxChange(userId, { target: checkbox });
+      }
+    }
+
     //used in the assigning of role in "Roles" tab
     onCheckboxChange(userId: number, event: any): void {
       if (event.target.checked) {
@@ -611,6 +637,7 @@ cancelEdit() {
       } else {
         this.selectedUserIds.delete(userId);
       }
+      console.log('Selected user IDs:', this.selectedUserIds);
     }
 
     //Used to assign checked user names in the second container in "Roles" tab
