@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 export class SidedrawerConfigComponent {
   @Input() isOpen = false; 
   @Output() close = new EventEmitter<void>();
+  @Output() save = new EventEmitter<any>();
   isDrawerOpen = false;
 
   openDrawer() {
@@ -22,4 +23,29 @@ export class SidedrawerConfigComponent {
     this.close.emit();
   }
 
+  //Form Datas
+  organizational = {
+    department: '',
+    idNumberFormat: ''
+  };
+
+  personnel = {
+    contractType: '',
+    employmentStatus: ''
+  };
+
+  timekeeping = {
+    workSchedule: '',
+    calendarTypes: ''
+  };
+// Logic to save system configurations
+  saveConfig() {
+    const configData = {
+      organizational: this.organizational,
+      personnel: this.personnel,
+      timekeeping: this.timekeeping
+    };
+    this.save.emit(configData);
+    this.closeDrawer();
+  }
 }

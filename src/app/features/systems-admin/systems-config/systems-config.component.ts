@@ -11,9 +11,8 @@ import { SidedrawerConfigComponent } from './sidedrawer-config/sidedrawer-config
   styleUrls: ['./systems-config.component.css']
 })
 export class SystemsConfigComponent {
-  @Input() isOpen = close;
-  @Output() close = new EventEmitter<void>();
-
+  //@Input() isOpen = close;
+  //@Output() close = new EventEmitter<void>();
   // Side Drawer State
   isDrawerOpen = false;
 
@@ -23,7 +22,12 @@ export class SystemsConfigComponent {
 
   closeDrawer() {
     this.isDrawerOpen = false;
-    this.close.emit();
+    //this.close.emit();
+  }
+
+  onSaveConfig(configData: any) {
+    //Handle the saved configuration data
+    console.log('COnfiguration Saved:', configData);
   }
 
 }
