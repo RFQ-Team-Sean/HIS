@@ -31,6 +31,10 @@ interface AuditLogEntry {
 export class SupabaseService {
   private databaseChangeSubject = new BehaviorSubject<boolean>(false);
   public databaseChange$ = this.databaseChangeSubject.asObservable();
+  organizationalData: any[] = [];
+  personnelData: any[] = [];
+  timekeepingData: any[]= [];
+
   //uploadFile: any;
   uploadPhoto(photoFile: any) {
     throw new Error('Method not implemented.');

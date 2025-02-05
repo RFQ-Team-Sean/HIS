@@ -1,20 +1,20 @@
 <div class="h-screen flex flex-col">
     <!-- Header Section -->
     <header class="bg-white h-28 flex flex-col justify-between px-8">
-        <h1 class="mb-2 text-3xl font-bold text-neutral-900">Systems Configuration</h1>
-        <h2 class="mb-2 text-3xl font-bold text-neutral-900">Configure Parameters and Metrics</h2>  
+        <h1 class="mb-2 text-3xl font-bold text-neutral-900">THE DAMN HEADER GOES HERE</h1>
     </header>
 
     <!-- Main Content Area -->
-     <div class="flex-1 bg-white flex flex-col">
-        <div class="rounded-xl shadow-lg w-full max-w-4x1 h-full">
+     <div class="flex-1 flex flex-col">
+        <div class="rounded-xl shadow-lg w-full max-w-4x1 border border-black h-full">
             <div class="bg-white p-5 h-full">
                 <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-4"> <!-- Upper Padding -->
                     <div class="relative w-[20%]">
                         <input type="text" placeholder="Search Employees..." class="w-full h-full p-2 pr-8 border rounded-full border-gray-300"/>
                             <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
-                      </div>
-                      <div class="flex items-center space-x-4">
+                    </div>
+
+                    <div class="flex items-center space-x-4">
                         <!--Filter Feature-->
                         <div class="relative">
                           <select class="border px-4 py-2 rounded appearance-none pr-10">
@@ -24,7 +24,7 @@
                           </select>
                           <i class="fa fa-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                         </div>
-                        <!-- New Employee button, disabled when isEditing is true -->
+                        <!-- New PARAMETER/CONFIGURATION button, disabled when isEditing is true -->
                         <button class="text-white bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300
                               font-medium rounded text-sm px-4 py-2 text-center dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                               type="button"
@@ -33,6 +33,8 @@
                         <app-sidedrawer-config [isOpen]="isDrawerOpen" (close)="closeDrawer()"></app-sidedrawer-config>
                     </div>
                 </div>
+                
+                <!-- AUDIT TRAIL AREA -->
                 <section class="bg-white p-4 h-4/5">
                     <div class="h-[500px] overflow-x-hidden overflow-y-auto max-auto"> <!-- Table Container -->
                         <table class="table-fixed w-full">
@@ -65,15 +67,15 @@
                         </table>    
                     </div>
                     <!-- Pagination -->
-                <div class="flex justify-between items-center mt-4">
-                    <button class="text-gray-400 px-3 py-1 hover:bg-gray-200 rounded" disabled>
+                    <div class="flex justify-between items-center mt-4">
+                        <button class="text-gray-400 px-3 py-1 hover:bg-gray-200 rounded" disabled>
                         &larr;
-                    </button>
-                    <span class="text-gray-400">Page 1 | Page N</span>
-                    <button class="text-gray-400 px-3 py-1 hover:bg-gray-200 rounded">
+                        </button>
+                        <span class="text-gray-400">Page 1 | Page N</span>
+                        <button class="text-gray-400 px-3 py-1 hover:bg-gray-200 rounded">
                         &rarr;
-                    </button>
-                </div> 
+                        </button>
+                    </div> 
                 </section>
             </div>
         </div>
