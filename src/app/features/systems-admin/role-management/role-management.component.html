@@ -53,7 +53,7 @@
         </button>
       </div>
       <!-- ROLE LIST -->
-      <div class="flex flex-col gap-0 w-full h-full min-h-0 overflow-y-auto border-y border-gray-200 pl-2">
+      <div class="flex flex-col gap-0 w-full h-full min-h-0 overflow-y-auto border-t border-gray-200 pl-2">
         <ng-container *ngIf="searchroletab.length > 0; else noMatch">
           <button class="group flex flex-1 gap-4 items-center pr-4 hover:bg-gray-100 min-h-12 text-gray-600 text-sm font-normal rounded-md w-full overflow-clip border-b"
           *ngFor="let role of searchroletab" [ngClass]="{'bg-gray-100': selectedRole.role_id === role.role_id}" (click)="onRoleClick(role); selectRoleForEditing(role)">
@@ -326,14 +326,16 @@
        <input type="text" [(ngModel)]="searchTerm" placeholder="Search Employees..." class="w-full p-2 border border-gray-300 rounded-xl">
      </div>
     <!-- TODO BACKEND: EMPLOYEE LIST TO BE ASSIGNED -->
-    <div class="flex-1 grid grid-cols-1 overflow-y-auto overflow-x-clip min-h-0 rounded-xl p-4 mx-4 bg-white border select-none">
+    <div class="flex-1 grid grid-cols-1 overflow-y-auto overflow-x-clip min-h-0 rounded-xl px-4 mx-4 bg-white border select-none">
       <ng-container *ngIf="searchEmpRole.length > 0; else noMatch">
-        <div class="grid grid-cols-[auto_auto_1fr] items-center gap-x-4 border-b h-12 px-4 hover:bg-gray-100 hover:rounded-xl cursor-pointer" *ngFor="let emp of searchEmpRole"
+        <div class="grid grid-cols-[auto_auto_1fr] items-center gap-x-4 h-12 px-4 hover:bg-gray-100 hover:rounded-xl cursor-pointer"
+        *ngFor="let emp of searchEmpRole; let last = last"
+        [ngClass]="{'border-b': !last}"
         (click)="toggleCheckbox($event, emp.user_id)">
-        <input type="checkbox" (change)="onCheckboxChange(emp.user_id, $event)" class="rounded focus:outline-none border border-gray-300 cursor-pointer" #checkbox>
-        <!-- TODO BACKEND: PROFILE PIC GOES HERE -->
-        <span class="material-icons text-gray-500">account_circle</span>
-        <span class="font-light whitespace-nowrap text-ellipsis">{{ emp.firstname }} {{ emp.midname }} {{ emp.surname }}</span>
+          <input type="checkbox" (change)="onCheckboxChange(emp.user_id, $event)" class="rounded focus:outline-none border border-gray-300 cursor-pointer" #checkbox>
+          <!-- TODO BACKEND: PROFILE PIC GOES HERE -->
+          <span class="material-icons text-gray-500">account_circle</span>
+          <span class="font-light whitespace-nowrap text-ellipsis">{{ emp.firstname }} {{ emp.midname }} {{ emp.surname }}</span>
         </div>
       </ng-container>
       <ng-template #noMatch>
@@ -344,7 +346,7 @@
     <div class="flex gap-2 justify-center pb-4 px-8">
       <button class="bg-[#534feb] hover:bg-blue-800 text-white px-4 py-2 rounded-xl" (click)="assignRole()">Assign</button>
       <div class="flex justify-center transition-all w-0 overflow-clip" [ngClass]="selectedUserIds.size > 0 ? 'w-[calc-size(auto,_size)] visible' : 'w-0 invisible'">
-        <button class="bg-red-600 text-white flex justify-between items-center gap-2 py-2 px-4 rounded-xl whitespace-nowrap transition-all ease-linear"
+        <button class="bg-red-600 text-white flex justify-between items-center gap-2 py-2 px-4 rounded-xl whitespace-nowrap transition-all ease-linear overflow-clip"
               (click)="deselectAllCheckboxes()" [ngClass]="selectedUserIds.size > 0 ? 'w-[calc-size(auto,_size)] visible' : 'w-0 invisible'">
           <span>Deselect ({{selectedUserIds.size}})</span>
           <span class="material-icons text-base">deselect</span>
