@@ -62,7 +62,7 @@ interface AuditLogEntry {
   templateUrl: './access-roles.component.html',
   styleUrls: ['./access-roles.component.css']
 })
-export class AccessRolesComponent implements OnInit {
+export class AccessRightsComponent implements OnInit {
   // Functions for users tab
   users: User[] = [];
   filteredUsers: User[] = [];
@@ -186,6 +186,40 @@ export class AccessRolesComponent implements OnInit {
   originalRoleName: string | null = null;
 
   selectedCount: number = 0;
+
+  rightsOptions = ['none', 'view', 'edit'];
+
+  accessRights = [
+    {
+      title: 'User Management',
+      items: [
+        { name: 'Users', key: 'users_rights' },
+        { name: 'Roles', key: 'roles_rights' },
+        { name: 'Support Tickets', key: 'sup_rights' }
+      ]
+    },
+    {
+      title: 'System Management',
+      items: [
+        { name: 'Parameters', key: 'par_rights' }
+      ]
+    },
+    {
+      title: 'Daily Time Record',
+      items: [
+        { name: 'Daily', key: 'daily_rights' },
+        { name: 'Monthly', key: 'monthly_rights' },
+        { name: 'Weekly', key: 'weekly_rights' }
+      ]
+    },
+    {
+      title: 'Audit Trail',
+      items: [
+        { name: 'Entries', key: 'entries' }
+      ]
+    }
+  ];
+
 
   sortDirection: 'none' | 'asc' | 'desc' = 'none';
   currentSorting(): string {

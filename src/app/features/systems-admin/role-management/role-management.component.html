@@ -47,15 +47,16 @@
       <div class="flex justify-between items-center px-6 h-12">
         <span class="text-xl font-semibold text-black align-middle">Roles</span>
         <button id="add-role-button" class="flex justify-between items-center gap-2 bg-blue-500 text-white px-3 py-2 rounded-xl hover:bg-blue-600"
-                (click)="openRolePopup()" *ngIf="!isManageMode">
+            (click)="openRolePopup()" *ngIf="!isManageMode">
           <span class="ms-2">Add New Role</span>
           <span class="material-icons">add</span>
         </button>
       </div>
+
       <!-- ROLE LIST -->
       <div class="flex flex-col gap-0 w-full h-full min-h-0 overflow-y-auto border-t border-gray-200 pl-2">
         <ng-container *ngIf="searchroletab.length > 0; else noMatch">
-          <button class="group flex flex-1 gap-4 items-center pr-4 hover:bg-gray-100 min-h-12 text-gray-600 text-sm font-normal rounded-md w-full overflow-clip border-b"
+          <button class="group flex flex-1 gap-4 items-center pr-4 hover:bg-gray-100 min-h-12 max-h-12 text-gray-600 text-sm font-normal rounded-md w-full overflow-clip border-b"
           *ngFor="let role of searchroletab" [ngClass]="{'bg-gray-100': selectedRole.role_id === role.role_id}" (click)="onRoleClick(role); selectRoleForEditing(role)">
           <div class="bg-transparent group-hover:bg-blue-600 min-w-1 h-full"></div>
             <div class="flex-1 overflow-clip">
@@ -101,15 +102,17 @@
     </div>
 
     <!-- ASSIGNED USERS AREA -->
-    <div *ngIf="assignedRole" class="flex flex-col flex-1 border-t h-full bg-transparent p-4 pb-0 gap-4">
-      <div class="flex justify-between items-center px-6 h-12">
-        <span class="text-xl font-semibold text-[#534feb]">{{ assignedRole.role_name }}</span>
-        <!-- ASSIGN BUTTON -->
-        <button id="assign-role-button" class="flex justify-between items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600"
-                (click)="openAssignPopup()" *ngIf="!isManageMode">
-          <span class="ms-0">Assign</span>
-          <span class="material-icons text-[1rem]">assignment_add</span>
-        </button>
+    <div *ngIf="assignedRole" class="flex flex-col flex-1 border-t h-full bg-transparent pt-4 pb-0 gap-4">
+      <div class="flex justify-start items-center px-5 h-12 w-full">
+        <span class="text-xl font-semibold inline-block align-middle pr-4 text-black border-r-2 border-black">
+          Assigned Employees
+        </span>
+        <span class="text-xl font-light inline-block align-middle pl-4 text-gray-800">
+          {{ assignedRole.role_name }}
+        </span>
+        <span  *ngIf="isManageMode" class="material-icons text-lg text-blue-600 w-6 aspect-square inline-block ">
+          edit
+        </span>
       </div>
       <!-- ASSIGNED USERS LIST -->
       <div class="flex flex-col justify-between bg-white border h-full min-h-0 overflow-y-auto overflow-x-clip rounded-xl p-2">

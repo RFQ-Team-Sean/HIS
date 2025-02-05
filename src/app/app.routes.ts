@@ -6,7 +6,7 @@ import { LoginLayoutComponent } from './features/auth/login-layout/login-layout.
 import { LayoutComponent } from './shared/layout/layout.component';
 import { UserManagementComponent } from './features/systems-admin/user-management/user-management.component';
 import { RoleManagementComponent } from './features/systems-admin/role-management/role-management.component';
-import { AccessRolesComponent } from './features/systems-admin/access-roles/access-roles.component';
+import { AccessRightsComponent } from './features/systems-admin/access-roles/access-roles.component';
 import { WorkflowApprovalComponent } from './features/systems-admin/approval-workflow/workflow-approval/workflow-approval.component';
 import { WorkflowApprovalUserComponent } from './features/systems-admin/approval-workflow/workflow-approval-user/workflow-approval-user.component';
 import { ViewPDSComponent } from './features/hr-admin/personnels-201-file/general-information/personal-data-sheet/view/view.component';
@@ -130,7 +130,7 @@ export const routes: Routes = [
       { path: 'dashboard', component: ADashboardComponent },
       { path: 'user-management', component: UserManagementComponent },
       { path: 'role-management', component: RoleManagementComponent },
-      { path: 'access-roles', component: AccessRolesComponent },
+      { path: 'access-roles', component: AccessRightsComponent },
       // { path: 'system-configuration', component: SystemConfigurationComponent },
       { path: 'approval-workflow', component: WorkflowApprovalComponent },
       { path: 'workflow-approval-user', component: WorkflowApprovalUserComponent },

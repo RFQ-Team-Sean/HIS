@@ -9,7 +9,7 @@
       </span>
     </div>
 
-    <nav class="flex-grow w-full px-1 overflow-y-auto overflow-x-hidden">
+    <nav class="flex flex-col flex-1 w-full px-1 overflow-y-auto overflow-x-hidden">
       <ul class="w-full" *ngIf="sidebarItems.length > 0; else noItemsTemplate">
         <li *ngFor="let item of sidebarItems" class="my-1">
           <!-- Main menu item -->

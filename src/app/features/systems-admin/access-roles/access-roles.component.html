@@ -1,4 +1,4 @@
-<main class="flex flex-col h-full w-full gap-6">
+<main class="flex flex-col h-full w-full gap-4">
   <!-- TOP SECTION -->
   <section class="bg-[rgba(83,_79,_235,_1)] w-full rounded-xl px-4 py-6 text-white">
     <span class="block font-semibold text-2xl">Access Rights</span>
@@ -42,345 +42,96 @@
   <!-- ROLE MANAGEMENT SECTION -->
   <section class="flex flex-1 gap-4 w-full text-white max-h-full h-full min-h-0">
     <!-- ADD/MANAGE ROLES AREA -->
-    <div class="basis-2/5 h-full max-h-full border rounded-xl bg-white p-10 py-6 flex flex-col gap-4">
-      <div class="flex justify-between items-center">
-        <p class="text-2xl font-semibold text-black align-middle">Roles</p>
-        <button id="add-role-button" class="flex justify-between items-center gap-2 bg-blue-500 text-white px-3 py-2 rounded-xl hover:bg-blue-600"
-                (click)="openRolePopup()" *ngIf="!isManageMode">
-          <span class="ms-2">Add New Role</span>
-          <span class="material-icons">add</span>
-        </button>
+    <div class="basis-2/5 h-full max-h-full border rounded-xl bg-white p-4 flex flex-col gap-4">
+      <div class="flex justify-between items-center px-6 h-12">
+        <span class="text-xl font-semibold text-black align-middle">Roles</span>
       </div>
-      <div class="flex flex-col gap-2 w-full max-h-full mt-0 overflow-y-auto custom-scrollbar">
-        <ng-container *ngIf="searchroletab.length > 0; else noMatch">
-          <div class="flex gap-8 items-center pl-0 hover:bg-gray-100 h-9 text-gray-600 text-sm font-light rounded-xl cursor-pointer"
+      <div class="flex flex-col gap-0 w-full h-full min-h-0 overflow-y-auto snap-y border-t border-gray-200 pl-2">
+      <ng-container *ngIf="searchroletab.length > 0; else noMatch">
+        <button class="group flex flex-1 gap-4 items-center pr-4 hover:bg-gray-100 min-h-12 max-h-12 text-gray-600 text-sm font-normal hover:rounded-md w-full overflow-clip border-b"
           *ngFor="let role of searchroletab" [ngClass]="{'bg-gray-100': selectedRole.role_id === role.role_id}" (click)="onRoleClick(role); selectRoleForEditing(role)">
-            <div class="flex-1 overflow-clip">
-              <ng-container *ngIf="editingRoleId === role.role_id; else displayRoleName">
-              <input [(ngModel)]="role.role_name" class="border rounded outline-none" />
-              </ng-container>
-              <ng-template #displayRoleName>
-                <span class="inline-flex h-full w-full ps-4 py-2 ms-[4px] hover:border-s-4 hover:border-[rgba(83,_79,_235,_1)]">
-                  {{ role.role_name }}
-                </span>
-              </ng-template>
-            </div>
-            <div *ngIf="isManageMode" class="text-center">
-              <ng-container *ngIf="editingRoleId === role.role_id; else editIcon">
-              <button (click)="updateRoleName(role)" class="text-green-500 hover:text-green-700" style="padding: 0;">
-                <i class="fa fa-check" aria-hidden="true"></i>
-              </button>
-              </ng-container>
-              <ng-template #editIcon>
-              <button (click)="startEdit(role)" class="text-blue-500 hover:text-blue-700" style="padding: 0;">
-                <i class="fa fa-pencil" aria-hidden="true"></i>
-              </button>
-              </ng-template>
-            </div>
-            <div *ngIf="isManageMode" class="text-center">
-              <ng-container *ngIf="editingRoleId === role.role_id; else deleteIcon">
-              <button (click)="cancelEdit()" class="text-gray-500 hover:text-gray-700" style="padding: 0;">
-                <i class="fa fa-ban" aria-hidden="true"></i>
-              </button>
-              </ng-container>
-              <ng-template #deleteIcon>
-              <button (click)="deleteRole(role)" class="text-red-500 hover:text-red-700 pr-1" style="padding: 0;">
-                <i class="fa fa-trash" aria-hidden="true"></i>
-              </button>
-              </ng-template>
-            </div>
-          </div>
+          <div class="bg-transparent group-hover:bg-blue-600 min-w-1 h-full"></div>
+          <div class="flex-1 overflow-clip">
+        <ng-container *ngIf="editingRoleId === role.role_id; else displayRoleName">
+          <input [(ngModel)]="role.role_name" class="border rounded outline-none p-1" />
         </ng-container>
-        <ng-template #noMatch>
-          <div class="h-9 text-gray-600 text-sm font-light text-center p-4">No matching roles found</div>
+        <ng-template #displayRoleName>
+          <span class="inline-flex h-full w-full ps-4 py-2">
+            {{ role.role_name }}
+          </span>
         </ng-template>
+          </div>
+          <div *ngIf="isManageMode" class="text-center">
+        <ng-container *ngIf="editingRoleId === role.role_id; else editIcon">
+          <button (click)="updateRoleName(role)" class="text-green-500 hover:text-green-700 p-0">
+            <i class="fa fa-check" aria-hidden="true"></i>
+          </button>
+        </ng-container>
+        <ng-template #editIcon>
+          <button (click)="startEdit(role)" class="text-blue-500 hover:text-blue-700 p-0">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+          </button>
+        </ng-template>
+          </div>
+          <div *ngIf="isManageMode" class="text-center">
+        <ng-container *ngIf="editingRoleId === role.role_id; else deleteIcon">
+          <button (click)="cancelEdit()" class="text-gray-500 hover:text-gray-700 p-0">
+            <i class="fa fa-ban" aria-hidden="true"></i>
+          </button>
+        </ng-container>
+        <ng-template #deleteIcon>
+          <button (click)="deleteRole(role)" class="text-red-500 hover:text-red-700 pr-1 p-0">
+            <i class="fa fa-trash" aria-hidden="true"></i>
+          </button>
+        </ng-template>
+          </div>
+        </button>
+      </ng-container>
+      <ng-template #noMatch>
+        <div class="h-9 text-gray-600 text-sm font-light text-center p-4">No matching roles found</div>
+      </ng-template>
       </div>
     </div>
     <!-- ACCESS RIGHTS CONFIGURATION AREA -->
-    <div class="flex-1 flex flex-col h-full min-h-0 rounded-xl border bg-white p-6 gap-6">
-      <div class="flex justify-between items-center px-5">
-        <p class="text-2xl font-semibold inline-block align-middle text-black">
-          Assign Access Rights &nbsp;
-          <span class="text-lg text-blue-600 w-6 aspect-square inline-block material-icons" *ngIf="isManageMode">
-            edit
-          </span>
-        </p>
+    <div class="flex-1 flex flex-col h-full min-h-0 border-t bg-transparent pt-4 gap-4">
+      <div class="flex justify-start items-center px-5 h-12 w-full">
+        <span class="text-xl font-semibold inline-block align-middle pr-4 text-black border-r-2 border-black">
+          Access Rights Configuration
+        </span>
+        <span class="text-xl font-light inline-block align-middle pl-4 text-gray-800">
+          {{ assignedRole.role_name }}
+        </span>
+        <div class="flex-1">
+          <button class="flex justify-between items-center gap-2 text-white bg-blue-600 hover:bg-blue-800 transition-colors justify-self-end px-4 py-2 rounded-full" *ngIf="isManageMode">
+            <span>Edit</span>
+            <span class="material-icons text-xs">edit</span>
+          </button>
+        </div>
       </div>
-      <div class="grid grid-cols-[80%_repeat(3,_1fr)] gap-y-2 h-full max-h-full min-h-0 overflow-y-auto mx-6">
-        <div class="col-span-1 text-center"></div>
-        <div class="col-span-1 text-center font-medium text-black">None</div>
-        <div class="col-span-1 text-center font-medium text-black">View</div>
-        <div class="col-span-1 text-center font-medium text-black">Edit</div>
+      <div class="grid grid-cols-[80%_repeat(3,_1fr)] gap-y-2 h-full max-h-full min-h-0 overflow-y-auto p-4 mx-4 rounded-xl border bg-white">
+        <div class="col-span-1 text-center bg-white sticky inset-0 pb-2 inline-block"></div>
+        <div class="col-span-1 text-center font-medium text-black bg-white sticky inset-0 pb-2 inline-block">None</div>
+        <div class="col-span-1 text-center font-medium text-black bg-white sticky inset-0 pb-2 inline-block">View</div>
+        <div class="col-span-1 text-center font-medium text-black bg-white sticky inset-0 pb-2 inline-block">Edit</div>
 
-        <div class="col-span-4 font-black text-black">User Management</div>
-        <div class="col-span-1 ms-2 text-black">Users</div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="users" value="none" [disabled]="!isManageMode" [checked]="usersRights === 'none'" [(ngModel)]="selectedRole.users_rights" (change)="onAccessRightChange('users_rights', $event)">
-        </div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="users" value="view" [disabled]="!isManageMode" [checked]="usersRights === 'view'" [(ngModel)]="selectedRole.users_rights" (change)="onAccessRightChange('users_rights', $event)">
-        </div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="users" value="edit" [disabled]="!isManageMode" [checked]="usersRights === 'edit'" [(ngModel)]="selectedRole.users_rights" (change)="onAccessRightChange('users_rights', $event)">
-        </div>
-
-        <div class="col-span-1 ms-2 text-black">Roles</div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="roles" value="none" [disabled]="!isManageMode" [checked]="rolesRights === 'none'" [(ngModel)]="selectedRole.roles_rights" (change)="onAccessRightChange('roles_rights', $event)">
-        </div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="roles" value="view" [disabled]="!isManageMode" [checked]="rolesRights === 'view'" [(ngModel)]="selectedRole.roles_rights" (change)="onAccessRightChange('roles_rights', $event)">
-        </div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="roles" value="edit" [disabled]="!isManageMode" [checked]="rolesRights === 'edit'" [(ngModel)]="selectedRole.roles_rights" (change)="onAccessRightChange('roles_rights', $event)">
-        </div>
-
-        <div class="col-span-1 ms-2 text-black">Support Tickets</div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="supportTickets" value="none" [disabled]="!isManageMode" [checked]="supportRights === 'none'" [(ngModel)]="selectedRole.sup_rights" (change)="onAccessRightChange('sup_rights', $event)">
-        </div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="supportTickets" value="view" [disabled]="!isManageMode" [checked]="supportRights === 'view'" [(ngModel)]="selectedRole.sup_rights" (change)="onAccessRightChange('sup_rights', $event)">
-        </div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="supportTickets" value="edit" [disabled]="!isManageMode" [checked]="supportRights === 'edit'" [(ngModel)]="selectedRole.sup_rights" (change)="onAccessRightChange('sup_rights', $event)">
-        </div>
-
-        <div class="col-span-4 font-black text-black">System Management</div>
-        <div class="col-span-1 ms-2 text-black">Parameters</div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="parameters" value="none" [disabled]="!isManageMode" [checked]="parametersRights === 'none'" [(ngModel)]="selectedRole.par_rights" (change)="onAccessRightChange('par_rights', $event)">
-        </div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="parameters" value="view" [disabled]="!isManageMode" [checked]="parametersRights === 'view'" [(ngModel)]="selectedRole.par_rights" (change)="onAccessRightChange('par_rights', $event)">
-        </div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="parameters" value="edit" [disabled]="!isManageMode" [checked]="parametersRights === 'edit'" [(ngModel)]="selectedRole.par_rights" (change)="onAccessRightChange('par_rights', $event)">
-        </div>
-
-        <div class="col-span-4 font-black text-black">Daily Time Record</div>
-        <div class="col-span-1 ms-2 text-black">Daily</div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="dailyTimeRecord" value="none" [disabled]="!isManageMode" [checked]="dailyRights === 'none'" [(ngModel)]="selectedRole.daily_rights" (change)="onAccessRightChange('daily_rights', $event)">
-        </div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="dailyTimeRecord" value="view" [disabled]="!isManageMode" [checked]="dailyRights === 'view'" [(ngModel)]="selectedRole.daily_rights" (change)="onAccessRightChange('daily_rights', $event)">
-        </div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="dailyTimeRecord" value="edit" [disabled]="!isManageMode" [checked]="dailyRights === 'edit'" [(ngModel)]="selectedRole.daily_rights" (change)="onAccessRightChange('daily_rights', $event)">
-        </div>
-
-        <div class="col-span-1 ms-2 text-black">Monthly</div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="monthlyTimeRecord" value="none" [disabled]="!isManageMode" [checked]="monthlyRights === 'none'" [(ngModel)]="selectedRole.monthly_rights" (change)="onAccessRightChange('monthly_rights', $event)">
-        </div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="monthlyTimeRecord" value="view" [disabled]="!isManageMode" [checked]="monthlyRights === 'view'" [(ngModel)]="selectedRole.monthly_rights" (change)="onAccessRightChange('monthly_rights', $event)">
-        </div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="monthlyTimeRecord" value="edit" [disabled]="!isManageMode" [checked]="monthlyRights === 'edit'" [(ngModel)]="selectedRole.monthly_rights" (change)="onAccessRightChange('monthly_rights', $event)">
-        </div>
-
-        <div class="col-span-1 ms-2 text-black">Weekly</div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="weeklyTimeRecord" value="none" [disabled]="!isManageMode" [checked]="weeklyRights === 'none'" [(ngModel)]="selectedRole.weekly_rights" (change)="onAccessRightChange('weekly_rights', $event)">
-        </div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="weeklyTimeRecord" value="view" [disabled]="!isManageMode" [checked]="weeklyRights === 'view'" [(ngModel)]="selectedRole.weekly_rights" (change)="onAccessRightChange('weekly_rights', $event)">
-        </div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="weeklyTimeRecord" value="edit" [disabled]="!isManageMode" [checked]="weeklyRights === 'edit'" [(ngModel)]="selectedRole.weekly_rights" (change)="onAccessRightChange('weekly_rights', $event)">
-        </div>
-
-        <div class="col-span-4 font-black text-black">Audit Trail</div>
-        <div class="col-span-1 ms-2 text-black">Entries</div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="entries" value="none" [disabled]="!isManageMode" [checked]="entriesRights === 'none'" [(ngModel)]="selectedRole.entries" (change)="onAccessRightChange('entries', $event)">
-        </div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="entries" value="view" [disabled]="!isManageMode" [checked]="entriesRights === 'view'" [(ngModel)]="selectedRole.entries" (change)="onAccessRightChange('entries', $event)">
-        </div>
-        <div class="col-span-1 text-center ms-2">
-          <input type="radio" name="entries" value="edit" [disabled]="!isManageMode" [checked]="entriesRights === 'edit'" [(ngModel)]="selectedRole.entries" (change)="onAccessRightChange('entries', $event)">
-        </div>
+        <ng-container *ngFor="let section of accessRights">
+          <div class="col-span-4 font-semibold text-black">{{ section.title }}</div>
+          <ng-container *ngFor="let item of section.items">
+            <div class="col-span-1 ms-2 text-black">{{ item.name }}</div>
+            <ng-container *ngFor="let right of rightsOptions">
+              <div class="col-span-1 text-center ms-2 inline-block">
+                <label class="cursor-pointer flex items-center justify-center w-4 h-4 rounded-full border border-gray-400 transition-all"
+                        [ngClass]="{'bg-blue-600 text-white': selectedRole[item.key] === right}">
+                  <input type="radio" [name]="item.key" [value]="right" [disabled]="!isManageMode"
+                         [(ngModel)]="selectedRole[item.key]" (change)="onAccessRightChange(item.key, $event)"
+                         class="hidden">
+                  <span class="material-icons text-xs" *ngIf="selectedRole[item.key] === right">check</span>
+                </label>
+              </div>
+            </ng-container>
+          </ng-container>
+        </ng-container>
       </div>
     </div>
   </section>
 </main>
-
-<!-- ADD ROLE POP-UP -->
-<div *ngIf="showRolePopup" class="fixed inset-0 flex justify-end bg-gray-900 bg-opacity-50 z-[9999] transition-opacity">
-  <div id="add-role-modal" class="absolute right-0 top-0 flex flex-col gap-y-4 bg-white p-6 h-full shadow-lg w-[30%]">
-    <div class="flex justify-between">
-      <span class="text-2xl font-semibold mb-0">Add Role</span>
-      <button>
-        <span class="material-icons">close</span>
-      </button>
-    </div>
-    <input type="text" id="role" [(ngModel)]="newRole" placeholder="Enter role name" class="border rounded-xl p-2 px-4 w-full bg-gray-100"/>
-
-    <div class="overflow-y-auto overflow-x-hidden custom-scrollbar" style="height: calc(80% - 2rem);">
-      <div class="grid grid-cols-[60%_repeat(3,_1fr)] gap-y-2">
-        <div class="col-span-1 text-center"></div>
-        <div class="col-span-1 text-center font-medium">None</div>
-        <div class="col-span-1 text-center font-medium">View</div>
-        <div class="col-span-1 text-center font-medium">Edit</div>
-
-        <div class="col-span-4 font-black">User Management</div>
-        <div class="col-span-1 ms-1">Users</div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupUsers" [(ngModel)]="popupUsersRights" value="none">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupUsers" [(ngModel)]="popupUsersRights" value="view">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupUsers" [(ngModel)]="popupUsersRights" value="edit">
-        </div>
-
-        <div class="col-span-1 ms-1">Roles</div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popRoles" [(ngModel)]="popupRolesRights" value="none">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popRoles" [(ngModel)]="popupRolesRights" value="view">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popRoles" [(ngModel)]="popupRolesRights" value="edit">
-        </div>
-
-        <div class="col-span-1 ms-1">Support Tickets</div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupSupportTickets" [(ngModel)]="popupSupportRights" value="none">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupSupportTickets" [(ngModel)]="popupSupportRights" value="view">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupSupportTickets" [(ngModel)]="popupSupportRights" value="edit">
-        </div>
-
-        <div class="col-span-4 font-black">System Management</div>
-
-        <div class="col-span-1 ms-1">Parameters</div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupParameters" [(ngModel)]="popupParametersRights" value="none">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupParameters" [(ngModel)]="popupParametersRights" value="view">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupParameters" [(ngModel)]="popupParametersRights" value="edit">
-        </div>
-
-        <div class="col-span-4 font-black">Daily Time Record</div>
-
-        <div class="col-span-1 ms-1">Daily</div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupDaily" [(ngModel)]="popupDailyRights" value="none">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupDaily" [(ngModel)]="popupDailyRights" value="view">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupDaily" [(ngModel)]="popupDailyRights" value="edit">
-        </div>
-
-        <div class="col-span-1 ms-1">Monthly</div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupMonthly" [(ngModel)]="popupMonthlyRights" value="none">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupMonthly" [(ngModel)]="popupMonthlyRights" value="view">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupMonthly" [(ngModel)]="popupMonthlyRights" value="edit">
-        </div>
-
-        <div class="col-span-1 ms-1">Weekly</div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupWeekly" [(ngModel)]="popupWeeklyRights" value="none">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupWeekly" [(ngModel)]="popupWeeklyRights" value="view">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupWeekly" [(ngModel)]="popupWeeklyRights" value="edit">
-        </div>
-
-        <div class="col-span-4 font-black">Audit Trail</div>
-
-        <div class="col-span-1 ms-1">Entries</div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupEntries" [(ngModel)]="popupEntriesRights" value="none">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupEntries" [(ngModel)]="popupEntriesRights" value="view">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupEntries" [(ngModel)]="popupEntriesRights" value="edit">
-        </div>
-      </div>
-    </div>
-
-    <div class="flex justify-center gap-2 mt-0">
-      <button (click)="addRole()" class="bg-blue-600 hover:bg-blue-800 text-white px-4 py-2 rounded-xl w-24">Add</button>
-      <button (click)="cancelRolePopup()"
-      class="bg-white hover:bg-blue-600 border-2 border-blue-600 text-blue-600 hover:text-white px-4 py-2 rounded-xl w-24 transition-colors">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<!-- ASSIGN POPUP -->
-<div *ngIf="showAssignPopup" class="fixed inset-0 flex justify-end bg-gray-900 bg-opacity-50 z-[9999]">
-  <div class="w-[30%] h-full shadow-xl bg-white flex flex-col">
-    <div class="flex flex-col h-full p-6">
-      <div class="flex justify-start flex-col mb-3">
-        <p class="text-2xl font-black">
-          Assign for <span class="text-blue-600">{{ assignedRole.role_name }}</span>
-        </p>
-        <input type="text" [(ngModel)]="searchTerm" placeholder="Search Employees..." class="w-full p-2 border rounded">
-      </div>
-      <p *ngIf="selectedUserIds.size > 0" class="text-gray-400 text-sm">
-        <button type="button" class="focus:outline-none text-red-700" (click)="deselectAllCheckboxes()">Deselect All</button>
-        {{selectedUserIds.size}} assigned
-      </p>
-      <div class="flex-grow overflow-y-auto overflow-x-hidden custom-scrollbar min-h-[150px]">
-        <table class="table-auto w-full">
-          <tbody>
-            <ng-container *ngIf="searchEmpRole.length > 0; else noMatch">
-              <tr class="h-9 text-gray-600 text-sm font-light" *ngFor="let emp of searchEmpRole">
-                <td>
-                  <input type="checkbox" (change)="onCheckboxChange(emp.user_id, $event)">
-                </td>
-                <td class="w-full">{{ emp.firstname }} {{ emp.midname }} {{ emp.surname }}</td>
-              </tr>
-            </ng-container>
-            <ng-template #noMatch>
-              <tr class="h-9 text-gray-600 text-sm font-light">
-                <td colspan="2" class="text-center p-4">No matching employees found</td>
-              </tr>
-            </ng-template>
-          </tbody>
-        </table>
-      </div>
-      <div class="flex gap-2 justify-start mt-3">
-        <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" (click)="assignRole()">Assign</button>
-        <button class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" (click)="closeAssignPopup()">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<div *ngIf="showDeleteAssigneePopup" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-  <div class="w-[20%] shadow-xl rounded bg-white flex flex-col">
-    <div class="flex flex-col h-full p-4 md:p-6 justify-between">
-      <div class="flex flex-col justify-center items-center mb-2">
-        <p class="text-xl md:text-2xl font-black text-center">Delete Assignee</p>
-        <p class="text-gray-600 text-center">This action cannot be undone. By deleting the assignee, all associated information will be permanently lost.</p>
-      </div>
-      <div class="flex gap-2 justify-center w-full"></div>
-        <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 flex-grow" (click)="confirmDeleteAssignee()">Delete</button>
-        <button class="border border-gray-500 text-gray-500 px-4 py-2 rounded hover:bg-gray-100 flex-grow" (click)="closeDeleteAssigneePopup()">Cancel</button>
-    </div>
-  </div>
-</div>
