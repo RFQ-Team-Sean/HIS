@@ -55,6 +55,17 @@ interface AuditLogEntry {
   date: string;
 }
 
+interface Permission {
+  name: string;
+  modelBinding: keyof RoleManagementComponent; // Ensures TypeScript knows it's a class property
+}
+
+interface PermissionCategory {
+  title: string;
+  permissions: Permission[];
+}
+
+
 @Component({
   selector: 'app-role-management',
   standalone: true,
@@ -145,6 +156,47 @@ export class RoleManagementComponent implements OnInit {
   assignedEmployees: string[] = ['Kobe Bryant', 'Alice Guo', 'Carlo Sotto', 'Harry Roque'];
   showCheckboxes = false;
   logAction: any;
+
+  permissionCategories: PermissionCategory[] = [
+    {
+      title: 'User Management',
+      permissions: [
+        { name: 'Users', modelBinding: 'popupUsersRights' },
+        { name: 'Roles', modelBinding: 'popupRolesRights' },
+        { name: 'Support Tickets', modelBinding: 'popupSupportRights' }
+      ]
+    },
+    {
+      title: 'System Management',
+      permissions: [
+        { name: 'Parameters', modelBinding: 'popupParametersRights' }
+      ]
+    },
+    {
+      title: 'Daily Time Record',
+      permissions: [
+        { name: 'Daily', modelBinding: 'popupDailyRights' },
+        { name: 'Monthly', modelBinding: 'popupMonthlyRights' },
+        { name: 'Weekly', modelBinding: 'popupWeeklyRights' }
+      ]
+    },
+    {
+      title: 'Audit Trail',
+      permissions: [
+        { name: 'Entries', modelBinding: 'popupEntriesRights' }
+      ]
+    }
+  ];
+
+  // Getter method to access the dynamic property
+  getPermissionValue(binding: string): string {
+    return (this as any)[binding]; // TypeScript workaround to access dynamic properties
+  }
+
+  // Setter method to update the dynamic property
+  setPermissionValue(binding: string, value: string): void {
+    (this as any)[binding] = value;
+  }
 
   addNewRole() {
     this.showCheckboxes = !this.showCheckboxes;

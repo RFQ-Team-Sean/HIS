@@ -129,7 +129,7 @@
               <!-- PROFILE PICTURE COLUMN -->
               <td class="table-cell border-b h-full align-middle text-center"></td>
               <!-- NAME COLUMN -->
-              <td class="table-cell border-b h-full align-middle text-left">{{ user.first_name }} {{ user.mid_name }} {{ user.surname }}</td>
+                <td class="table-cell border-b h-full align-middle text-left">{{ user.first_name + user.mid_name + user.surname }}</td>
               <!-- STATUS COLUMN -->
               <td class="table-cell border-b h-full align-middle text-center">{{ user.status }}</td>
               <!-- ACCESS TOGGLE COLUMN -->
@@ -199,107 +199,48 @@
     <!-- PERMISSIONS AREA -->
     <div class="overflow-y-auto overflow-x-hidden min-h-0 bg-white rounded-xl p-4 mx-4 border">
       <div class="grid grid-cols-[60%_repeat(3,_1fr)] gap-y-2">
+        <!-- Header Row -->
         <div class="col-span-1 text-center"></div>
         <div class="col-span-1 text-center font-medium">None</div>
         <div class="col-span-1 text-center font-medium">View</div>
         <div class="col-span-1 text-center font-medium">Edit</div>
 
-        <div class="col-span-4 font-bold">User Management</div>
-        <div class="col-span-1 ms-1">Users</div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupUsers" [(ngModel)]="popupUsersRights" value="none">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupUsers" [(ngModel)]="popupUsersRights" value="view">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupUsers" [(ngModel)]="popupUsersRights" value="edit">
-        </div>
+        <!-- Permission Categories -->
+        <ng-container *ngFor="let category of permissionCategories">
+          <div class="col-span-4 font-bold">{{ category.title }}</div>
 
-        <div class="col-span-1 ms-1">Roles</div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popRoles" [(ngModel)]="popupRolesRights" value="none">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popRoles" [(ngModel)]="popupRolesRights" value="view">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popRoles" [(ngModel)]="popupRolesRights" value="edit">
-        </div>
-
-        <div class="col-span-1 ms-1">Support Tickets</div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupSupportTickets" [(ngModel)]="popupSupportRights" value="none">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupSupportTickets" [(ngModel)]="popupSupportRights" value="view">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupSupportTickets" [(ngModel)]="popupSupportRights" value="edit">
-        </div>
-
-        <div class="col-span-4 font-bold">System Management</div>
-
-        <div class="col-span-1 ms-1">Parameters</div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupParameters" [(ngModel)]="popupParametersRights" value="none">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupParameters" [(ngModel)]="popupParametersRights" value="view">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupParameters" [(ngModel)]="popupParametersRights" value="edit">
-        </div>
-
-        <div class="col-span-4 font-bold">Daily Time Record</div>
-
-        <div class="col-span-1 ms-1">Daily</div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupDaily" [(ngModel)]="popupDailyRights" value="none">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupDaily" [(ngModel)]="popupDailyRights" value="view">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupDaily" [(ngModel)]="popupDailyRights" value="edit">
-        </div>
-
-        <div class="col-span-1 ms-1">Monthly</div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupMonthly" [(ngModel)]="popupMonthlyRights" value="none">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupMonthly" [(ngModel)]="popupMonthlyRights" value="view">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupMonthly" [(ngModel)]="popupMonthlyRights" value="edit">
-        </div>
-
-        <div class="col-span-1 ms-1">Weekly</div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupWeekly" [(ngModel)]="popupWeeklyRights" value="none">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupWeekly" [(ngModel)]="popupWeeklyRights" value="view">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupWeekly" [(ngModel)]="popupWeeklyRights" value="edit">
-        </div>
-
-        <div class="col-span-4 font-bold">Audit Trail</div>
-
-        <div class="col-span-1 ms-1">Entries</div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupEntries" [(ngModel)]="popupEntriesRights" value="none">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupEntries" [(ngModel)]="popupEntriesRights" value="view">
-        </div>
-        <div class="col-span-1 text-center">
-          <input type="radio" name="popupEntries" [(ngModel)]="popupEntriesRights" value="edit">
-        </div>
+          <ng-container *ngFor="let permission of category.permissions">
+            <div class="col-span-1 ms-1">{{ permission.name }}</div>
+            <div class="col-span-1 text-center">
+              <input
+                type="radio"
+                [name]="permission.modelBinding"
+                [checked]="getPermissionValue(permission.modelBinding) === 'none'"
+                (change)="setPermissionValue(permission.modelBinding, 'none')"
+              />
+            </div>
+            <div class="col-span-1 text-center">
+              <input
+                type="radio"
+                [name]="permission.modelBinding"
+                [checked]="getPermissionValue(permission.modelBinding) === 'view'"
+                (change)="setPermissionValue(permission.modelBinding, 'view')"
+              />
+            </div>
+            <div class="col-span-1 text-center">
+              <input
+                type="radio"
+                [name]="permission.modelBinding"
+                [checked]="getPermissionValue(permission.modelBinding) === 'edit'"
+                (change)="setPermissionValue(permission.modelBinding, 'edit')"
+              />
+            </div>
+          </ng-container>
+        </ng-container>
       </div>
     </div>
+
+
 
     <div class="flex gap-2 justify-center">
       <button class="bg-[#534feb] hover:bg-blue-800 text-white px-4 py-2 rounded-xl w-20" (click)="addRole()">Add</button>
