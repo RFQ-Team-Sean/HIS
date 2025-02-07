@@ -1,17 +1,21 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { SupabaseService } from 'src/app/Supabase/supabase.service';
 import { SidebarComponent } from 'src/app/shared/sidebar/sidebar.component';
 
+type RequestStatus = 'Pending' | 'Approved' | 'Rejected';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, SidebarComponent],
+  imports: [CommonModule, RouterModule, SidebarComponent, FormsModule, ReactiveFormsModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class ADashboardComponent implements OnInit {
+  employees: any[] = []; //Stores employee data for Requests function
   isExpanded = false;
   userEmail: string = ''; // Declare userEmail
   totalEmployees: string = '0'; // Add this line to store total employees as a string
@@ -29,6 +33,11 @@ export class ADashboardComponent implements OnInit {
   isError = false;
   holidays: any[] = [];
 
+  //Added Requests function 
+  requests: any[] = [];
+  requestTypes: any[] = ['Leave Request', 'Overtime Request', 'DTR Adjustment Request', 'Certifications', 'Membership Forms', 'Monetization of Leave Credits'];
+  newLeaveStatus: RequestStatus = 'Pending';
+
   constructor(private router: Router, private supabaseService: SupabaseService) {}
 
   async ngOnInit() {
@@ -38,6 +47,19 @@ export class ADashboardComponent implements OnInit {
     await this.fetchHolidays(); // Make sure this line is present
     this.generateCalendar();
     this.updateCurrentDateTime(); // Start updating the current date and time
+    this.requests = await this.supabaseService.getRequests();
+    for (const request of this.requests) {
+      request.fileUrl = await this.supabaseService.getFileUrl(request.request, 'requests-documents');
+    }
+
+    this.loadEmployees();
+  }
+
+  // Added Load Employees for Requests table
+  async loadEmployees() {
+    const { data, error } = await this.supabaseService.getProfilesForRequests();
+    if (error) console.error('Error loading employees:', error);
+    else this.employees = data;
   }
 
   currentDateTime: string = this.getCurrentDateTime();

@@ -1,24 +1,16 @@
+<div>
+    <p class="mb-2 text-3xl font-bold text-neutral-900">Requests<br></p>
+    <p class="mb-2 pb-5 text-slate-500 text-sm">View and manage Leaves, Daily Time Record Adjustments, Overtime, Certifications, Membership Forms, Monetization of leave credits, etc.</p>
+    <button *ngIf="isManagingLeaves" (click)="openAddLeaveModal()" class="text-white bg-blue-500 hover:bg-blue-700 rounded border border-gray-200 text-sm font-medium px-5 py-2.5">+ Add Request</button>
+    <button [ngClass]="{ 'bg-green-500 hover:bg-green-600': !isManagingLeaves, 'bg-pink-500 hover:bg-pink-600': isManagingLeaves }" class="text-white rounded border border-gray-200 text-sm font-medium px-5 py-2.5 transition duration-300 ease-in-out" (click)="onManageButtonClick('Leaves')">{{ manageLeaveButtonText }}</button>
+</div>
 <div class="flex">
     <div class="flex-grow">
         <div class="min-h-screen p-6 mb-6">
-            <p class="mb-2 text-3xl font-bold text-neutral-900">Requests<br></p>
-            <p class="mb-2 pb-5 text-slate-500 text-sm">View and manage Leaves, Daily Time Record Adjustments, Overtime, Certifications, Membership Forms, Monetization of leave credits, etc.</p>
             <div class="z-10 relative rounded-xl shadow-lg bg-white">
                 <div class="flex flex-col gap-5 w-full">
                     <div class="overflow-x-auto flex flex-col gap-5 py-5 rounded-lg">
                         <!-- LEAVE REQUESTS -->
-                        <div class="flex justify-between items-center w-full px-5">
-                            <p class="text-xl font-semibold tracking-wider mt-10">REQUESTS</p>
-                            <div  class="flex space-x-2">
-                                <button *ngIf="isManagingLeaves" (click)="openAddLeaveModal()" class="text-white bg-blue-500 hover:bg-blue-700 rounded border border-gray-200 text-sm font-medium px-5 py-2.5">
-                                    + Add Request
-                                </button>
-                                <button [ngClass]="{ 'bg-green-500 hover:bg-green-600': !isManagingLeaves, 'bg-pink-500 hover:bg-pink-600': isManagingLeaves }"
-                                        class="text-white rounded border border-gray-200 text-sm font-medium px-5 py-2.5 transition duration-300 ease-in-out" (click)="onManageButtonClick('Leaves')">
-                                    {{ manageLeaveButtonText }}
-                                </button>
-                            </div>
-                        </div>
                         <div class="max-h-[calc(100vh-14rem)] overflow-y-auto custom-scrollbar overflow-x-auto">
                             <table class="w-full text-left" >
                                 <thead class="bg-gray-100 z-10 sticky top-0">

@@ -82,94 +82,37 @@
       </div>
     </section>
     <!-- Requests Table -->
-    <section class="flex w-full h-full min-h-0 justify-between gap-4">
-      <div class="flex flex-col justify-between bg-white border h-full min-h-0 overflow-y-auto overflow-x-clip rounded-xl p-2">
-        <table class="table table-fixed w-full h-min min-h-min rounded-xl text-black px-2">
-          <thead class="rounded-xl table-header-group w-full sticky inset-0">
-            <tr class="bg-[#f5f5f5] rounded-xl h-12 border-spacing-2">
-              <th class="text-center rounded-l-xl p-2">Date</th>
-              <th class="p-2">Employee Name</th>
-              <th class="p-2">Employment Type</th>
-              <th class="rounded-r-xl p-2">Status</th>
-            </tr>
+     <div>
+      <section class="flex w-full h-full min-h-0 justify-between gap-4">
+        <table class="w-full text-left" >
+          <thead class="bg-gray-100 z-10 sticky top-0">
+              <tr>
+                  <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Request ID</th>
+                  <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Requested By</th>
+                  <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Request Type</th>
+                  <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Request</th>
+                  <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              </tr>
           </thead>
-          <tbody>
-            <tr class="table-row h-16 text-gray-600 text-sm font-light w-full border-b">
-              <td class="table-cell border-b h-full align-middle text-center p-2">01/01/2023</td>
-              <td class="table-cell border-b h-full align-middle text-left p-2">John Doe</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Full-Time</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Approved</td>
-            </tr>
-            <tr class="table-row h-16 text-gray-600 text-sm font-light w-full border-b">
-              <td class="table-cell border-b h-full align-middle text-center p-2">02/01/2023</td>
-              <td class="table-cell border-b h-full align-middle text-left p-2">Jane Smith</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Part-Time</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Pending</td>
-            </tr>
-            <tr class="table-row h-16 text-gray-600 text-sm font-light w-full border-b">
-              <td class="table-cell border-b h-full align-middle text-center p-2">03/01/2023</td>
-              <td class="table-cell border-b h-full align-middle text-left p-2">Alice Johnson</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Contract</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Rejected</td>
-            </tr>
-            <tr class="table-row h-16 text-gray-600 text-sm font-light w-full border-b">
-              <td class="table-cell border-b h-full align-middle text-center p-2">04/01/2023</td>
-              <td class="table-cell border-b h-full align-middle text-left p-2">Michael Brown</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Full-Time</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Approved</td>
-            </tr>
-            <tr class="table-row h-16 text-gray-600 text-sm font-light w-full border-b">
-              <td class="table-cell border-b h-full align-middle text-center p-2">05/01/2023</td>
-              <td class="table-cell border-b h-full align-middle text-left p-2">Emily Davis</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Part-Time</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Pending</td>
-            </tr>
-            <tr class="table-row h-16 text-gray-600 text-sm font-light w-full border-b">
-              <td class="table-cell border-b h-full align-middle text-center p-2">06/01/2023</td>
-              <td class="table-cell border-b h-full align-middle text-left p-2">David Wilson</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Contract</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Rejected</td>
-            </tr>
-            <tr class="table-row h-16 text-gray-600 text-sm font-light w-full border-b">
-              <td class="table-cell border-b h-full align-middle text-center p-2">07/01/2023</td>
-              <td class="table-cell border-b h-full align-middle text-left p-2">Sophia Martinez</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Full-Time</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Approved</td>
-            </tr>
-            <tr class="table-row h-16 text-gray-600 text-sm font-light w-full border-b">
-              <td class="table-cell border-b h-full align-middle text-center p-2">08/01/2023</td>
-              <td class="table-cell border-b h-full align-middle text-left p-2">James Anderson</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Part-Time</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Pending</td>
-            </tr>
-            <tr class="table-row h-16 text-gray-600 text-sm font-light w-full border-b">
-              <td class="table-cell border-b h-full align-middle text-center p-2">09/01/2023</td>
-              <td class="table-cell border-b h-full align-middle text-left p-2">Olivia Thomas</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Contract</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Rejected</td>
-            </tr>
-            <tr class="table-row h-16 text-gray-600 text-sm font-light w-full border-b">
-              <td class="table-cell border-b h-full align-middle text-center p-2">10/01/2023</td>
-              <td class="table-cell border-b h-full align-middle text-left p-2">Liam Jackson</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Full-Time</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Approved</td>
-            </tr>
-            <tr class="table-row h-16 text-gray-600 text-sm font-light w-full border-b">
-              <td class="table-cell border-b h-full align-middle text-center p-2">11/01/2023</td>
-              <td class="table-cell border-b h-full align-middle text-left p-2">Ava White</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Part-Time</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Pending</td>
-            </tr>
-            <tr class="table-row h-16 text-gray-600 text-sm font-light w-full border-b">
-              <td class="table-cell border-b h-full align-middle text-center p-2">12/01/2023</td>
-              <td class="table-cell border-b h-full align-middle text-left p-2">Noah Harris</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Contract</td>
-              <td class="table-cell border-b h-full align-middle text-center p-2">Rejected</td>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let requests of requests">
+              <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.id }} </td>
+              <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.profile?.email }} </td>
+              <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.request_type }} </td>
+              <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
+                <div>{{ requests.request }} <br>
+                    <a *ngIf="requests.fileUrl" [href]="requests.fileUrl" target="_blank" class="text-xs text-blue-600 hover:underline">View</a>
+                    </div></td>
+              <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
+                <span class="px-2 py-1 text-xs font-semibold rounded"
+                              [ngClass]="{
+                              'bg-yellow-200 text-yellow-800': requests.status === 'Pending',
+                              'bg-green-200 text-green-800': requests.status === 'Approved', 'bg-red-200 text-red-800': requests.status === 'Rejected'}">{{ requests.status }}</span></td>
             </tr>
           </tbody>
-        </table>
-      </div>
-    </section>
+      </table>
+      </section>
+     </div>
   </div>
 
   <!-- Right pink container -->
