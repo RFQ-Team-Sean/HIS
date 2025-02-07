@@ -82,81 +82,75 @@
       </div>
     </section>
     <!-- Requests Table -->
-     <div>
       <section class="flex w-full h-full min-h-0 justify-between gap-4">
-        <table class="w-full text-left" >
-          <thead class="bg-gray-100 z-10 sticky top-0">
-              <tr>
+        <div class="flex flex-col justify-between bg-white border h-full min-h-0 overflow-y-auto overflow-x-clip rounded-xl p-2">
+          <table class="table table-fixed w-full h-min min-h-min rounded-xl text-black px-2" >
+            <thead class="rounded-xl table-header-group w-full sticky inset-0">
+                <tr class="bg-[#f5f5f5] rounded-xl h-12 border-spacing-2">
                   <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Request ID</th>
                   <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Requested By</th>
                   <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Request Type</th>
                   <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Request</th>
                   <th class="px-3 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr *ngFor="let requests of requests" class="table-row h-16 text-gray-600 text-sm font-light w-full border-b">
+                <td class="table-cell border-b h-full align-middle text-center p-2"> {{ requests.id }} </td>
+                <td class="table-cell border-b h-full align-middle text-center p-2"> {{ requests.profile?.email }} </td>
+                <td class="table-cell border-b h-full align-middle text-center p-2"> {{ requests.request_type }} </td>
+                <td class="table-cell border-b h-full align-middle text-center p-2"><div>{{ requests.request }} <br><a *ngIf="requests.fileUrl" [href]="requests.fileUrl" target="_blank" class="text-xs text-blue-600 hover:underline">View</a></div></td>
+                <td class="table-cell border-b h-full align-middle text-center p-2"><span class="px-2 py-1 text-xs font-semibold rounded" [ngClass]="{'bg-yellow-200 text-yellow-800': requests.status === 'Pending', 'bg-green-200 text-green-800': requests.status === 'Approved', 'bg-red-200 text-red-800': requests.status === 'Rejected'}">{{ requests.status }}</span></td>
               </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr *ngFor="let requests of requests">
-              <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.id }} </td>
-              <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.profile?.email }} </td>
-              <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900"> {{ requests.request_type }} </td>
-              <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
-                <div>{{ requests.request }} <br>
-                    <a *ngIf="requests.fileUrl" [href]="requests.fileUrl" target="_blank" class="text-xs text-blue-600 hover:underline">View</a>
-                    </div></td>
-              <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
-                <span class="px-2 py-1 text-xs font-semibold rounded"
-                              [ngClass]="{
-                              'bg-yellow-200 text-yellow-800': requests.status === 'Pending',
-                              'bg-green-200 text-green-800': requests.status === 'Approved', 'bg-red-200 text-red-800': requests.status === 'Rejected'}">{{ requests.status }}</span></td>
-            </tr>
-          </tbody>
-      </table>
+            </tbody>
+          </table>
+        </div>
       </section>
-     </div>
   </div>
 
   <!-- Right pink container -->
   <section class="bg-white w-[25%] h-[100%] ml-4 rounded-xl p-4 border border-gray-200">
     <!-- Navigation -->
-    <div class="bg-blue-50 p-4 rounded">
+    <div class="bg-[#534feb] p-4 rounded-lg">
       <div class="flex items-center justify-between mb-4">
-        <button (click)="changeMonth(-1)" class="text-black-500 font-bold hover:text-blue-700 transition duration-150 ease-in-out">
+        <button (click)="changeMonth(-1)" class="text-white font-bold hover:text-blue-700 transition duration-150 ease-in-out">
           &lt;
         </button>
-        <span class="text-lg font-semibold">{{ currentMonth + 1 }}/{{ currentYear }}</span>
-        <button (click)="changeMonth(1)" class="text-black-500 font-bold hover:text-blue-700 transition duration-150 ease-in-out">
+        <span class="text-lg text-white font-semibold">{{ currentMonth + 1 }}/{{ currentYear }}</span>
+        <button (click)="changeMonth(1)" class="text-white font-bold hover:text-blue-700 transition duration-150 ease-in-out">
           &gt;
         </button>
       </div>
 
       <!-- Days of the week -->
       <div class="grid grid-cols-7 text-center text-sm font-medium mb-2">
-        <div class="p-2">Sun</div>
-        <div class="p-2">Mon</div>
-        <div class="p-2">Tue</div>
-        <div class="p-2">Wed</div>
-        <div class="p-2">Thu</div>
-        <div class="p-2">Fri</div>
-        <div class="p-2">Sat</div>
+        <div class="p-2 font-light text-base text-white">Sun</div>
+        <div class="p-2 font-light text-base text-white">Mon</div>
+        <div class="p-2 font-light text-base text-white">Tue</div>
+        <div class="p-2 font-light text-base text-white">Wed</div>
+        <div class="p-2 font-light text-base text-white">Thu</div>
+        <div class="p-2 font-light text-base text-white">Fri</div>
+        <div class="p-2 font-light text-base text-white">Sat</div>
       </div>
 
       <!-- Calendar days -->
       <div class="grid grid-cols-7 gap-1 text-center text-sm">
         <!-- Days of previous month -->
-        <div *ngFor="let day of daysInPrevMonth" class="p-2 opacity-50"></div>
+        <div *ngFor="let day of daysInPrevMonth" class="p-2"></div>
         <!-- Days of current month -->
-        <div *ngFor="let day of daysInMonth" [ngClass]="{'bg-blue-200': isToday(day, currentMonth, currentYear)}" class="p-2 rounded-lg hover:bg-blue-100 transition duration-150 ease-in-out"> {{ day }}</div>
+        <div *ngFor="let day of daysInMonth" [ngClass]="{'border border-white border-b': isToday(day, currentMonth, currentYear)}" class="p-2 text-white rounded-lg hover:bg-blue-100 hover:text-gray-600 transition duration-150 ease-in-out"> {{ day }}</div>
         <!-- Days of next month -->
-        <div *ngFor="let day of daysInNextMonth" class="p-2 opacity-50"></div>
+        <div *ngFor="let day of daysInNextMonth" class="p-2"></div>
       </div>
     </div>
-    <p class="text-xl font-bold pt-4">Monthly Schedules</p>
+
+    <p class="text-xl font-light text-center pt-4">Monthly Schedules</p>
     <div class="h-44 overflow-y-auto borde rounded-md custom-scrollbar">
       <div *ngFor="let holiday of holidays" class="flex items-center justify-between">
         <p class="text-lg">{{ holiday.parameter_name }}</p>
         <p class="text-sm text-gray-400 ml-2">{{ holiday.parameter_date | date:'MM/dd/yy' }}</p>
       </div>
-      <p *ngIf="holidays.length === 0" class="text-gray-500">No schedules this month</p>
+      <p *ngIf="holidays.length === 0" class="text-center text-light text-gray-500">No schedules this month</p>
     </div>
   </section>
 </main>
