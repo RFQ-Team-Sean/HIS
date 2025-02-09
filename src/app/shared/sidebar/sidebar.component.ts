@@ -212,6 +212,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
                 route: '/hr/personnel-201-file/general-info',
                 icon: 'person',
                 subItems: [
+                  { name: 'Table Placeholder', route: '/hr/personnel-201-file/general-info/personal-data-sheet/master-table'},
                   { name: 'Personal Details', route: '/hr/personnel-201-file/general-info/personal-data-sheet/view' },
                   { name: 'Contact Information', route: '/hr/personnel-201-file/general-info/contact' },
                   { name: 'Family Background', route: '/hr/personnel-201-file/general-info/family' }
@@ -235,20 +236,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
                 ]
               },
               { name: 'Requests Management', icon: 'assignment', route: '/hr/personnel-201-file/requests' },
-              { name: 'Personnel Movement', route: '/hr/personnel-201-file/movement' },
-              { name: 'Loan Information', route: '/hr/personnel-201-file/loan-information' },
-              { name: 'Additional Contributions', route: '/hr/personnel-201-file/contributions' }
-            ]
-          },
-          {
-            name: 'Health & Wellness',
-            route: '/hr/health-wellness',
-            icon: 'health_and_safety',
-            subItems: [
-              { name: 'Activities', route: '/hr/health-wellness/activities' },
-              { name: 'Medical Services', route: '/hr/health-wellness/medical' },
-              { name: 'Sick Leave History', route: '/hr/health-wellness/sick-leave' },
-              { name: 'Health Statistics', route: '/hr/health-wellness/statistics' }
+              { name: 'Personnel Movement', route: '/hr/personnel-201-file/movement' }
             ]
           }
         ];

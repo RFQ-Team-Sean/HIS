@@ -28,6 +28,7 @@ import { DailyTimeLogsComponent } from './features/hr-admin/personnels-201-file/
 import { ScheduleAdjustmentRequestsComponent } from './features/hr-admin/personnels-201-file/leaves-attendance-records/schedule-adjustment-requests/schedule-adjustment-requests.component';
 import { EmployeeLeaveBalanceComponent } from './features/hr-admin/personnels-201-file/leaves-attendance-records/employee-leave-balance/employee-leave-balance.component';
 import { PasswordManagementComponent } from './features/systems-admin/password-management/password-management.component';
+import { MasterTableComponent } from './features/hr-admin/personnels-201-file/general-information/personal-data-sheet/master-table/master-table.component';
 
 // Feature Components
 // import { UserManagementComponent } from './features/systems-administration/user-management/user-management.component';
@@ -172,6 +173,10 @@ export const routes: Routes = [
           { path: 'general-information', component: GeneralInformationComponent },
           { path: 'compensation-records', component: CompensationRecordsComponent }
         ]
+      },
+      {
+        path: 'personnel-201-file/general-info/personal-data-sheet/master-table',
+        component: MasterTableComponent
       },
       {
         path: 'personnel-201-file/general-info/personal-data-sheet/edit',
