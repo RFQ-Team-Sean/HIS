@@ -3,20 +3,25 @@
     <div class="flex flex-col w-full border-none">
 <p class="font-martel-bold text-2xl text-blue-500 border-none">Login to your account</p>
             <!-- SIGN UP FORM -->
-            <form class="flex flex-col gap-2">
+            <form (ngSubmit)="login()">
+                <!-- Email Input -->
                 <app-form-inputs
-                    label="Email"
-                    id="email"
-                    type="email"
-                    name="email"
-                    placeholder="Input your registered email"
+                  label="Email"
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  [(ngModel)]="email" 
                 ></app-form-inputs>
+              
+                <!-- Password Input -->
                 <app-form-inputs
-                    label="Password"
-                    id="password"
-                    type="password"
-                    name="password"
-                    placeholder="Input your password"
+                  label="Password"
+                  id="password"
+                  type="password"
+                  name="password"
+                  placeholder="Enter your password"
+                  [(ngModel)]="password" 
                 ></app-form-inputs>
                 <div class="flex items-center justify-between border-none">
                     <div class="flex items-center gap-1 border-none">

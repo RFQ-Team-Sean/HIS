@@ -42,8 +42,18 @@ interface Employee {
 })
 
 export class SupabaseService {
+  
+  async signOut() {
+    return await this.supabase.auth.signOut();
+  }
+  
+  async signIn(email: string, password: string): Promise<{ data: any; error: any }> {
+    const { data, error } = await this.supabase.auth.signInWithPassword({ email, password });
+    return { data, error };
+  }
   private databaseChangeSubject = new BehaviorSubject<boolean>(false);
   public databaseChange$ = this.databaseChangeSubject.asObservable();
+  supabaseService: any;
   //uploadFile: any;
   uploadPhoto(photoFile: any) {
     throw new Error('Method not implemented.');
@@ -124,19 +134,53 @@ export class SupabaseService {
     return !!session.data.session;
   }
 
-  async signIn(email: string, password: string): Promise<boolean> {
-    const { data, error } = await this.supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      console.error('Sign in error:', error);
-      return false;
+  async login() {
+    try {
+      // Authenticate the user using Supabase
+      const { data: authData, error: authError } = await this.supabaseService.signIn(this.email, this.password);
+  
+      if (authError) {
+        console.error('Authentication Error:', authError.message);
+        alert('Invalid credentials. Please try again.');
+        return;
+      }
+  
+      // Fetch the user's profile to determine their role
+      const { data: userProfile, error: profileError } = await this.supabaseService.getProfiles(this.email); // Pass the email argument
+  
+      if (profileError || !userProfile) {
+        console.error('Error fetching user profile:', profileError?.message);
+        alert('Failed to fetch user profile.');
+        return;
+      }
+  
+      // Extract the user's role from the profile
+      const userRole = userProfile?.role;
+  
+      if (!userRole) {
+        console.error('User role is not defined.');
+        alert('User role is not defined.');
+        return;
+      }
+  
+      // Store the user's role in localStorage
+      localStorage.setItem('userRole', userRole);
+  
+      // Redirect to the appropriate dashboard based on the user's role
+      this.redirectToDashboard(userRole);
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('An error occurred during login.');
     }
-    this.currentUser.next(data.user);
-    this.currentSession.next(data.session);
-    return true;
   }
-
-  async signOut() {
-    return await this.supabase.auth.signOut();
+  password(email: (email: any, password: any) => { data: any; error: any; } | PromiseLike<{ data: any; error: any; }>, password: any): { data: any; error: any; } | PromiseLike<{ data: any; error: any; }> {
+    throw new Error('Method not implemented.');
+  }
+  email(email: any, password: any): { data: any; error: any; } | PromiseLike<{ data: any; error: any; }> {
+    throw new Error('Method not implemented.');
+  }
+  redirectToDashboard(userRole: any) {
+    throw new Error('Method not implemented.');
   }
 
 
@@ -1526,7 +1570,7 @@ async getParameters() {
     return { data, error }; 
   }
 
-  async getProfiles() {
+  async getProfiles(email?: string) {
     const { data, error } = await this.supabase
       .from('profile')
       .select('*');
