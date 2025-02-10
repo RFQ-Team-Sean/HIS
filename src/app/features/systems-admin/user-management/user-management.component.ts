@@ -86,7 +86,7 @@ export class UserManagementComponent implements OnInit {
 
   showAccessRightsPopup = false;
   showAddDepartmentPopup = false;
-  isEditing: boolean = false;
+  isEditing = false;
   showModal = false;
   photoPreviewUrl: string = 'https://via.placeholder.com/200x200';;
   showPasswordGeneratedMessage: boolean = false;
@@ -157,16 +157,33 @@ export class UserManagementComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
   isDrawerOpen = false;
 
-  openDrawer() {
+  openDrawer(employeeData?: any) {
     this.generateRandomPassword(); // Generate a random password here before the side drawer opens
-    this.selectedEmployee = {...this.employee}; //Update the selectedEmployee with the generated password
     this.isDrawerOpen = true; //opens the drawer
-    //this.showModal = true;
+    if (employeeData) {
+      this.isEditing = true;
+      this.employee = { ...employeeData };
+    } else {
+      this.isEditing = false;
+      this.employee = {
+        email: '',
+        password: '',
+        firstname: '',
+        midname: '',
+        surname: '',
+        position: '',
+        department: '',
+        type: '', 
+        employee_id: ''
+       };
+    }
+    this.isDrawerOpen = true;
+  
   }
 
   closeDrawer() {
     this.isDrawerOpen = false;
-    this.showModal = false;
+    this.isEditing = false;
     this.loadEmployees(); //Refreshes the list after closing 
     this.close.emit();
   }
