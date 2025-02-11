@@ -1,6 +1,6 @@
 <!-- Flexible container that holds a sidebar navigation component and user-management area -->
 <div class="flex">
-    <div class="flex-grow"> 
+    <div class="flex-grow">
       <!-- Main componenet -->
       <div class="min-h-screen">
         <main class="p-6">
@@ -11,7 +11,7 @@
 
           <!-- Users active tab -->
           <div class="flex flex-col">
-        <section id="user-list" class="flex flex-col h-full"> 
+        <section id="user-list" class="flex flex-col h-full">
           <!-- Adding New Employee -->
           <div *ngIf="showModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center"(click)="toggleModal()">
             <div class="relative px-4 w-full max-w-4xl" (click)="$event.stopPropagation()">
@@ -34,7 +34,7 @@
                             <p *ngIf="showFileSizeAlert" class="text-red-600 text-sm mb-2">The photo you selected exceeds 2MB. Please try again.</p>
                             <input type="file" id="photoInput" accept="image/png,image/jpeg" class="hidden" (change)="onPhotoChange($event)">
                             <label for="photoInput" class="w-48 text-center bg-blue-500 text-white py-2 px-4 rounded cursor-pointer hover:bg-blue-600 transition duration-300 mt-3">Choose Photo</label>
-                          </div>                  
+                          </div>
                           <div class="md:col-span-3 col-span-4 space-y-4">
                             <div class="grid grid-cols-2 gap-4">
                               <div class="flex flex-col">
@@ -44,17 +44,17 @@
                               <div class="flex flex-col">
                                 <label for="password" class="mb-1 text-sm font-medium text-gray-500">Password*</label>
                                 <div class="relative">
-                                  <input 
-                                    [type]="showPassword ? 'text' : 'password'" 
-                                    id="password" 
-                                    [(ngModel)]="employee.password" 
-                                    name="password" 
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5" 
+                                  <input
+                                    [type]="showPassword ? 'text' : 'password'"
+                                    id="password"
+                                    [(ngModel)]="employee.password"
+                                    name="password"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5"
                                     required
                                   >
-                                  <button 
-                                    type="button" 
-                                    (click)="togglePasswordVisibility()" 
+                                  <button
+                                    type="button"
+                                    (click)="togglePasswordVisibility()"
                                     class="absolute inset-y-0 right-0 flex items-center pr-3"
                                   >
                                     <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -136,7 +136,7 @@
               <div class="relative w-[20%]">
                 <input type="text" [(ngModel)]="searchTerm" placeholder="Search Employees..." (input)="searchTable()" class="w-full h-full p-2 pr-8 border rounded-full border-gray-300"/>
                     <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
-              </div>          
+              </div>
                 <div class="flex items-center space-x-4">
                   <!--Filter Feature-->
                   <div class="relative">
@@ -147,7 +147,7 @@
                     </select>
                     <i class="fa fa-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                   </div>
-                    
+
                   <!-- Delete button only displayed when in editing mode -->
                   <button *ngIf="isEditing" class="bg-red-500 text-white px-4 pr-8 py-2 rounded" (click)="deleteUsers()">Delete</button>
                   <!-- Manage User button -->
@@ -176,14 +176,14 @@
                       <th *ngIf="isEditing" class="font-thin py-3 px-6 text-center">Select</th>
                       <th class="z-1 top-0 sticky bg-gray-100 py-3 px-4 w-2/12 text-left font-medium text-gray-500">PROFILE</th>
                       <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">NAME</th>
-                      <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">EMAIL</th> 
+                      <th class="z-10 top-0 sticky bg-gray-100 py-3 px-6 text-left font-medium text-gray-500">EMAIL</th>
                       <th class="z-10 top-0 sticky bg-gray-100 py-3 px-2 w-1/12 text-left font-medium text-gray-500">PASSWORD</th>
                       <th class="z-10 top-0 sticky bg-gray-100 py-3 px-2 w-1/12 text-left font-medium text-gray-500">ROLE</th>
                       <th class="z-10 top-0 sticky bg-gray-100 py-3 px-2 w-1/12 text-left font-medium text-gray-500">STATUS</th>
                       <th class="z-10 top-0 sticky bg-gray-100 py-3 px-2 w-1/12 text-center font-medium text-gray-500">ACCESS</th>
                       <th *ngIf="isEditing" class="z-10 top-0 sticky bg-gray-100 y-3 px-6 text-center text-lg">EDIT</th>
                     </tr>
-                  </thead>                
+                  </thead>
                   <tbody class="text-gray-500 text-sm font-light">
                     <tr *ngFor="let user of paginatedUsers; let i = index" class="border-b border-gray-200 hover:bg-gray-50">
                       <td *ngIf="isEditing" class="py-3 px-6 text-center -z-10">
@@ -191,7 +191,7 @@
                       </td>
                       <td class="py-3 px-4 w-2/12 text-left whitespace-nowrap">
                         <div class="flex items-center"><img [src]="user.profile" alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-gray-200"></div>
-                      </td>              
+                      </td>
                       <td class="py-3 px-6 text-left truncate">{{ user.name }}</td>
                       <td class="py-3 px-6 text-left truncate">{{ user.email }}</td>
                       <td class="py-3 px-1 w-1/12 text-left">
@@ -202,7 +202,7 @@
                         <span [ngClass]="{'bg-green-200 text-green-700': user.status === 'Active', 'bg-red-200 text-red-700': user.status === 'Inactive'}" class="py-1 px-3 rounded-full text-xs">{{ user.status }}</span>
                       </td>
                       <td class="py-3 px-2 w-1/12 text-center">
-                        <button 
+                        <button
                           (click)="!showModal && toggleUserAccess(user)"
                           class="relative inline-flex items-center w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                           [ngClass]="{
@@ -215,7 +215,7 @@
                           [attr.disabled]="showModal ? '' : null"
                           aria-label="Toggle user access"
                         >
-                          <span 
+                          <span
                             class="inline-block w-5 h-5 transform transition-transform duration-200 ease-in-out bg-white rounded-full"
                             [ngClass]="{'translate-x-6': user.access, 'translate-x-1': !user.access}"
                           ></span>
@@ -231,8 +231,8 @@
                     </tr>
                   </tbody>
                 </table>
-                         
-              </div>      
+
+              </div>
           </div>
         </section>
           </div>
@@ -241,4 +241,3 @@
       </div>
     </div>
   </div>
-    

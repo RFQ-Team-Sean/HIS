@@ -28,6 +28,7 @@ import { DailyTimeLogsComponent } from './features/hr-admin/personnels-201-file/
 import { ScheduleAdjustmentRequestsComponent } from './features/hr-admin/personnels-201-file/leaves-attendance-records/schedule-adjustment-requests/schedule-adjustment-requests.component';
 import { EmployeeLeaveBalanceComponent } from './features/hr-admin/personnels-201-file/leaves-attendance-records/employee-leave-balance/employee-leave-balance.component';
 import { PasswordManagementComponent } from './features/systems-admin/password-management/password-management.component';
+import { AuditTrailComponent } from './features/systems-admin/audit-trail/audit-trail.component';
 
 // Feature Components
 // import { UserManagementComponent } from './features/systems-administration/user-management/user-management.component';
@@ -135,7 +136,7 @@ export const routes: Routes = [
       { path: 'approval-workflow', component: WorkflowApprovalComponent },
       { path: 'workflow-approval-user', component: WorkflowApprovalUserComponent },
       { path: 'password-management', component: PasswordManagementComponent },
-      // { path: 'audit-trail', component: AuditTrailComponent },
+      { path: 'audit-trail', component: AuditTrailComponent },
       // { path: 'system-integration', component: SystemIntegrationComponent }
     ]
   },

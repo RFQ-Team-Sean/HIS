@@ -54,11 +54,11 @@
       </div>
 
       <!-- ROLE LIST -->
-      <div class="flex flex-col gap-0 w-full h-full min-h-0 overflow-y-auto border-t border-gray-200 pl-2">
+      <div class="flex flex-col gap-0 w-full h-full min-h-0 overflow-y-auto px-2">
         <ng-container *ngIf="searchroletab.length > 0; else noMatch">
-          <button class="group flex flex-1 gap-4 items-center pr-4 hover:bg-gray-100 min-h-12 max-h-12 text-gray-600 text-sm font-normal rounded-md w-full overflow-clip border-b"
-          *ngFor="let role of searchroletab" [ngClass]="{'bg-gray-100': selectedRole.role_id === role.role_id}" (click)="onRoleClick(role); selectRoleForEditing(role)">
-          <div class="bg-transparent group-hover:bg-blue-600 min-w-1 h-full"></div>
+            <button class="group flex flex-1 gap-4 items-center pr-4 hover:bg-gray-100 hover:rounded-lg min-h-12 max-h-12 text-gray-600 text-sm font-normal w-full overflow-clip border-b"
+            *ngFor="let role of searchroletab; let first = first" [ngClass]="{'bg-gray-100 overflow-clip rounded-lg': selectedRole.role_id === role.role_id, 'border-y': first}" (click)="onRoleClick(role); selectRoleForEditing(role)">
+            <div class="bg-transparent min-w-2 h-full rounded-l-lg" [ngClass]="{'bg-blue-600': selectedRole.role_id === role.role_id}"></div>
             <div class="flex-1 overflow-clip">
               <ng-container *ngIf="editingRoleId === role.role_id; else displayRoleName">
               <input [(ngModel)]="role.role_name" class="border rounded outline-none p-1" />
@@ -107,7 +107,7 @@
         <span class="text-xl font-semibold inline-block align-middle pr-4 text-black border-r-2 border-black">
           Assigned Employees
         </span>
-        <span class="text-xl font-light inline-block align-middle pl-4 text-gray-800">
+        <span class="text-xl font-light inline-block align-middle pl-4 text-black">
           {{ assignedRole.role_name }}
         </span>
         <span  *ngIf="isManageMode" class="material-icons text-lg text-blue-600 w-6 aspect-square inline-block ">
@@ -115,7 +115,7 @@
         </span>
       </div>
       <!-- ASSIGNED USERS LIST -->
-      <div class="flex flex-col justify-between bg-white border h-full min-h-0 overflow-y-auto overflow-x-clip rounded-xl p-2">
+      <div class="flex flex-col justify-between bg-white border h-full min-h-0 overflow-y-auto overflow-x-clip rounded-xl p-2 mx-4">
         <table class="table table-fixed w-full h-min min-h-min rounded-xl text-black px-2">
           <thead class="rounded-xl table-header-group w-full sticky inset-0">
             <tr class="bg-[#f5f5f5] rounded-xl h-12 border-spacing-2">

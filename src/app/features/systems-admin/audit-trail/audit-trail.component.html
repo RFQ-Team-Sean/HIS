@@ -1,58 +1,59 @@
-<div class="flex">
-    <div class="flex-grow">
-      <div class="min-h-screen">
-        <main class="p-6">
-          <div class="mb-3">
-            <p class="mb-2 text-3xl font-bold text-neutral-900">Audit Trail<br></p>
-            <p class="mb-2 pb-5 text-slate-500 text-sm">View system configuration logs and other changes</p>
-          </div>
-  
-          <div class="overflow-x-auto shadow-lg rounded-xl bg-white">
-            <div class="flex flex-col md:flex-row md:justify-between items-center justify-center p-4">
-              <div class="relative w-[20%]">
-                <input
-                  type="text"
-                  placeholder="Search Log..."
-                  class="w-full h-full p-2 pr-8 border rounded-full border-gray-300"
-                />
-                <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pl-5"></i>
-              </div>
-              <div class="flex items-center space-x-4">
-                <button class="text-black p-1 bg-gray-100 rounded-md" (click)="previousPage()"><</button>
-                <span class="text-gray-600 text-center">{{ currentPage }} of {{ getTotalPages() }}</span>
-                <button class="text-black p-1 bg-gray-100 rounded-md" (click)="nextPage()">></button>
-              </div>
-            </div>
-  
-            <div class="overflow-x-hidden overflow-y-auto max-h-[31rem] custom-scrollbar">
-              <table class="w-full text-left table-fixed">
-                <thead class="bg-gray-100">
-                  <tr>
-                    <th class="bg-gray-100 w-1/12 sticky top-0 px-4 py-3  z-10 font-medium text-gray-500">DATE</th>
-                    <th class="bg-gray-100 w-1/12 sticky top-0 px-4 py-3  z-10 font-medium text-gray-500">TIME</th>
-                    <th class="bg-gray-100 w-1/12 sticky top-0 px-4 py-3  z-10 font-medium text-gray-500">USER ID</th>
-                    <th class="bg-gray-100 w-1/6 sticky top-0 px-4 py-3  z-10 font-medium text-gray-500">AFFECTED PAGE</th>
-                    <th class="bg-gray-100 w-1/12 sticky top-0 px-4 py-3  z-10 font-medium text-gray-500">ACTION</th>
-                    <th class="bg-gray-100 w-1/4 sticky top-0 px-4 py-3  z-10 font-medium text-gray-500">OLD PARAMETER</th>
-                    <th class="bg-gray-100 w-1/4 sticky top-0 px-4 py-3  z-10 font-medium text-gray-500">NEW PARAMETER</th>
-                  </tr>
-                </thead>
-                <tbody class="text-slate-500">
-                  <tr *ngFor="let log of paginatedLogs" class="border-t border-gray-200">
-                    <td class="px-4 py-3 whitespace-nowrap truncate">{{ log.date }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap truncate">{{ log.time }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap truncate">{{ log.user_id }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap truncate">{{ log.affected_page }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap truncate">{{ log.action }}</td>
-                    <td class="px-4 py-3 truncate"><pre class="parameter-pre">{{ log.old_parameter }}</pre></td>
-                    <td class="px-4 py-3 truncate"><pre class="parameter-pre">{{ log.new_parameter }}</pre></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </main>
+<main class="flex flex-col h-full w-full gap-4">
+  <!-- TOP SECTION -->
+  <section class="bg-[#534feb] w-full rounded-xl px-4 py-6 text-white">
+    <span class="block font-semibold text-2xl">Audit Trail</span>
+    <span class="block font-extralight">View system configuration logs and other changes</span>
+  </section>
+  <!-- UTILITY SECTION -->
+  <section class="flex gap-4 w-full rounded-lg">
+    <!-- SEARCH BAR -->
+    <!-- Material Icons -->
+
+
+    <div class="relative">
+      <input type="search" placeholder="Search Log..." class="peer w-36 bg-white text-gray-800 border border-gray-300 rounded-md px-3 py-1.5 text-sm transition-all duration-300 focus:w-60 placeholder:text-gray-500 focus:ring-2 focus:ring-blue-500 outline-none" />
+      <span class="material-icons absolute right-2 top-1/2 text-gray-500 text-xl -translate-y-1/2 transition-all duration-150 peer-placeholder-shown:opacity-100 peer-placeholder-shown:visible opacity-0 invisible">search</span>
+      <span class="material-icons absolute right-2 top-1/2 text-gray-500 text-xl -translate-y-1/2 transition-all duration-150 invisible peer-placeholder-shown:opacity-0 peer-placeholder-shown:invisible peer-placeholder-shown:rotate-180
+      opacity-100 visible cursor-pointer" onclick="this.previousElementSibling.previousElementSibling.value=''; this.previousElementSibling.previousElementSibling.focus();">close</span>
+    </div>
+
+
+    <!-- PAGINATION BUTTONS -->
+    <div class="flex items-center space-x-4">
+      <button class="text-black p-1 bg-gray-100 rounded-md" (click)="previousPage()"></button>
+      <span class="text-gray-600 text-center">{{ currentPage }} of {{ getTotalPages() }}</span>
+      <button class="text-black p-1 bg-gray-100 rounded-md" (click)="nextPage()">></button>
+    </div>
+  </section>
+  <!-- LOG TABLE SECTION -->
+  <section class="flex flex-1 gap-4 w-full text-white max-h-full h-full min-h-0">
+    <div class="basis-full h-full max-h-full border rounded-xl bg-white p-2 flex flex-col gap-4">
+      <div class="overflow-x-hidden overflow-y-auto min-h-0 custom-scrollbar">
+        <table class="w-full text-left table-fixed">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="bg-gray-100 w-1/12 sticky top-0 px-4 py-3 z-10 font-medium text-gray-500 rounded-l-xl">DATE</th>
+              <th class="bg-gray-100 w-1/12 sticky top-0 px-4 py-3 z-10 font-medium text-gray-500">TIME</th>
+              <th class="bg-gray-100 w-1/12 sticky top-0 px-4 py-3 z-10 font-medium text-gray-500">USER ID</th>
+              <th class="bg-gray-100 w-1/6 sticky top-0 px-4 py-3 z-10 font-medium text-gray-500">AFFECTED PAGE</th>
+              <th class="bg-gray-100 w-1/12 sticky top-0 px-4 py-3 z-10 font-medium text-gray-500">ACTION</th>
+              <th class="bg-gray-100 w-1/4 sticky top-0 px-4 py-3 z-10 font-medium text-gray-500">OLD PARAMETER</th>
+              <th class="bg-gray-100 w-1/4 sticky top-0 px-4 py-3 z-10 font-medium text-gray-500 rounded-r-xl">NEW PARAMETER</th>
+            </tr>
+          </thead>
+          <tbody class="text-slate-500">
+            <tr *ngFor="let log of paginatedLogs" class="border-t border-gray-200 hover:bg-gray-100">
+              <td class="px-4 py-3 whitespace-nowrap truncate">{{ log.date }}</td>
+              <td class="px-4 py-3 whitespace-nowrap truncate">{{ log.time }}</td>
+              <td class="px-4 py-3 whitespace-nowrap truncate">{{ log.user_id }}</td>
+              <td class="px-4 py-3 whitespace-nowrap truncate">{{ log.affected_page }}</td>
+              <td class="px-4 py-3 whitespace-nowrap truncate">{{ log.action }}</td>
+              <td class="px-4 py-3 truncate"><pre class="parameter-pre">{{ log.old_parameter }}</pre></td>
+              <td class="px-4 py-3 truncate"><pre class="parameter-pre">{{ log.new_parameter }}</pre></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </div>
-  
+  </section>
+</main>
