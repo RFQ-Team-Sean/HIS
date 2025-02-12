@@ -40,7 +40,7 @@
                   </button>
 
                   <!-- New Employee button, disabled when isEditing is true -->
-                  <app-side-drawer [isOpen]="isDrawerOpen" *ngIf="!isEditing" (close)="closeDrawer()"></app-side-drawer>
+                  <app-side-drawer [isOpen]="isDrawerOpen" [employeeData]="employee" [isEditing]="isEditing" (close)="closeDrawer()"></app-side-drawer>
                   <button (click)="openDrawer()"
                         [ngClass]="{ 'bg-blue-500': !isEditing, 'bg-gray-500 cursor-not-allowed': isEditing }"
                         [disabled]="isEditing"
@@ -56,7 +56,7 @@
                   <button class=" text-black p-1 bg-gray-100 rounded-md" (click)="nextPage()" [disabled]="currentPage === totalPages">></button>
                 </div>
             </div>
-                <!-- Users active tab -->
+                <!-- USER MANAGEMENT TABLE -->
               <div *ngIf="filteredUsers.length > 0" class="overflow-x-hidden">
                 <table class="table-fixed w-full">
                   <thead>

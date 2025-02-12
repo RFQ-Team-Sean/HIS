@@ -51,6 +51,7 @@ interface AuditLogEntry {
 export class SideDrawerComponent {
   @Input() isOpen = false; 
   @Input() employeeData: any;
+  @Input() isEditing = false;
   @Output() close = new EventEmitter<void>();
   isDrawerOpen = false; // Flag to check if the drawer is open
 
@@ -71,7 +72,7 @@ export class SideDrawerComponent {
     employee_id: '',
   };
 
-  isEditing = false; // Flag to check if the form is in edit mode
+  //isEditing = false; // Flag to check if the form is in edit mode
   showPassword = false; // Flag to show password
   photoPreviewUrl = 'https://via.placeholder.com/200x200'; // Default Preview image URL
   showFileTypeAlert = false; // Flag to show file type alert
@@ -81,13 +82,14 @@ export class SideDrawerComponent {
   selectedEmployee: any=null; // Selected employee data
   roles: any[] = []; // List of roles
   showPasswordGeneratedMessage: boolean = false; // Flag to show password generated message
+  assignedRole: { role_id: number; role_name: string } = { role_id: 0, role_name: '' };
   
   idPreview: string = 'Select Department to Preview ID'; //Defaut Preview Message
 
-  openDrawer() {
-    this.isDrawerOpen = true;
-    this.showModal = true;
-  }
+  //openDrawer() {
+   // this.isDrawerOpen = true;
+   // this.showModal = true;
+  //}
 
   closeDrawer() {
     this.isDrawerOpen = false;
@@ -99,7 +101,6 @@ export class SideDrawerComponent {
     if (changes['employeeData'] && this.employeeData) {
       // Populate the form with employee data
       this.employee = { ...this.employeeData };
-      this.isEditing = true;
     } else {
       this.resetForm();
     }
@@ -175,17 +176,6 @@ export class SideDrawerComponent {
     }
   }
 
-  // UNUSED FUNCTION, 
-  //toggleModal() {
-    //this.showModal = !this.showModal;
-    //if (this.showModal) {
-      //this.generateRandomPassword();
-      //this.selectedEmployee = null;
-    //} else {
-     // this.resetForm();
-    //}
- // }
-
   //Password Generation Logic
   generateRandomPassword(length: number = 8) {
     const lowercase = 'abcdefghijklmnopqrstuvwxyz';
@@ -224,7 +214,8 @@ export class SideDrawerComponent {
     this.showPassword = !this.showPassword;
   }
   
-  //Form Submission Logic, THIS IS WHERE THE CREATE, EDIT, UPDATE FOR EMPLOYEE DATA TAKES PLACE, DOES NOT UPDATE AT THE MOMENT AFTER ADDING EMPLOYEE ID NUMBER GENERATOR FUNCTION
+  //Form Submission Logic, THIS IS WHERE THE CREATE, EDIT, UPDATE FOR EMPLOYEE DATA TAKES PLACE, SUBMIT FUNCTION DOES NOT WORK AT THE MOMENT
+
   async onSubmit() {
     console.log('Submitting employee data:', this.employee);
     // Validate email
@@ -265,6 +256,8 @@ export class SideDrawerComponent {
         console.log('Creating employee:', employeeData);
         response = await this.supabaseService.createEmployee(employeeData);
       }
+
+      console.log('Supabase response:', response)
       if (response.error) {
         console.error('Error:', response.error);
         alert(`Error ${this.isEditing ? 'updating' : 'creating'} employee. Please try again.`);
@@ -397,6 +390,16 @@ export class SideDrawerComponent {
       console.error('Error uploading photo:', error);
       alert('Error uploading photo. Please try again.');
       return null;
+    }
+  }
+
+  async loadRoles() {
+    try {
+      this.roles = await this.supabaseService.getRoles();
+      if (this.roles.length > 0) { /*checks if there is a role and displays the first row when you load the page */ 
+      }
+    } catch (error) {
+      console.error('Error fetching roles:', error);
     }
   }
 

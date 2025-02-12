@@ -90,7 +90,6 @@ export class SupabaseService {
     const { data, error } = await this.supabase
       .from('roles')
       .select('role_name, role_id');
-
     if (error) {
       throw error;
     }
@@ -257,6 +256,13 @@ export class SupabaseService {
       .select('role_id')
       .eq('role_name', employee.position)
       .single();
+
+      // For Debugging purposes
+      console.log('Role Query:', {
+        position: employee.position,
+        rolesData,
+        rolesError: rolesError?.message // <-- Check the error message
+      });
 
     if (rolesError) {
       console.error('Error fetching role_id:', rolesError.message);

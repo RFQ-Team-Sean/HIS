@@ -158,27 +158,20 @@ export class UserManagementComponent implements OnInit {
   isDrawerOpen = false;
 
   openDrawer(employeeData?: any) {
+    this.employee = {
+      email: '',
+      password: '',
+      firstname: '',
+      midname: '',
+      surname: '',
+      position: '',
+      department: '',
+      type: '',
+      employee_id: ''
+    };
     this.generateRandomPassword(); // Generate a random password here before the side drawer opens
+    this.selectedEmployee = { ...this.employee }; //Update the selectedEmployee with the generated password
     this.isDrawerOpen = true; //opens the drawer
-    if (employeeData) {
-      this.isEditing = true;
-      this.employee = { ...employeeData };
-    } else {
-      this.isEditing = false;
-      this.employee = {
-        email: '',
-        password: '',
-        firstname: '',
-        midname: '',
-        surname: '',
-        position: '',
-        department: '',
-        type: '', 
-        employee_id: ''
-       };
-    }
-    this.isDrawerOpen = true;
-  
   }
 
   closeDrawer() {
@@ -242,138 +235,19 @@ export class UserManagementComponent implements OnInit {
   startEdit(role: any) {
   this.editingRoleId = role.role_id;
   this.originalRoleName = role.role_name; // Store the original name
-}
-
-cancelEdit() {
-  if (this.originalRoleName !== null && this.editingRoleId) {
-    const roleToEdit = this.searchroletab.find(r => r.role_id === this.editingRoleId);
-    if (roleToEdit) {
-      roleToEdit.role_name = this.originalRoleName; // Revert to the original name
-    }
   }
-  this.editingRoleId = null; // Exit edit mode
-  this.originalRoleName = null; // Clear the original name
-}
 
   toggleManageMode() { // Add this method
     this.isManageMode = !this.isManageMode;
   }
-
-  openDeleteAssigneePopup(userId: number, roleId: number): void {
-    this.currentUserId = userId;
-    this.currentRoleId = roleId;
-    this.showDeleteAssigneePopup = true;
-  }
-
-  async confirmDeleteAssignee(): Promise<void> {
-    if (this.currentUserId !== null && this.currentRoleId !== null) {
-      await this.unassignUser(this.currentUserId, this.currentRoleId);
-      this.showDeleteAssigneePopup = false;
-      this.currentUserId = null;
-      this.currentRoleId = null;
-    }
-  }
-
-  closeDeleteAssigneePopup(): void {
-    this.showDeleteAssigneePopup = false;
-    this.currentUserId = null;
-    this.currentRoleId = null;
-  }
-
-  openRolePopup() {
-    this.showRolePopup = true;
-    this.isManageMode = false;
-
-  }
-
-  closeRolePopup() {
-    this.showRolePopup = false;
-  }
-
-  openAssignPopup() {
-    this.showAssignPopup = true;
-    this.isManageMode = false;
-  }
-
-  closeAssignPopup() {
-    this.showAssignPopup = false;
-    this.selectedUserIds.clear();
-  }
-
-  confirmRolePopup() {
-    if (this.newManageRole.trim()) {
-      this.roles.push(this.newManageRole.trim());
-    }
-    this.newManageRole = '';
-    this.showRolePopup = false;
-  }
-
-  cancelRolePopup() {
-    this.newManageRole = '';
-    this.showRolePopup = false;
-  }
-
-  selectRoleForEditing(role: any) {
-    this.selectedRole = { ...role };
-    this.fetchAccessRights(role.role_id);
-  }
-
-  // Delete a role
-  async deleteRole(role: any) {
-    await this.supabaseService.deleteRole(role.role_name);
-    this.roles = this.roles.filter(r => r.role_name !== role.role_name);
-  }
-  
-  filteredRoles: any[] = [];
-
-  searchRoleTable() {
-    const searchTerm = this.searchTerm.toLowerCase();
-    this.filteredRoles = this.roles.filter(role =>
-      role.role_name.toLowerCase().includes(searchTerm)
-    );
-  }
-  
   
   clickedRoleId: number | null = null;
-
-  async onRoleClick(role: { role_id: number, role_name: string }) {
-    console.log('Role clicked:', role);
-    this.assignedRole = role;
-    this.clickedRoleId = this.clickedRoleId === role.role_id ? null : role.role_id; // Toggle clicked state
-    if (this.clickedRoleId) {
-      const { data, error } = await this.supabaseService.getRoleById(role.role_id);
-      if (error) {
-        console.error('Error fetching role:', error.message);
-      } else if (data) {
-        this.usersRights = data.users_rights;
-        this.rolesRights = data.roles_rights;
-        this.supportRights = data.sup_rights;
-        this.parametersRights = data.par_rights;
-        this.dailyRights = data.daily_rights;
-        this.monthlyRights = data.monthly_rights;
-        this.weeklyRights = data.weekly_rights;
-        this.entriesRights = data.entries;
-      }
-    }
-    await this.loadAssignedUsers(role);
-    console.log('Assigned Role:', this.assignedRole);
-  }
-
-  // Mockdata for Tickets
-  tickets: Ticket[] = [];
 
   showPassword: any;
 
   constructor(private supabaseService: SupabaseService) {}
 
-  toggleModal() {
-    if (this.showModal) {
-      //this.generateRandomPassword();
-      this.selectedEmployee = {...this.employee};
-      this.showModal = true;
-    } 
-  }
-
+  //Function to automatically generate random password when Creating New Employee Account
   generateRandomPassword(length: number = 8) {
     const lowercase = 'abcdefghijklmnopqrstuvwxyz';
     const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -405,6 +279,7 @@ cancelEdit() {
     setTimeout(() => this.showPasswordGeneratedMessage = false, 3000);
   }
 
+  //Function for changing photos
   onPhotoChange(event: any) {
     const file = event.target.files[0];
     const maxSizeInBytes = 50 * 1024 * 1024; // 50MB
@@ -436,13 +311,14 @@ cancelEdit() {
       reader.readAsDataURL(file);
     }
   }
-  
-  
+
+  //Function for Email format validation
   isValidEmail(email: string): boolean {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   }
 
+  //Function to submit New or Edited Employee Account Data
   async onSubmit() {
     console.log('Submitting employee data:', this.employee);
     if (!this.isValidEmail(this.employee.email)) {
@@ -504,7 +380,7 @@ cancelEdit() {
       }
   
       alert(`Employee ${this.isEditing ? 'updated' : 'created'} successfully.`);
-      this.toggleModal();
+      this.openDrawer();
       this.resetForm();
       this.loadEmployees();
   
@@ -519,8 +395,7 @@ cancelEdit() {
   showEmpSuccessMessage: boolean = false;
   showEmpErrorMessage: boolean = false;
 
-
-  
+  //Function for uploading photos
   async uploadPhoto(): Promise<string | null> {
     if (!this.photoFile) {
       console.log('No photo file selected');
@@ -555,132 +430,9 @@ cancelEdit() {
   }
   
 
-  addRole() {
-    if (!this.newRole) {
-      alert('Please enter a role name');
-      return;
-    }
-    const roleData = {
-      role_name: this.newRole,
-      users_rights: this.popupUsersRights,
-      roles_rights: this.popupRolesRights,
-      sup_rights: this.popupSupportRights,
-      par_rights: this.popupParametersRights,
-      daily_rights: this.popupDailyRights,
-      monthly_rights: this.popupMonthlyRights,
-      weekly_rights: this.popupWeeklyRights,
-      entries: this.popupEntriesRights,
-    };
-    this.supabaseService.createRole(roleData)
-    .then(response => {
-      if (response.error) {
-        console.error('Error creating role:', response.error.message);
-        this.showRoleErrorMessage = true;
-        setTimeout(() => {
-          this.showRoleErrorMessage = false;
-        }, 5000); // Hide the message after 3 seconds
-      } else {
-        if (response.data) {
-          console.log('Role created successfully:', response.data);
-          this.showRoleSuccessMessage = true;
-          setTimeout(() => {
-            this.showRoleSuccessMessage = false;
-          }, 5000); // Hide the message after 3 seconds
-        } else {
-          console.log('Role created successfully, but no data returned.');
-          this.showRoleSuccessMessage = true;
-          setTimeout(() => {
-            this.showRoleSuccessMessage = false;
-          }, 5000);
-        }
-        this.closeAddPopup();
-      }
-    });
-    this.showRolePopup = false;
-    this.loadRoles();
-  }  
-  
-    async loadAssignedUsers(role: { role_id: number; role_name: string }): Promise<void> {
-      this.assignedRole = role;
-      console.log('Loading assigned users for role:', this.assignedRole);
-    
-      try {
-        const users = await this.supabaseService.getUsersAssignedToRole(role.role_id);
-        this.assignedUsers = users; // Directly assign the fetched users
-        console.log('Assigned users:', this.assignedUsers);
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error('Error loading assigned users:', error.message);
-        } else {
-          console.error('An unknown error occurred');
-        }
-      }
-    }
-
-    //used in the assigning of role in "Roles" tab
-    onCheckboxChange(userId: number, event: any): void {
-      if (event.target.checked) {
-        this.selectedUserIds.add(userId);
-      } else {
-        this.selectedUserIds.delete(userId);
-      }
-    }
-
-    //Used to assign checked user names in the second container in "Roles" tab
-    async assignRole(): Promise<void> {
-      if (!this.assignedRole || !this.selectedUserIds.size) {
-        console.error('No role or users selected.');
-        return;
-      }
-  
-      try {
-        await this.supabaseService.assignRoleToUsers(this.assignedRole.role_id, Array.from(this.selectedUserIds));
-        console.log('Role assigned successfully.');
-        this.closeAssignPopup();
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error('Error assigning role:', error.message);
-        } else {
-          console.error('An unknown error occurred');
-        }
-      }
-    }
-
   currentUserId: number | null = null;
   currentRoleId: number | null = null;
 
-  async unassignUser(userId: number, roleId: number): Promise<void> {
-    try {
-      await this.supabaseService.unassignUserFromRole(userId, roleId);
-      console.log('User unassigned successfully.');
-      this.loadAssignedUsers(this.assignedRole);
-      this.showEmpSuccessMessage = true;
-      setTimeout(() => {
-        this.showEmpSuccessMessage = false;
-      }, 5000);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error unassigning user:', error.message);
-        this.showEmpErrorMessage = true;
-        setTimeout(() => {
-          this.showEmpErrorMessage = false;
-        }, 5000);
-      } else {
-        console.error('An unknown error occurred');
-      }
-    }
-  }
-
-    async updateRoleName(role: any) {
-      try {
-        await this.supabaseService.updateRoleName(role.role_id, role.role_name);
-        this.editingRoleId = null; // Exit edit mode
-        this.originalRoleName = null; // Clear the original name
-        this.loadRoles(); // Refresh the roles list
-      } catch (error) {
-        console.error('Error saving role:', error);
-      }
-    }
 
     //for updating access rights
     async fetchAccessRights(roleId: string) {
@@ -798,7 +550,7 @@ cancelEdit() {
       await this.supabaseService.logAction(auditLogEntry);
   
       // Close modal and reset form
-      this.toggleModal();
+      this.openDrawer();
       this.resetForm();
   
       // Reload employees to ensure consistency
@@ -926,7 +678,7 @@ cancelEdit() {
       this.users.push(newUser);
       this.filteredUsers = [...this.users];
       this.updatePagination();
-      this.toggleModal();
+      this.openDrawer();
       this.resetForm();
       alert('Employee created successfully.');
   
@@ -960,24 +712,8 @@ cancelEdit() {
   ngOnInit() {
     this.loadEmployees();
     this.loadEmployeeNames();
-    this.loadRoles();
     this.updatePagination();
   } 
-
-  async loadRoles() {
-    try {
-      this.roles = await this.supabaseService.getRoles();
-      this.filteredRoles = this.roles;
-
-      if (this.roles.length > 0) { /*checks if there is a role and displays the first row when you load the page */ 
-        this.clickedRoleId = this.roles[0].role_id;
-        this.assignedRole = this.roles[0];
-        await this.loadAssignedUsers(this.roles[0]);
-      }
-    } catch (error) {
-      console.error('Error fetching roles:', error);
-    }
-  }
 
     // Added method to fetch employee names
     loadEmployeeNames(): void {
@@ -996,7 +732,6 @@ cancelEdit() {
         console.error('Error fetching employees:', error);
       });
     }
-
 
   //edit the photo here
   async loadEmployees() {
@@ -1103,12 +838,6 @@ cancelEdit() {
     );
   }
   
-  get searchroletab() {
-    return this.roles.filter(role => 
-      role.role_name.toLowerCase().includes(this.searchRoleTerm.toLowerCase())
-    );
-  }
-
   getContractType(position: string): string {
     const positionLower = position.toLowerCase();
     switch (positionLower) {
@@ -1132,10 +861,6 @@ cancelEdit() {
     user.status = user.access ? 'Active' : 'Inactive';
   }
 
-  // ticketStatus(ticket: Ticket){
-  //   ticket.status = !ticket;f
-  //   ticket.status = ticket.status? 'Open' : 'Closed' : 'In-progress';
-  // }
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
@@ -1181,52 +906,46 @@ cancelEdit() {
     // window.location.reload();
   }
   
-  
 
-
-clearSelections() {
-  // Clear selection for each user in the array
-  this.users.forEach(user => user.selected = false);
-}
-
-updatePagination() {
-  // Update pagination information based on filtered user list
-  const totalUsers = this.filteredUsers.length;
-  this.totalPages = Math.ceil(totalUsers / this.itemsPerPage); // Calculate total pages
-  const start = (this.currentPage - 1) * this.itemsPerPage;
-  const end = start + this.itemsPerPage;
-  this.paginatedUsers = this.filteredUsers.slice(start, end); // Paginate to display users on the first page
-  console.log('Page:', this.currentPage, 'Start:', start, 'End:', end);
-  console.log('Paginated users:', this.paginatedUsers);
-}
-
-paginate() {
-  // Paginate the filtered user list based on current page and items per page
-  const start = (this.currentPage - 1) * this.itemsPerPage; // Calculate start index
-  const end = start + this.itemsPerPage; // Calculate end index (exclusive)
-  this.paginatedUsers = this.filteredUsers.slice(start, end); // Extract users for the current page
-}
-
-prevPage() {
-  // Navigate to the previous page if current page is greater than 1
-  if (this.currentPage > 1) {
-    this.currentPage--; // Decrease current page number
-    this.updatePagination(); // Update paginated users
+  clearSelections() {
+    // Clear selection for each user in the array
+    this.users.forEach(user => user.selected = false);
   }
-}
 
-nextPage() {
-  // Navigate to the next page if current page is less than total pages
-  if (this.currentPage < this.totalPages) {
-    this.currentPage++; // Increase current page number
-    this.updatePagination(); // Update paginated users
+  updatePagination() {
+    // Update pagination information based on filtered user list
+    const totalUsers = this.filteredUsers.length;
+    this.totalPages = Math.ceil(totalUsers / this.itemsPerPage); // Calculate total pages
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    this.paginatedUsers = this.filteredUsers.slice(start, end); // Paginate to display users on the first page
+    console.log('Page:', this.currentPage, 'Start:', start, 'End:', end);
+    console.log('Paginated users:', this.paginatedUsers);
   }
-}
 
-  setActiveTab(tab: string) {
-    this.activeTab = tab;
-    this.searchRoleTerm = '';
+  paginate() {
+    // Paginate the filtered user list based on current page and items per page
+    const start = (this.currentPage - 1) * this.itemsPerPage; // Calculate start index
+    const end = start + this.itemsPerPage; // Calculate end index (exclusive)
+    this.paginatedUsers = this.filteredUsers.slice(start, end); // Extract users for the current page
   }
+
+  prevPage() {
+    // Navigate to the previous page if current page is greater than 1
+    if (this.currentPage > 1) {
+      this.currentPage--; // Decrease current page number
+      this.updatePagination(); // Update paginated users
+    }
+  }
+
+  nextPage() {
+    // Navigate to the next page if current page is less than total pages
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++; // Increase current page number
+      this.updatePagination(); // Update paginated users
+    }
+  }
+
 
   toggleEditMode() {
     this.isEditing = !this.isEditing;
@@ -1252,74 +971,27 @@ nextPage() {
     this.isEditing = true;
   }
 
-  resetAccessForm() {
-    this.newRole = '';
-  }
-
-
-  toggleManagePopup() {
-    this.showManagePopup = !this.showManagePopup;
-  }
-
-  toggleAddPopup() {
-    this.showAddPopup = !this.showAddPopup;
-    if (this.showAddPopup){
-      this.resetAccessForm();
-    }
-  }
-
-
-  closeAddPopup() {
-    this.showAddPopup = false;
-    this.resetAccessForm();
-  }
-
-  toggleEditPopup() {
-    this.showEditPopup = !this.showEditPopup;
-  }
-
-  closeEditPopup() {
-    this.showEditPopup = false;
-  }
-
-  toggleAccessRightsPopup() {
-    this.showAccessRightsPopup = !this.showAccessRightsPopup;
-  }
-
-  exitPopup(): void {
-    this.showManagePopup = false;
-  }
-
-  closePopupOutside(event: MouseEvent): void {
-    this.showManagePopup = false;
-  }
-
-closeModal() {
-  this.showModal = false;
-  this.resetForm();
-}
-
 // Functions for Sorting alphabetically, ascending and descending order
 
-sortUsers(sortOption: string): void {
-  if (sortOption === 'none') {
-    // Default sort: most recently added users
-    this.filteredUsers = [...this.users].sort((a, b) => (b.dateAdded || new Date()).getTime() - (a.dateAdded || new Date()).getTime());
-  } else if (sortOption === 'asc') {
-    // Sort alphabetically ascending
-    this.filteredUsers = [...this.users].sort((a, b) => a.name.localeCompare(b.name));
-  } else if (sortOption === 'desc') {
-    // Sort alphabetically descending
-    this.filteredUsers = [...this.users].sort((a, b) => b.name.localeCompare(a.name));
+  sortUsers(sortOption: string): void {
+    if (sortOption === 'none') {
+      // Default sort: most recently added users
+      this.filteredUsers = [...this.users].sort((a, b) => (b.dateAdded || new Date()).getTime() - (a.dateAdded || new Date()).getTime());
+    } else if (sortOption === 'asc') {
+      // Sort alphabetically ascending
+      this.filteredUsers = [...this.users].sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortOption === 'desc') {
+      // Sort alphabetically descending
+      this.filteredUsers = [...this.users].sort((a, b) => b.name.localeCompare(a.name));
+    }
+    this.updatePagination();
   }
-  this.updatePagination();
-}
 
-onSortOptionChange(event: Event): void {
-  const target = event.target as HTMLSelectElement;
-  const selectedOption = target.value as 'asc' | 'desc';
-  this.sortUsers(selectedOption);
-}
+  onSortOptionChange(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    const selectedOption = target.value as 'asc' | 'desc';
+    this.sortUsers(selectedOption);
+  }
 
 
 //DO NOT DELETE: These codes below might be useful in the future
